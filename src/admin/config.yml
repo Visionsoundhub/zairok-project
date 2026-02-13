@@ -13,26 +13,19 @@ collections:
         label: "Site Settings"
         file: "src/_data/settings.json"
         fields:
-          # --- AUDIO ---
           - {label: "Background Audio", name: "audio_loop", widget: "file", required: false}
           - {label: "Access Sound", name: "audio_access", widget: "file", required: false}
-          
-          # --- SCANNER TEXT ---
           - {label: "Scan Text (Start)", name: "scan_start_text", widget: "string"}
           - {label: "Scan Text (Success)", name: "scan_success_text", widget: "string"}
-
-          # --- COLORS ---
-          - {label: "Main Accent Color (Neon)", name: "color_accent", widget: "color", default: "#00ff41"}
+          - {label: "Main Accent Color (Neon)", name: "color_accent", widget: "color", default: "#ff8c00"}
           - {label: "Error/Alert Color (Red)", name: "color_error", widget: "color", default: "#ff003c"}
-
-          # --- MENU MANAGER (Links & Modals) ---
           - label: "Menu Items"
             name: "menu_items"
             widget: "list"
             fields:
               - {label: "Label (Τίτλος Κουμπιού)", name: "label", widget: "string"}
               - {label: "Type (Τι κάνει;)", name: "type", widget: "select", options: ["Link", "Modal"], default: "Link"}
-              - {label: "Link URL (Αν διάλεξες Link)", name: "url", widget: "string", required: false, hint: "π.χ. /about"}
+              - {label: "Link URL (Αν διάλεξες Link)", name: "url", widget: "string", required: false}
               - {label: "Modal Title (Αν διάλεξες Modal)", name: "modal_title", widget: "string", required: false}
               - {label: "Modal Text (Αν διάλεξες Modal)", name: "modal_text", widget: "text", required: false}
 
@@ -42,39 +35,41 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Permalink", name: "permalink", widget: "string", default: "/new-page/"}
-      - label: "Blocks"
+      - {label: "Layout", name: "layout", widget: "hidden", default: "base.njk"}
+      - {label: "ΤΙΤΛΟΣ ΣΕΛΙΔΑΣ", name: "title", widget: "string"}
+      - {label: "PERMALINK (Π.Χ. /ABOUT/)", name: "permalink", widget: "string"}
+      - {label: "ΕΜΦΑΝΙΣΗ ΣΤΟ ΜΕΝΟΥ;", name: "in_menu", widget: "boolean", default: true, hint: "Ξε-τίκαρέ το αν θες να είναι ΚΡΥΦΗ σελίδα (π.χ. για QR Code)."}
+      - label: "PAGE BLOCKS"
         name: "blocks"
         widget: "list"
         types:
-          - label: "Hero"
+          - label: "Hero (Μεγάλα Γράμματα)"
             name: "hero"
             widget: "object"
             fields:
               - {label: "Title", name: "title", widget: "string"}
-              - {label: "Subtitle", name: "subtitle", widget: "string"}
+              - {label: "Subtitle", name: "subtitle", widget: "string", required: false}
               - {label: "Text", name: "text", widget: "text"}
-          - label: "Lore Section"
+          - label: "Lore Section (Database Style)"
             name: "lore"
             widget: "object"
             fields:
-              - {label: "Title", name: "title", widget: "string"}
-              - {label: "List Items", name: "items", widget: "list", fields: [{label: "Item Title", name: "item_title", widget: "string"}, {label: "Item Desc", name: "item_desc", widget: "text"}]}
-          - label: "Form"
+              - {label: "Section Title", name: "title", widget: "string"}
+              - {label: "Items", name: "items", widget: "list", fields: [{label: "Item Title", name: "item_title", widget: "string"}, {label: "Item Desc", name: "item_desc", widget: "text"}]}
+          - label: "Form (Εγγραφή)"
             name: "signup_form"
             widget: "object"
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Desc", name: "desc", widget: "text"}
-          - label: "Rich Text"
-            name: "richtext"
-            widget: "object"
-            fields:
-              - {label: "Body", name: "body", widget: "markdown"}
           - label: "Video / Image"
             name: "media_block"
             widget: "object"
             fields:
-              - {label: "YouTube Embed URL", name: "video", widget: "string", required: false}
+              - {label: "YouTube URL", name: "video", widget: "string", required: false}
               - {label: "Image", name: "image", widget: "image", required: false}
+          - label: "Rich Text (Ελεύθερο Κείμενο)"
+            name: "richtext"
+            widget: "object"
+            fields:
+              - {label: "Body", name: "body", widget: "markdown"}
