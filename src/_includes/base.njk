@@ -34,7 +34,6 @@
 
         h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; color: var(--text-color); margin-bottom: 1rem; }
         .accent-text { color: var(--accent-color); }
-        .glitch { position: relative; }
         .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 10; }
         
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 50px; }
@@ -148,18 +147,17 @@
             gateOverlay.style.display = 'none'; 
         }
 
-       enterBtn.addEventListener('click', () => {
-            // Ξεκινάει ο ήχος ΑΜΕΣΩΣ για να "πιάσει" το κινητό
+        enterBtn.addEventListener('click', () => {
+            // ΗΧΟΣ ΑΜΕΣΑ ΜΕ ΤΟ ΚΛΙΚ ΓΙΑ ΤΑ ΚΙΝΗΤΑ
             if(accessSound && accessSound.querySelector('source').getAttribute('src')) {
                 accessSound.volume = 1.0;
-                accessSound.play().catch(e => console.log("Audio blocked"));
+                accessSound.play().catch(e => console.log("Audio play blocked by browser"));
             }
 
             enterBtn.style.display = 'none';
             gateBox.classList.add('scanning');
             gateMsg.innerText = "{{ settings.scan_start_text }}";
             
-            // Το κείμενο αλλάζει στα 2 δευτερόλεπτα, εκεί που ο ήχος σου θα λέει "Access Granted"
             setTimeout(() => {
                 gateMsg.innerText = "{{ settings.scan_success_text }}";
                 gateMsg.style.color = "var(--accent-color)";
@@ -170,7 +168,6 @@
                 gateOverlay.classList.add('fade-out');
                 sessionStorage.setItem('zairok_access', 'true');
                 
-                // Ξεκινάει το background loop
                 if(audioEl && audioEl.querySelector('source').getAttribute('src')) {
                     audioEl.volume = 0.4;
                     audioEl.play().then(() => {
@@ -183,3 +180,41 @@
 
             setTimeout(() => { gateOverlay.style.display = 'none'; }, 4000);
         });
+
+        let isPlaying = false;
+        playBtn.addEventListener('click', () => {
+            if(!isPlaying) { 
+                audioEl.play(); 
+                playBtn.innerText = "❚❚"; 
+                isPlaying = true; 
+            } else { 
+                audioEl.pause(); 
+                playBtn.innerText = "▶"; 
+                isPlaying = false; 
+            }
+        });
+
+        audioEl.ontimeupdate = () => {
+            if(audioEl.duration) {
+                const pct = (audioEl.currentTime / audioEl.duration) * 100;
+                progressBar.style.width = pct + "%";
+            }
+        };
+
+        function openModal(title, text) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = text;
+            document.getElementById('modal').classList.remove('hidden');
+        }
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
