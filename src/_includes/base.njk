@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://unpkg.com/swup@4"></script>
-    <style>
+<style>
         :root {
             --bg-color: #000000;
             --accent-color: {{ settings.color_accent | default('#ff8c00') }};
@@ -16,7 +16,22 @@
             --text-color: #e0e0e0;
             --font-display: 'Orbitron', sans-serif;
             --font-body: 'Inter', sans-serif;
+        } /* <--- Εδώ κλείνει το root */
+
+        /* ΑΥΤΟ ΠΡΕΠΕΙ ΝΑ ΕΙΝΑΙ ΑΠΟ ΚΑΤΩ ΕΞΩ ΑΠΟ ΤΟ ROOT */
+        nav .menu-modal-trigger { 
+            color: var(--error-color) !important; 
+            font-weight: bold; 
+            opacity: 0.9; 
         }
+        nav .menu-modal-trigger:hover { 
+            opacity: 1; 
+            text-shadow: 0 0 10px var(--error-color); 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* ... ο υπόλοιπος κώδικας ... */
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); overflow-x: hidden; padding-bottom: 110px; }
         
@@ -99,7 +114,7 @@
                 <nav id="nav-menu">
                     {% for item in settings.menu_items %}
                         {% if item.type == 'Modal' %}
-                            <button onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')">{{ item.label }}</button>
+                            <button class="menu-modal-trigger" onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')">{{ item.label }}</button>
                         {% else %}
                             <a href="{{ item.url }}">{{ item.label }}</a>
                         {% endif %}
