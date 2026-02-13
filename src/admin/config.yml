@@ -1,0 +1,77 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "src/assets/images"
+public_folder: "/assets/images"
+
+# Εδώ ορίζουμε τι θα βλέπεις στο Admin Panel
+collections:
+  # 1. ΓΕΝΙΚΕΣ ΡΥΘΜΙΣΕΙΣ (Ήχος, Intro, Popups)
+  - name: "settings"
+    label: "⚙️ Γενικές Ρυθμίσεις"
+    files:
+      - name: "global"
+        label: "Site Settings"
+        file: "src/_data/settings.json"
+        fields:
+          - {label: "🔊 Background Audio (Loop)", name: "audio_loop", widget: "file", required: false}
+          - {label: "🔊 Access Granted Sound", name: "audio_access", widget: "file", required: false}
+          - {label: "Intro: Scan Text (Start)", name: "scan_start_text", widget: "string", default: "SCANNING RETINA..."}
+          - {label: "Intro: Scan Text (Success)", name: "scan_success_text", widget: "string", default: "IDENTITY CONFIRMED"}
+          - {label: "🔒 Locked Modal Text", name: "locked_text", widget: "text", default: "CLASSIFIED MATERIAL."}
+          - {label: "🔒 Locked Modal Subtext", name: "locked_subtext", widget: "string", default: "Find the Envelopes at the Hobby Festival."}
+
+  # 2. ΣΕΛΙΔΕΣ (Μπορείς να προσθέτεις όσες θες)
+  - name: "pages"
+    label: "📄 Σελίδες"
+    folder: "src/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Τίτλος Σελίδας", name: "title", widget: "string"}
+      - {label: "Permalink (π.χ. /about)", name: "permalink", widget: "string"}
+      - {label: "Εμφάνιση στο Μενού;", name: "in_menu", widget: "boolean", default: true, hint: "Ξε-τίκαρέ το αν θες να είναι ΚΡΥΦΗ σελίδα (π.χ. για QR Code)."}
+      
+      # PAGE BUILDER BLOCKS (Χτίσε τη σελίδα όπως θες)
+      - label: "Page Blocks"
+        name: "blocks"
+        widget: "list"
+        types:
+          - label: "Hero Section (Κεντρικός Τίτλος)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - {label: "Main Title", name: "title", widget: "string"}
+              - {label: "Subtitle / Glitch Text", name: "subtitle", widget: "string"}
+              - {label: "Description", name: "text", widget: "text"}
+
+          - label: "Κείμενο (Rich Text)"
+            name: "richtext"
+            widget: "object"
+            fields:
+              - {label: "Content", name: "body", widget: "markdown", hint: "Γράψε κείμενο, βάλε Bold, Italic, Λίστες."}
+
+          - label: "Lore Section (Database Style)"
+            name: "lore"
+            widget: "object"
+            fields:
+              - {label: "Section Title", name: "title", widget: "string"}
+              - {label: "Items List", name: "items", widget: "list", fields: [
+                  {label: "Title", name: "item_title", widget: "string"},
+                  {label: "Description", name: "item_desc", widget: "text"}
+                ]}
+
+          - label: "Media (Video/Image)"
+            name: "media_block"
+            widget: "object"
+            fields:
+              - {label: "Εικόνα", name: "image", widget: "image", required: false}
+              - {label: "YouTube Video URL", name: "video_url", widget: "string", required: false}
+
+          - label: "Form (First Wave)"
+            name: "signup_form"
+            widget: "object"
+            fields:
+              - {label: "Form Title", name: "title", widget: "string", default: "FIRST WAVE RECRUITMENT"}
+              - {label: "Description", name: "desc", widget: "text"}
