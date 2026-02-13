@@ -19,10 +19,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; font-size: 16px; padding-bottom: 90px; }
         
+        /* CRT EFFECTS */
         .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; z-index: 998; pointer-events: none; }
         .crt-flicker { animation: flicker 0.15s infinite; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 140, 0, 0.01); z-index: 998; pointer-events: none; }
         @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
 
+        /* INTRO GATE */
         #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
         .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 30px; box-shadow: 0 0 30px var(--accent-dim); max-width: 90%; position: relative; overflow: hidden; }
         .face-scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; background-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); opacity: 0; pointer-events: none; }
@@ -44,7 +46,7 @@
         .menu-modal-trigger { color: var(--error-color) !important; opacity: 0.8; }
 
         section { margin-bottom: 80px; }
-        .section-header { font-family: monospace; color: #666; margin-bottom: 15px; display: block; border-left: 3px solid var(--accent-color); padding-left: 15px; }
+        .section-header { font-family: monospace; color: #666; margin-bottom: 15px; display: block; border-left: 3px solid var(--accent-color); padding-left: 15px; text-transform: uppercase; }
 
         .cyber-box { border: 1px solid #333; padding: 25px; position: relative; background: rgba(10,10,10,0.8); }
         .cyber-box h3 { color: var(--accent-color); }
@@ -53,6 +55,7 @@
         .submit-btn { background: var(--accent-color); color: #000; border: none; padding: 15px 30px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-family: var(--font-display); width: 100%; transition: 0.3s; }
         .submit-btn:hover { background: #fff; box-shadow: 0 0 20px #fff; }
 
+        /* AUDIO BAR */
         #audio-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #050505; border-top: 1px solid var(--accent-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 990; box-shadow: 0 -5px 20px rgba(0,0,0,0.9); }
         .player-controls button { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); width: 40px; height: 40px; cursor: pointer; margin-right: 10px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
         
@@ -107,11 +110,56 @@
         </header>
 
         {% for block in blocks %}
-            {% if block.type == 'hero' %}<section><span class="section-header">01 // INIT</span><h1 style="font-size: 2.5rem; line-height: 1.2;">{{ block.title }}<br><span class="accent-text">{{ block.subtitle }}</span></h1><p>{{ block.text }}</p></section>{% endif %}
-            {% if block.type == 'lore' %}<section><span class="section-header">02 // {{ block.title }}</span><div style="display: grid; gap: 30px;">{% for item in block.items %}<div><h3>{{ item.item_title }}</h3><p style="font-size: 0.9rem; color: #aaa;">{{ item.item_desc }}</p></div>{% endfor %}</div></section>{% endif %}
+            {# Υπολογισμός αυτόματης αρίθμησης 01, 02... #}
+            {% set blockNumber = "" %}
+            {% if loop.index < 10 %}{% set blockNumber = "0" ~ loop.index %}{% else %}{% set blockNumber = loop.index %}{% endif %}
+            
+            {% if block.type == 'hero' %}
+            <section>
+                <span class="section-header">{{ blockNumber }} // {{ block.status | default('INIT') }}</span>
+                <h1 style="font-size: 2.5rem; line-height: 1.2;">{{ block.title }}<br><span class="accent-text">{{ block.subtitle }}</span></h1>
+                <p style="white-space: pre-line;">{{ block.text }}</p>
+            </section>
+            {% endif %}
+
+            {% if block.type == 'lore' %}
+            <section>
+                <span class="section-header">{{ blockNumber }} // DATABASE</span>
+                <div style="display: grid; gap: 30px;">
+                {% for item in block.items %}
+                    <div><h3>{{ item.item_title }}</h3><p style="font-size: 0.9rem; color: #aaa;">{{ item.item_desc }}</p></div>
+                {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
             {% if block.type == 'richtext' %}<section><div class="cyber-box">{{ block.body | safe }}</div></section>{% endif %}
-            {% if block.type == 'media_block' %}<section>{% if block.image %}<img src="{{ block.image }}" style="max-width: 100%; border: 1px solid var(--accent-color);">{% endif %}{% if block.video %}<div class="video-container"><iframe src="{{ block.video | replace('watch?v=', 'embed/') }}" frameborder="0" allowfullscreen></iframe></div>{% endif %}</section>{% endif %}
-            {% if block.type == 'signup_form' %}<section><span class="section-header">03 // JOIN</span><div class="cyber-box"><h3>{{ block.title }}</h3><p style="font-size: 0.9rem; margin-bottom: 20px;">{{ block.desc }}</p><form name="firstwave" method="POST" data-netlify="true" style="margin-top: 20px;"><input type="text" name="codename" class="cyber-input" placeholder="CODE NAME (Όνομα)" required><input type="email" name="email" class="cyber-input" placeholder="FREQUENCY (Email)" required><button type="submit" class="submit-btn">ESTABLISH LINK</button></form></div></section>{% endif %}
+            
+            {% if block.type == 'media_block' %}
+            <section>
+                {% if block.image %}<img src="{{ block.image }}" style="max-width: 100%; border: 1px solid var(--accent-color); margin-bottom: 15px;">{% endif %}
+                {% if block.video %}
+                    <div class="video-container">
+                        <iframe src="{{ block.video | replace('watch?v=', 'embed/') }}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                {% endif %}
+            </section>
+            {% endif %}
+
+            {% if block.type == 'signup_form' %}
+            <section>
+                <span class="section-header">{{ blockNumber }} // CONNECTION</span>
+                <div class="cyber-box">
+                    <h3>{{ block.title }}</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 20px;">{{ block.desc }}</p>
+                    <form name="contact" method="POST" data-netlify="true" style="margin-top: 20px;">
+                        <input type="text" name="codename" class="cyber-input" placeholder="CODE NAME" required>
+                        <input type="email" name="email" class="cyber-input" placeholder="FREQUENCY (Email)" required>
+                        <button type="submit" class="submit-btn">ESTABLISH LINK</button>
+                    </form>
+                </div>
+            </section>
+            {% endif %}
         {% endfor %}
     </div>
 
@@ -124,12 +172,8 @@
             <div id="progress-bar" style="width: 0%; height: 100%; background: var(--accent-color);"></div>
         </div>
         
-        <audio id="main-audio" loop preload="auto">
-            <source src="{{ settings.audio_loop }}" type="audio/mpeg">
-        </audio>
-        <audio id="access-sound" preload="auto">
-            <source src="{{ settings.audio_access }}" type="audio/mpeg">
-        </audio>
+        <audio id="main-audio" loop preload="auto"><source src="{{ settings.audio_loop }}" type="audio/mpeg"></audio>
+        <audio id="access-sound" preload="auto"><source src="{{ settings.audio_access }}" type="audio/mpeg"></audio>
     </div>
 
     <script>
@@ -143,15 +187,13 @@
         const trackNameDisplay = document.getElementById('active-track-name');
         const progressBar = document.getElementById('progress-bar');
 
-        if(sessionStorage.getItem('zairok_access')) { 
-            gateOverlay.style.display = 'none'; 
-        }
+        if(sessionStorage.getItem('zairok_access')) { gateOverlay.style.display = 'none'; }
 
         enterBtn.addEventListener('click', () => {
-            // ΗΧΟΣ ΑΜΕΣΑ ΜΕ ΤΟ ΚΛΙΚ ΓΙΑ ΤΑ ΚΙΝΗΤΑ
+            // Άμεσο trigger ήχου για κινητά
             if(accessSound && accessSound.querySelector('source').getAttribute('src')) {
                 accessSound.volume = 1.0;
-                accessSound.play().catch(e => console.log("Audio play blocked by browser"));
+                accessSound.play().catch(e => console.log("Audio blocked"));
             }
 
             enterBtn.style.display = 'none';
@@ -183,15 +225,8 @@
 
         let isPlaying = false;
         playBtn.addEventListener('click', () => {
-            if(!isPlaying) { 
-                audioEl.play(); 
-                playBtn.innerText = "❚❚"; 
-                isPlaying = true; 
-            } else { 
-                audioEl.pause(); 
-                playBtn.innerText = "▶"; 
-                isPlaying = false; 
-            }
+            if(!isPlaying) { audioEl.play(); playBtn.innerText = "❚❚"; isPlaying = true; } 
+            else { audioEl.pause(); playBtn.innerText = "▶"; isPlaying = false; }
         });
 
         audioEl.ontimeupdate = () => {
