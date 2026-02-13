@@ -1,7 +1,7 @@
 ---
 layout: base.njk
 title: Home
-permalink: /home/
+permalink: /
 in_menu: true
 blocks:
   - type: hero
