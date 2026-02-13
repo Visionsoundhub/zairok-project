@@ -19,7 +19,7 @@ blocks:
       - item_title: KRIVA (THE EVENT)
         item_desc: Η στιγμή της αφύπνισης. Λιποθυμία; Ή σύνδεση με το δίκτυο;
   - type: signup_form
-    title: FIRST WAVE RECRUITMENT
+    title: FIRST WAVE RECRUITMENT.
     desc: Μόνο οι πρώτοι 100 θα έχουν πρόσβαση στα Κρυφά Κεφάλαια. Λάβετε
       ενημερώσεις υψηλής ασφαλείας απευθείας στο νευρικό σας δίκτυο.
 ---
