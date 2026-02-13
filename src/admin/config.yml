@@ -71,3 +71,8 @@ collections:
             fields:
               - {label: "YouTube URL", name: "video", widget: "string", required: false}
               - {label: "Image", name: "image", widget: "image", required: false}
+          - label: "Rich Text (Markdown)"
+            name: "richtext"
+            widget: "object"
+            fields:
+              - {label: "Body", name: "body", widget: "markdown"}
