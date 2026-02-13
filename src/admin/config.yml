@@ -13,8 +13,10 @@ collections:
         label: "Site Settings"
         file: "src/_data/settings.json"
         fields:
+          - {label: "Site Logo (Image)", name: "site_logo", widget: "image", required: false}
           - {label: "Background Audio", name: "audio_loop", widget: "file", required: false}
           - {label: "Access Sound", name: "audio_access", widget: "file", required: false}
+          - {label: "Audio Track Label", name: "audio_label", widget: "string", default: "ENCRYPTED_SIGNAL.log"}
           - {label: "Scan Text (Start)", name: "scan_start_text", widget: "string"}
           - {label: "Scan Text (Success)", name: "scan_success_text", widget: "string"}
           - {label: "Main Accent Color (Neon)", name: "color_accent", widget: "color", default: "#ff8c00"}
@@ -23,11 +25,11 @@ collections:
             name: "menu_items"
             widget: "list"
             fields:
-              - {label: "Label (Τίτλος Κουμπιού)", name: "label", widget: "string"}
-              - {label: "Type (Τι κάνει;)", name: "type", widget: "select", options: ["Link", "Modal"], default: "Link"}
-              - {label: "Link URL (Αν διάλεξες Link)", name: "url", widget: "string", required: false}
-              - {label: "Modal Title (Αν διάλεξες Modal)", name: "modal_title", widget: "string", required: false}
-              - {label: "Modal Text (Αν διάλεξες Modal)", name: "modal_text", widget: "text", required: false}
+              - {label: "Label", name: "label", widget: "string"}
+              - {label: "Type", name: "type", widget: "select", options: ["Link", "Modal"], default: "Link"}
+              - {label: "Link URL (π.χ. / ή /archives/)", name: "url", widget: "string", required: false}
+              - {label: "Modal Title", name: "modal_title", widget: "string", required: false}
+              - {label: "Modal Text", name: "modal_text", widget: "text", required: false}
 
   - name: "pages"
     label: "📄 Pages"
@@ -37,7 +39,7 @@ collections:
     fields:
       - {label: "Layout", name: "layout", widget: "hidden", default: "base.njk"}
       - {label: "ΤΙΤΛΟΣ ΣΕΛΙΔΑΣ", name: "title", widget: "string"}
-      - {label: "PERMALINK (Π.Χ. /ABOUT/)", name: "permalink", widget: "string"}
+      - {label: "PERMALINK", name: "permalink", widget: "string"}
       - {label: "ΕΜΦΑΝΙΣΗ ΣΤΟ ΜΕΝΟΥ;", name: "in_menu", widget: "boolean", default: true}
       - label: "PAGE BLOCKS"
         name: "blocks"
@@ -47,7 +49,7 @@ collections:
             name: "hero"
             widget: "object"
             fields:
-              - {label: "Status (Επιλογή Χαρακτηρισμού)", name: "status", widget: "select", options: ["INIT", "INFO", "DATA", "SECRET", "ALERT", "ARCHIVE", "CLASSIFIED"], default: "INIT"}
+              - {label: "Status (Dropdown)", name: "status", widget: "select", options: ["INIT", "INFO", "DATA", "SECRET", "ALERT", "ARCHIVE", "CLASSIFIED", "REDACTED"], default: "INIT"}
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Subtitle", name: "subtitle", widget: "string", required: false}
               - {label: "Text", name: "text", widget: "text"}
