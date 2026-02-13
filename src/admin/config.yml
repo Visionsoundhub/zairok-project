@@ -38,7 +38,7 @@ collections:
       - {label: "Layout", name: "layout", widget: "hidden", default: "base.njk"}
       - {label: "ΤΙΤΛΟΣ ΣΕΛΙΔΑΣ", name: "title", widget: "string"}
       - {label: "PERMALINK (Π.Χ. /ABOUT/)", name: "permalink", widget: "string"}
-      - {label: "ΕΜΦΑΝΙΣΗ ΣΤΟ ΜΕΝΟΥ;", name: "in_menu", widget: "boolean", default: true, hint: "Ξε-τίκαρέ το αν θες να είναι ΚΡΥΦΗ σελίδα (π.χ. για QR Code)."}
+      - {label: "ΕΜΦΑΝΙΣΗ ΣΤΟ ΜΕΝΟΥ;", name: "in_menu", widget: "boolean", default: true}
       - label: "PAGE BLOCKS"
         name: "blocks"
         widget: "list"
@@ -47,6 +47,7 @@ collections:
             name: "hero"
             widget: "object"
             fields:
+              - {label: "Status (Επιλογή Χαρακτηρισμού)", name: "status", widget: "select", options: ["INIT", "INFO", "DATA", "SECRET", "ALERT", "ARCHIVE", "CLASSIFIED"], default: "INIT"}
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Subtitle", name: "subtitle", widget: "string", required: false}
               - {label: "Text", name: "text", widget: "text"}
@@ -68,7 +69,7 @@ collections:
             fields:
               - {label: "YouTube URL", name: "video", widget: "string", required: false}
               - {label: "Image", name: "image", widget: "image", required: false}
-          - label: "Rich Text (Ελεύθερο Κείμενο)"
+          - label: "Rich Text (Markdown)"
             name: "richtext"
             widget: "object"
             fields:
