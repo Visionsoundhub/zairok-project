@@ -20,70 +20,53 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); overflow-x: hidden; padding-bottom: 110px; }
         
+        /* CRT EFFECTS */
         .scanlines, .crt-flicker { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; pointer-events: none; }
         .scanlines { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; }
         .crt-flicker { animation: flicker 0.15s infinite; background: rgba(255, 140, 0, 0.01); }
-        @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
 
-        /* GATE OVERLAY - MAXIMUM PRIORITY */
-        #the-gate { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background-color: var(--bg-color); z-index: 2147483647; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            transition: opacity 1s ease-out; pointer-events: all;
-        }
-        .gate-content { 
-            text-align: center; border: 1px solid var(--accent-color); padding: 40px; 
-            box-shadow: 0 0 50px var(--accent-dim); max-width: 90%; 
-            position: relative; z-index: 2147483647;
-        }
-        .btn-access { 
-            background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); 
-            padding: 20px 40px; font-family: var(--font-display); font-size: 1.2rem; 
-            cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
-            pointer-events: auto !important; position: relative;
-        }
+        /* GATE OVERLAY - ΔΕΝ ΤΟ ΠΕΙΡΑΖΟΥΜΕ, ΛΕΙΤΟΥΡΓΕΙ */
+        #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 2147483647; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; pointer-events: all; }
+        .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 40px; box-shadow: 0 0 50px var(--accent-dim); max-width: 90%; position: relative; z-index: 2147483647; }
+        .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 20px 40px; font-family: var(--font-display); font-size: 1.2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; pointer-events: auto !important; position: relative; }
 
-        /* HEADER & MOBILE MENU */
+        /* HEADER & NAVIGATION */
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 20px 0; margin-bottom: 50px; position: relative; z-index: 1000; }
         .logo-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-decoration: none; }
         
-        .menu-toggle { display: none; font-size: 3.5rem; color: var(--accent-color); background: none; border: none; cursor: pointer; z-index: 10005; padding: 10px; }
-        nav { display: flex; gap: 20px; }
-        nav a, nav button { color: #888; text-decoration: none; font-family: var(--font-display); font-size: 0.9rem; text-transform: uppercase; transition: 0.3s; background: none; border: none; cursor: pointer; }
+        .menu-toggle { display: none; font-size: 2.5rem; color: var(--accent-color); background: none; border: none; cursor: pointer; z-index: 10005; padding: 10px; }
+        nav { display: flex; gap: 20px; align-items: center; }
+        nav a, nav button { color: #888; text-decoration: none; font-family: var(--font-display); font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; background: none; border: none; cursor: pointer; }
+        nav a:hover, nav button:hover { color: var(--accent-color); }
 
+        /* MOBILE MENU FIX - ΚΕΝΤΡΑΡΙΣΜΕΝΟ & ΣΩΣΤΟ ΜΕΓΕΘΟΣ */
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
             nav { 
                 position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; 
                 background: rgba(0,0,0,0.98); backdrop-filter: blur(15px); z-index: 10004; 
-                flex-direction: column; justify-content: center; align-items: center; transition: 0.5s;
+                flex-direction: column; justify-content: center; align-items: center; transition: 0.4s ease-in-out;
+                gap: 30px;
             }
             nav.active { right: 0; }
-            nav a, nav button { 
-                font-size: 2.5rem !important; /* MEGA FONTS */
-                margin: 20px 0; color: var(--accent-color); font-weight: 900;
-            }
+            nav a, nav button { font-size: 1.6rem !important; color: var(--accent-color); font-weight: 700; letter-spacing: 2px; margin: 0; }
         }
 
         .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
         section { margin-bottom: 80px; }
         .section-header { font-family: monospace; color: #666; margin-bottom: 15px; border-left: 3px solid var(--accent-color); padding-left: 15px; text-transform: uppercase; }
+
+        /* LORE GRID */
         .lore-grid { display: grid; gap: 40px; }
         .lore-item h3 { color: var(--accent-color); margin-bottom: 5px; font-family: var(--font-display); }
         .lore-item p { color: #aaa; line-height: 1.6; }
 
         /* AUDIO BAR */
-        #audio-bar { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 85px; 
-            background: #050505; border-top: 1px solid var(--accent-color); 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 0 20px; z-index: 2000000; pointer-events: auto;
-        }
-        .player-controls button { 
-            background: transparent; border: 2px solid var(--accent-color); 
-            color: var(--accent-color); width: 50px; height: 50px; cursor: pointer;
-        }
+        #audio-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 85px; background: #050505; border-top: 1px solid var(--accent-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 2000000; pointer-events: auto; }
+        .player-controls button { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+
+        .hidden { display: none !important; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 40000; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
@@ -115,7 +98,11 @@
                 <button class="menu-toggle" onclick="document.getElementById('nav-menu').classList.toggle('active')">☰</button>
                 <nav id="nav-menu">
                     {% for item in settings.menu_items %}
-                        <a href="{{ item.url }}">{{ item.label }}</a>
+                        {% if item.type == 'Modal' %}
+                            <button onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')">{{ item.label }}</button>
+                        {% else %}
+                            <a href="{{ item.url }}">{{ item.label }}</a>
+                        {% endif %}
                     {% endfor %}
                 </nav>
             </header>
@@ -124,7 +111,7 @@
                 {% set nr = loop.index if loop.index > 9 else "0" ~ loop.index %}
                 <section>
                     {% if block.type == 'hero' %}
-                        <span class="section-header">{{ nr }} // {{ block.status }}</span>
+                        <span class="section-header">{{ nr }} // {{ block.status | default('INIT') }}</span>
                         <h1 style="font-size: 2.5rem;">{{ block.title }}<br><span style="color:var(--accent-color);">{{ block.subtitle }}</span></h1>
                         <p style="white-space: pre-line;">{{ block.text }}</p>
                     {% elif block.type == 'lore' %}
@@ -156,6 +143,14 @@
         </div>
     </main>
 
+    <div id="modal-container" class="modal-overlay hidden">
+        <div style="border: 1px solid #333; padding: 30px; background: #000; max-width: 500px; width: 90%; text-align: center;">
+            <h2 id="modal-title" style="color: var(--accent-color); font-family: var(--font-display); margin-bottom: 15px;"></h2>
+            <p id="modal-body" style="margin-bottom: 25px; white-space: pre-line; color: #aaa;"></p>
+            <button onclick="closeModal()" style="background: var(--accent-color); color: #000; border: none; padding: 10px 25px; cursor: pointer; font-family: var(--font-display); font-weight: bold;">CLOSE</button>
+        </div>
+    </div>
+
     <script>
         const swup = new Swup();
         const audioEl = document.getElementById('main-audio');
@@ -166,7 +161,6 @@
         if(sessionStorage.getItem('zairok_access')) { document.getElementById('the-gate').style.display = 'none'; }
 
         function handleAccess(btn) {
-            console.log("Access triggered");
             try {
                 audioEl.volume = 0.4; audioEl.play().then(() => { isPlaying = true; playBtn.innerText = "❚❚"; });
                 accessSound.volume = 1.0; accessSound.play();
@@ -174,10 +168,7 @@
             btn.style.display = 'none';
             document.getElementById('gate-msg').innerText = "{{ settings.scan_start_text }}";
             setTimeout(() => { document.getElementById('gate-msg').innerText = "{{ settings.scan_success_text }}"; }, 2000);
-            setTimeout(() => { 
-                document.getElementById('the-gate').style.opacity = '0';
-                sessionStorage.setItem('zairok_access', 'true');
-            }, 3000);
+            setTimeout(() => { document.getElementById('the-gate').style.opacity = '0'; sessionStorage.setItem('zairok_access', 'true'); }, 3000);
             setTimeout(() => { document.getElementById('the-gate').style.display = 'none'; }, 4000);
         }
 
@@ -186,7 +177,18 @@
             else { audioEl.pause(); playBtn.innerText = "▶"; isPlaying = false; }
         }
 
+        function openModal(title, text) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = text;
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
+
         audioEl.ontimeupdate = () => { if(audioEl.duration) document.getElementById('progress-bar').style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%"; };
+        
+        // Close menu on link click (mobile)
+        swup.on('contentReplaced', () => { document.getElementById('nav-menu').classList.remove('active'); });
     </script>
 </body>
 </html>
