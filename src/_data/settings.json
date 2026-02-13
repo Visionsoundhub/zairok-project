@@ -7,9 +7,14 @@
   "color_error": "#ff003c",
   "menu_items": [
     {
-      "label": "ARCHIVES",
       "type": "Link",
-      "url": "#lore"
+      "label": "Home ",
+      "url": "/home/"
+    },
+    {
+      "type": "Link",
+      "label": "Public Archives",
+      "url": "/public-archives/"
     },
     {
       "label": "MERCH [🔒]",
@@ -18,14 +23,9 @@
       "modal_text": "Έχω λίγα Quest Items. Δεν είναι για όλους.\n\nΑν νιώθεις ότι πρέπει να έχεις ένα... έλα να βρεις τους Απόρρητους Φακέλους στο Hobby Festival."
     },
     {
+      "label": "ARCHIVES",
       "type": "Link",
-      "label": "Public Archives",
-      "url": "/public-archives/"
-    },
-    {
-      "type": "Link",
-      "label": "Home ",
-      "url": "/home/"
+      "url": "#lore"
     }
   ]
 }
