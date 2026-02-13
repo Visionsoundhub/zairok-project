@@ -8,11 +8,6 @@
   "menu_items": [
     {
       "type": "Link",
-      "label": "Home ",
-      "url": "/home/"
-    },
-    {
-      "type": "Link",
       "label": "Public Archives",
       "url": "/public-archives/"
     },
