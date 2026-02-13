@@ -28,4 +28,10 @@ blocks:
     subtitle: WE ARE THE GLITCH.
     text: Μια διαδραστική Hybrid Sci-Fi εμπειρία. Το Ίδρυμα Ζάιρα παρακολουθεί. Η
       Ε.ΝΕ.ΔΙΑ δεν είναι ασθένεια. Είναι η δύναμή μας.
+  - type: lore
+    title: DATABASE
+    items:
+      - item_title: THE FOUNDATION
+        item_desc: Το καθεστώς που ελέγχει τη Norken. Μετατρέπουν τους διαφορετικούς σε
+          'μπαταρίες'.
 ---
