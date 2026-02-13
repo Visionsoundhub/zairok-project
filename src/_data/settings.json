@@ -3,7 +3,7 @@
   "scan_success_text": "IDENTITY CONFIRMED: SUBJECT #9204",
   "audio_loop": "",
   "audio_access": "/assets/images/access-granted.mp3",
-  "color_accent": "#00bbde",
+  "color_accent": "#de8400",
   "color_error": "#ff003c",
   "menu_items": [
     {
