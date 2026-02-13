@@ -1,7 +1,7 @@
 {
   "scan_start_text": "SCANNING RETINA...",
   "scan_success_text": "IDENTITY CONFIRMED: SUBJECT #9204",
-  "audio_loop": "",
+  "audio_loop": "/assets/images/bg-music.mp3",
   "audio_access": "/assets/images/access_granted.mp3",
   "color_accent": "#de8400",
   "color_error": "#ff003c",
