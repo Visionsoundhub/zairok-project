@@ -22,4 +22,10 @@ blocks:
     title: FIRST WAVE RECRUITMENT.
     desc: Μόνο οι πρώτοι 100 θα έχουν πρόσβαση στα Κρυφά Κεφάλαια. Λάβετε
       ενημερώσεις υψηλής ασφαλείας απευθείας στο νευρικό σας δίκτυο.
+  - type: hero
+    status: INIT
+    title: THE SYSTEM IS BROKEN.
+    subtitle: WE ARE THE GLITCH.
+    text: Μια διαδραστική Hybrid Sci-Fi εμπειρία. Το Ίδρυμα Ζάιρα παρακολουθεί. Η
+      Ε.ΝΕ.ΔΙΑ δεν είναι ασθένεια. Είναι η δύναμή μας.
 ---
