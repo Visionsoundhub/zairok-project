@@ -1,4 +1,5 @@
 ---
+layout: "base.njk"
 title: "Home"
 permalink: "/"
 in_menu: true
