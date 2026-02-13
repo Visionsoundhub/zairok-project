@@ -21,6 +21,11 @@
       "type": "Link",
       "label": "Public Archives",
       "url": "/public-archives/"
+    },
+    {
+      "type": "Link",
+      "label": "Home ",
+      "url": "/home/"
     }
   ]
 }
