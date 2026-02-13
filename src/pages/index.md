@@ -1,44 +1,22 @@
 ---
-
 title: "Home"
-
 permalink: "/"
-
-in\_menu: true
-
+in_menu: true
 blocks:
+  - type: "hero"
+    title: "THE SYSTEM IS BROKEN."
+    subtitle: "WE ARE THE GLITCH."
+    text: "Μια διαδραστική Hybrid Sci-Fi εμπειρία. Το Ίδρυμα Ζάιρα παρακολουθεί. Η Ε.ΝΕ.ΔΙΑ δεν είναι ασθένεια. Είναι η δύναμή μας."
+  
+  - type: "lore"
+    title: "DATABASE"
+    items:
+      - item_title: "THE FOUNDATION"
+        item_desc: "Το καθεστώς που ελέγχει τη Norken. Μετατρέπουν τους διαφορετικούς σε 'μπαταρίες'."
+      - item_title: "KRIVA (THE EVENT)"
+        item_desc: "Η στιγμή της αφύπνισης. Λιποθυμία; Ή σύνδεση με το δίκτυο;"
 
-&nbsp; - type: "hero"
-
-&nbsp;   title: "THE SYSTEM IS BROKEN."
-
-&nbsp;   subtitle: "WE ARE THE GLITCH."
-
-&nbsp;   text: "Μια διαδραστική Hybrid Sci-Fi εμπειρία. Το Ίδρυμα Ζάιρα παρακολουθεί. Η Ε.ΝΕ.ΔΙΑ δεν είναι ασθένεια. Είναι η δύναμή μας."
-
-&nbsp; 
-
-&nbsp; - type: "lore"
-
-&nbsp;   title: "DATABASE"
-
-&nbsp;   items:
-
-&nbsp;     - item\_title: "THE FOUNDATION"
-
-&nbsp;       item\_desc: "Το καθεστώς που ελέγχει τη Norken. Μετατρέπουν τους διαφορετικούς σε 'μπαταρίες'."
-
-&nbsp;     - item\_title: "KRIVA (THE EVENT)"
-
-&nbsp;       item\_desc: "Η στιγμή της αφύπνισης. Λιποθυμία; Ή σύνδεση με το δίκτυο;"
-
-
-
-&nbsp; - type: "signup\_form"
-
-&nbsp;   title: "FIRST WAVE RECRUITMENT"
-
-&nbsp;   desc: "Μόνο οι πρώτοι 100 θα έχουν πρόσβαση στα Κρυφά Κεφάλαια. Λάβετε ενημερώσεις υψηλής ασφαλείας απευθείας στο νευρικό σας δίκτυο."
-
+  - type: "signup_form"
+    title: "FIRST WAVE RECRUITMENT"
+    desc: "Μόνο οι πρώτοι 100 θα έχουν πρόσβαση στα Κρυφά Κεφάλαια. Λάβετε ενημερώσεις υψηλής ασφαλείας απευθείας στο νευρικό σας δίκτυο."
 ---
-
