@@ -5,6 +5,11 @@ permalink: /public-archives/
 in_menu: true
 blocks:
   - type: hero
+    status: INIT
+    title: knowledge Database
+    subtitle: ""
+    text: Βάσικές γνώσεις για να μπείς στον κόσμο του Zairok
+  - type: hero
     title: ΕΝΕΔΙΑ
     subtitle: "Ορισμός: Ενδογενής Νευρο-Επιληπτοειδής Διαταραχή."
     text: >-
@@ -43,9 +48,4 @@ blocks:
     text: "Σκοπός: Χρησιμοποιείται για την αποφυγή εντοπισμού από τα ειδικά ραντάρ
       και τα συστήματα ανίχνευσης του Ιδρύματος."
     status: CLASSIFIED
-  - type: hero
-    status: INIT
-    title: knowledge Database
-    subtitle: ""
-    text: Βάσικές γνώσεις για να μπείς στον κόσμο του Zairok
 ---
