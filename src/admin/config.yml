@@ -27,7 +27,7 @@ collections:
             fields:
               - {label: "Label", name: "label", widget: "string"}
               - {label: "Type", name: "type", widget: "select", options: ["Link", "Modal"], default: "Link"}
-              - {label: "Link URL (π.χ. / ή /archives/)", name: "url", widget: "string", required: false}
+              - {label: "Link URL", name: "url", widget: "string", required: false}
               - {label: "Modal Title", name: "modal_title", widget: "string", required: false}
               - {label: "Modal Text", name: "modal_text", widget: "text", required: false}
 
@@ -49,7 +49,7 @@ collections:
             name: "hero"
             widget: "object"
             fields:
-              - {label: "Status (Dropdown)", name: "status", widget: "select", options: ["INIT", "INFO", "DATA", "SECRET", "ALERT", "ARCHIVE", "CLASSIFIED", "REDACTED"], default: "INIT"}
+              - {label: "Status", name: "status", widget: "select", options: ["INIT", "INFO", "DATA", "SECRET", "ALERT", "ARCHIVE", "CLASSIFIED", "REDACTED"], default: "INIT"}
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Subtitle", name: "subtitle", widget: "string", required: false}
               - {label: "Text", name: "text", widget: "text"}
@@ -71,8 +71,3 @@ collections:
             fields:
               - {label: "YouTube URL", name: "video", widget: "string", required: false}
               - {label: "Image", name: "image", widget: "image", required: false}
-          - label: "Rich Text (Markdown)"
-            name: "richtext"
-            widget: "object"
-            fields:
-              - {label: "Body", name: "body", widget: "markdown"}
