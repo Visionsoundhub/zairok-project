@@ -6,6 +6,7 @@
     <title>PROJECT ZAIROK | {{ title }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://unpkg.com/swup@4"></script>
     <style>
         :root {
             --bg-color: #000000;
@@ -19,56 +20,50 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; font-size: 16px; padding-bottom: 90px; }
         
-        /* CRT EFFECTS */
-        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; z-index: 998; pointer-events: none; }
-        .crt-flicker { animation: flicker 0.15s infinite; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 140, 0, 0.01); z-index: 998; pointer-events: none; }
+        .scanlines, .crt-flicker { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; pointer-events: none; }
+        .scanlines { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; }
+        .crt-flicker { animation: flicker 0.15s infinite; background: rgba(255, 140, 0, 0.01); }
         @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
 
-        /* INTRO GATE */
+        /* HEADER & LOGO */
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 50px; }
+        .logo-link { text-decoration: none; display: flex; align-items: center; }
+        .logo-img { max-height: 50px; width: auto; }
+        .logo-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: var(--text-color); letter-spacing: -1px; }
+
+        /* GATE */
         #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
         .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 30px; box-shadow: 0 0 30px var(--accent-dim); max-width: 90%; position: relative; overflow: hidden; }
         .face-scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; background-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); opacity: 0; pointer-events: none; }
         .scanning .face-scan-line { opacity: 1; animation: scanFace 1.5s ease-in-out infinite; }
-        @keyframes scanFace { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
-        .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 15px 30px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px; }
+        @keyframes scanFace { 0%, 100% { top: 0%; } 50% { top: 100%; } }
+        .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 15px 30px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px; }
         .btn-access:hover { background: var(--accent-color); color: var(--bg-color); box-shadow: 0 0 30px var(--accent-color); }
-        .gate-msg { margin-top: 20px; font-family: var(--font-display); font-size: 0.9rem; min-height: 1.5em; color: var(--accent-color); }
 
-        h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; color: var(--text-color); margin-bottom: 1rem; }
-        .accent-text { color: var(--accent-color); }
+        /* SWUP TRANSITION */
+        .transition-fade { opacity: 1; transition: 0.4s; }
+        html.is-leaving .transition-fade { opacity: 0; transform: translateY(10px); }
+
         .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 10; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 50px; }
-        .logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
-        
-        nav button, nav a { background: none; border: none; cursor: pointer; color: #888; text-decoration: none; margin-left: 15px; font-family: var(--font-display); font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; }
-        nav button:hover, nav a:hover { color: var(--accent-color); }
-        .menu-modal-trigger { color: var(--error-color) !important; opacity: 0.8; }
+        h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; margin-bottom: 1rem; }
+        .accent-text { color: var(--accent-color); }
+        nav a, nav button { color: #888; text-decoration: none; margin-left: 15px; font-family: var(--font-display); font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; background: none; border: none; cursor: pointer; }
+        nav a:hover, nav button:hover { color: var(--accent-color); }
 
+        /* SECTIONS */
         section { margin-bottom: 80px; }
-        .section-header { font-family: monospace; color: #666; margin-bottom: 15px; display: block; border-left: 3px solid var(--accent-color); padding-left: 15px; text-transform: uppercase; }
+        .section-header { font-family: monospace; color: #666; margin-bottom: 15px; display: block; border-left: 3px solid var(--accent-color); padding-left: 15px; }
+        .cyber-box { border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8); }
 
-        .cyber-box { border: 1px solid #333; padding: 25px; position: relative; background: rgba(10,10,10,0.8); }
-        .cyber-box h3 { color: var(--accent-color); }
-        .cyber-input { width: 100%; background: transparent; border: 1px solid #444; color: #fff; padding: 15px; font-family: var(--font-body); margin-bottom: 15px; transition: 0.3s; }
-        .cyber-input:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 10px var(--accent-dim); }
-        .submit-btn { background: var(--accent-color); color: #000; border: none; padding: 15px 30px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-family: var(--font-display); width: 100%; transition: 0.3s; }
-        .submit-btn:hover { background: #fff; box-shadow: 0 0 20px #fff; }
-
-        /* AUDIO BAR */
-        #audio-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #050505; border-top: 1px solid var(--accent-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 990; box-shadow: 0 -5px 20px rgba(0,0,0,0.9); }
-        .player-controls button { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); width: 40px; height: 40px; cursor: pointer; margin-right: 10px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        /* AUDIO BAR (Εκτός Swup για να μην σταματάει) */
+        #audio-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #050505; border-top: 1px solid var(--accent-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 990; }
+        .player-controls button { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-box { border: 2px solid var(--accent-color); padding: 30px; text-align: center; max-width: 500px; background: #000; box-shadow: 0 0 50px var(--accent-dim); width: 90%; }
-        .close-btn { background: transparent; border: 1px solid var(--error-color); color: var(--error-color); padding: 10px 20px; margin-top: 20px; cursor: pointer; font-weight: bold; font-family: var(--font-display); }
-        
         .hidden { display: none !important; }
         .fade-out { opacity: 0; pointer-events: none; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 20px; border: 1px solid #333; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        
-        @media (max-width: 600px) { header { flex-direction: column; align-items: flex-start; gap: 15px; } nav a, nav button { margin-left: 0; margin-right: 15px; } h1 { font-size: 2rem; } .track-display { display: none; } }
+
+        @media (max-width: 600px) { .track-display { display: none; } }
     </style>
 </head>
 <body>
@@ -78,162 +73,118 @@
     <div id="the-gate">
         <div class="gate-content" id="gate-box">
             <div class="face-scan-line"></div>
-            <h1 style="font-size: 1.5rem; margin-bottom: 20px;">SYSTEM: FOUNDATION ZAIRA</h1>
+            <h1>SYSTEM: FOUNDATION ZAIRA</h1>
             <p style="font-size: 0.8rem; color: #666; margin-bottom: 30px;">SECURE CONNECTION REQUIRED</p>
             <button id="enter-btn" class="btn-access">PRESS FOR ENCRYPTED ACCESS</button>
-            <div id="gate-msg" class="gate-msg"></div>
+            <div id="gate-msg" class="gate-msg" style="margin-top:20px; font-family:var(--font-display); color:var(--accent-color);"></div>
         </div>
     </div>
 
-    <div id="modal" class="modal-overlay hidden">
-        <div class="modal-box">
-            <h2 id="modal-title" style="color: var(--accent-color);">ALERT</h2>
-            <p id="modal-body" style="margin-bottom: 20px; white-space: pre-line;"></p>
-            <button class="close-btn" onclick="closeModal()">CLOSE TERMINAL</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <header>
-            <div class="logo">ZAIROK</div>
-            <nav>
-                {% for item in settings.menu_items %}
-                    {% if item.type == 'Modal' %}
-                        <button onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')" class="menu-modal-trigger">
-                            {{ item.label }}
-                        </button>
-                    {% else %}
-                        <a href="{{ item.url }}">{{ item.label }}</a>
-                    {% endif %}
-                {% endfor %}
-            </nav>
-        </header>
-
-        {% for block in blocks %}
-            {# Υπολογισμός αυτόματης αρίθμησης 01, 02... #}
-            {% set blockNumber = "" %}
-            {% if loop.index < 10 %}{% set blockNumber = "0" ~ loop.index %}{% else %}{% set blockNumber = loop.index %}{% endif %}
-            
-            {% if block.type == 'hero' %}
-            <section>
-                <span class="section-header">{{ blockNumber }} // {{ block.status | default('INIT') }}</span>
-                <h1 style="font-size: 2.5rem; line-height: 1.2;">{{ block.title }}<br><span class="accent-text">{{ block.subtitle }}</span></h1>
-                <p style="white-space: pre-line;">{{ block.text }}</p>
-            </section>
-            {% endif %}
-
-            {% if block.type == 'lore' %}
-            <section>
-                <span class="section-header">{{ blockNumber }} // DATABASE</span>
-                <div style="display: grid; gap: 30px;">
-                {% for item in block.items %}
-                    <div><h3>{{ item.item_title }}</h3><p style="font-size: 0.9rem; color: #aaa;">{{ item.item_desc }}</p></div>
-                {% endfor %}
-                </div>
-            </section>
-            {% endif %}
-
-            {% if block.type == 'richtext' %}<section><div class="cyber-box">{{ block.body | safe }}</div></section>{% endif %}
-            
-            {% if block.type == 'media_block' %}
-            <section>
-                {% if block.image %}<img src="{{ block.image }}" style="max-width: 100%; border: 1px solid var(--accent-color); margin-bottom: 15px;">{% endif %}
-                {% if block.video %}
-                    <div class="video-container">
-                        <iframe src="{{ block.video | replace('watch?v=', 'embed/') }}" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                {% endif %}
-            </section>
-            {% endif %}
-
-            {% if block.type == 'signup_form' %}
-            <section>
-                <span class="section-header">{{ blockNumber }} // CONNECTION</span>
-                <div class="cyber-box">
-                    <h3>{{ block.title }}</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 20px;">{{ block.desc }}</p>
-                    <form name="contact" method="POST" data-netlify="true" style="margin-top: 20px;">
-                        <input type="text" name="codename" class="cyber-input" placeholder="CODE NAME" required>
-                        <input type="email" name="email" class="cyber-input" placeholder="FREQUENCY (Email)" required>
-                        <button type="submit" class="submit-btn">ESTABLISH LINK</button>
-                    </form>
-                </div>
-            </section>
-            {% endif %}
-        {% endfor %}
-    </div>
+    <audio id="main-audio" loop preload="auto"><source src="{{ settings.audio_loop }}" type="audio/mpeg"></audio>
+    <audio id="access-sound" preload="auto"><source src="{{ settings.audio_access }}" type="audio/mpeg"></audio>
 
     <div id="audio-bar">
-        <div class="player-controls">
-            <button id="play-btn">▶</button> 
-        </div>
-        <div class="track-display">AUDIO_LOG: <span class="accent-text" id="active-track-name">OFFLINE</span></div>
+        <div class="player-controls"><button id="play-btn">▶</button></div>
+        <div class="track-display">AUDIO_LOG: <span class="accent-text">{{ settings.audio_label | default('SIGNAL_DETECTED') }}</span></div>
         <div style="flex-grow: 1; height: 2px; background: #333; margin-left: 20px; position: relative;">
             <div id="progress-bar" style="width: 0%; height: 100%; background: var(--accent-color);"></div>
         </div>
-        
-        <audio id="main-audio" loop preload="auto"><source src="{{ settings.audio_loop }}" type="audio/mpeg"></audio>
-        <audio id="access-sound" preload="auto"><source src="{{ settings.audio_access }}" type="audio/mpeg"></audio>
+    </div>
+
+    <main id="swup" class="transition-fade">
+        <div class="container">
+            <header>
+                <a href="/" class="logo-link">
+                    {% if settings.site_logo %}
+                        <img src="{{ settings.site_logo }}" alt="ZAIROK" class="logo-img">
+                    {% else %}
+                        <span class="logo-text">ZAIROK</span>
+                    {% endif %}
+                </a>
+                <nav>
+                    {% for item in settings.menu_items %}
+                        {% if item.type == 'Modal' %}
+                            <button onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')">{{ item.label }}</button>
+                        {% else %}
+                            <a href="{{ item.url }}">{{ item.label }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </nav>
+            </header>
+
+            {% for block in blocks %}
+                {% set nr = "" %}{% if loop.index < 10 %}{% set nr = "0" ~ loop.index %}{% else %}{% set nr = loop.index %}{% endif %}
+                
+                {% if block.type == 'hero' %}
+                <section>
+                    <span class="section-header">{{ nr }} // {{ block.status | default('INIT') }}</span>
+                    <h1 style="font-size: 2.5rem; line-height: 1.2;">{{ block.title }}<br><span class="accent-text">{{ block.subtitle }}</span></h1>
+                    <p style="white-space: pre-line;">{{ block.text }}</p>
+                </section>
+                {% endif %}
+
+                {% if block.type == 'lore' %}
+                <section>
+                    <span class="section-header">{{ nr }} // DATABASE</span>
+                    <div style="display: grid; gap: 30px;">
+                    {% for item in block.items %}
+                        <div><h3>{{ item.item_title }}</h3><p style="font-size: 0.9rem; color: #aaa;">{{ item.item_desc }}</p></div>
+                    {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+                {% endfor %}
+        </div>
+    </main>
+
+    <div id="modal" class="modal-overlay hidden">
+        <div class="modal-box" style="border: 2px solid var(--accent-color); padding: 30px; text-align: center; max-width: 500px; background: #000;">
+            <h2 id="modal-title" style="color: var(--accent-color);"></h2>
+            <p id="modal-body" style="margin-bottom: 20px; white-space: pre-line;"></p>
+            <button onclick="closeModal()" style="background:transparent; border:1px solid var(--error-color); color:var(--error-color); padding:10px 20px; cursor:pointer;">CLOSE</button>
+        </div>
     </div>
 
     <script>
-        const enterBtn = document.getElementById('enter-btn');
-        const gateBox = document.getElementById('gate-box');
-        const gateMsg = document.getElementById('gate-msg');
-        const gateOverlay = document.getElementById('the-gate');
+        const swup = new Swup();
         const audioEl = document.getElementById('main-audio');
         const accessSound = document.getElementById('access-sound');
         const playBtn = document.getElementById('play-btn');
-        const trackNameDisplay = document.getElementById('active-track-name');
         const progressBar = document.getElementById('progress-bar');
+        let isPlaying = false;
 
-        if(sessionStorage.getItem('zairok_access')) { gateOverlay.style.display = 'none'; }
+        if(sessionStorage.getItem('zairok_access')) { document.getElementById('the-gate').style.display = 'none'; }
 
-        enterBtn.addEventListener('click', () => {
-            // Άμεσο trigger ήχου για κινητά
-            if(accessSound && accessSound.querySelector('source').getAttribute('src')) {
-                accessSound.volume = 1.0;
-                accessSound.play().catch(e => console.log("Audio blocked"));
+        document.getElementById('enter-btn').addEventListener('click', function() {
+            // 1. ΞΕΚΙΝΑΕΙ Η ΜΟΥΣΙΚΗ ΑΚΑΡΙΑΙΑ
+            if(audioEl.querySelector('source').getAttribute('src')) {
+                audioEl.volume = 0.4;
+                audioEl.play().then(() => { isPlaying = true; playBtn.innerText = "❚❚"; });
+            }
+            if(accessSound.querySelector('source').getAttribute('src')) {
+                accessSound.volume = 1.0; accessSound.play();
             }
 
-            enterBtn.style.display = 'none';
-            gateBox.classList.add('scanning');
-            gateMsg.innerText = "{{ settings.scan_start_text }}";
+            // 2. ΞΕΚΙΝΑΕΙ ΤΟ VISUAL
+            this.style.display = 'none';
+            document.getElementById('gate-box').classList.add('scanning');
+            document.getElementById('gate-msg').innerText = "{{ settings.scan_start_text }}";
             
-            setTimeout(() => {
-                gateMsg.innerText = "{{ settings.scan_success_text }}";
-                gateMsg.style.color = "var(--accent-color)";
-            }, 2000);
-
-            setTimeout(() => {
-                gateBox.classList.remove('scanning');
-                gateOverlay.classList.add('fade-out');
+            setTimeout(() => { document.getElementById('gate-msg').innerText = "{{ settings.scan_success_text }}"; }, 2000);
+            setTimeout(() => { 
+                document.getElementById('the-gate').classList.add('fade-out');
                 sessionStorage.setItem('zairok_access', 'true');
-                
-                if(audioEl && audioEl.querySelector('source').getAttribute('src')) {
-                    audioEl.volume = 0.4;
-                    audioEl.play().then(() => {
-                        isPlaying = true;
-                        playBtn.innerText = "❚❚";
-                        trackNameDisplay.innerText = "MAIN_LOOP.mp3";
-                    }).catch(e => console.log("Loop blocked")); 
-                }
             }, 3000);
-
-            setTimeout(() => { gateOverlay.style.display = 'none'; }, 4000);
+            setTimeout(() => { document.getElementById('the-gate').style.display = 'none'; }, 4000);
         });
 
-        let isPlaying = false;
         playBtn.addEventListener('click', () => {
             if(!isPlaying) { audioEl.play(); playBtn.innerText = "❚❚"; isPlaying = true; } 
             else { audioEl.pause(); playBtn.innerText = "▶"; isPlaying = false; }
         });
 
         audioEl.ontimeupdate = () => {
-            if(audioEl.duration) {
-                const pct = (audioEl.currentTime / audioEl.duration) * 100;
-                progressBar.style.width = pct + "%";
-            }
+            if(audioEl.duration) progressBar.style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%";
         };
 
         function openModal(title, text) {
@@ -242,14 +193,6 @@
             document.getElementById('modal').classList.remove('hidden');
         }
         function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
-                }
-            });
-        }
     </script>
 </body>
 </html>
