@@ -25,15 +25,16 @@
         .crt-flicker { animation: flicker 0.15s infinite; background: rgba(255, 140, 0, 0.01); }
         @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
 
-        #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
-        .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 30px; box-shadow: 0 0 30px var(--accent-dim); max-width: 90%; position: relative; overflow: hidden; }
+        /* GATE OVERLAY - ΥΨΗΛΟΤΕΡΟ Z-INDEX ΓΙΑ ΝΑ ΠΑΤΙΕΤΑΙ */
+        #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
+        .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 30px; box-shadow: 0 0 30px var(--accent-dim); max-width: 90%; position: relative; overflow: hidden; pointer-events: all; }
         .face-scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; background-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); opacity: 0; pointer-events: none; }
         .scanning .face-scan-line { opacity: 1; animation: scanFace 1.5s ease-in-out infinite; }
         @keyframes scanFace { 0%, 100% { top: 0%; } 50% { top: 100%; } }
-        .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 15px 30px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 15px 30px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px; position: relative; z-index: 20001; }
 
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 50px; position: relative; z-index: 1001; }
-        .logo-link { text-decoration: none; }
+        .logo-link { text-decoration: none; display: flex; align-items: center; }
         .logo-img { max-height: 40px; }
         .logo-text { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; color: var(--text-color); }
 
@@ -41,7 +42,6 @@
         .menu-toggle { display: none; font-size: 1.8rem; color: var(--accent-color); background: none; border: none; cursor: pointer; z-index: 10005; }
         nav { display: flex; gap: 20px; }
         nav a, nav button { color: #888; text-decoration: none; font-family: var(--font-display); font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; background: none; border: none; cursor: pointer; }
-        nav a:hover, nav button:hover { color: var(--accent-color); }
 
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
@@ -62,7 +62,7 @@
         section { margin-bottom: 80px; }
         .section-header { font-family: monospace; color: #666; margin-bottom: 15px; border-left: 3px solid var(--accent-color); padding-left: 15px; }
         .cyber-box { border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8); }
-        .cyber-input { width: 100%; background: transparent; border: 1px solid #444; color: #fff; padding: 15px; margin-bottom: 15px; }
+        .cyber-input { width: 100%; background: transparent; border: 1px solid #444; color: #fff; padding: 15px; margin-bottom: 15px; font-family: var(--font-body); }
         .submit-btn { background: var(--accent-color); color: #000; border: none; padding: 15px 30px; cursor: pointer; font-family: var(--font-display); width: 100%; font-weight: bold; }
 
         #audio-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #050505; border-top: 1px solid var(--accent-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 990; }
@@ -91,7 +91,7 @@
 
     <div id="audio-bar">
         <div class="player-controls"><button id="play-btn">▶</button></div>
-        <div class="track-display">AUDIO_LOG: <span class="accent-text" id="track-label">{{ settings.audio_label | default('SIGNAL_DETECTED') }}</span></div>
+        <div class="track-display">AUDIO_LOG: <span class="accent-text">{{ settings.audio_label | default('SIGNAL_DETECTED') }}</span></div>
         <div style="flex-grow: 1; height: 2px; background: #333; margin-left: 20px; position: relative;">
             <div id="progress-bar" style="width: 0%; height: 100%; background: var(--accent-color);"></div>
         </div>
@@ -151,6 +151,8 @@
                     {% if block.image %}<img src="{{ block.image }}" style="max-width:100%; border:1px solid var(--accent-color);">{% endif %}
                     {% if block.video %}<div style="position:relative;padding-bottom:56.25%;height:0;margin-top:20px;"><iframe src="{{ block.video | replace('watch?v=', 'embed/') }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe></div>{% endif %}
                 </section>
+                {% elif block.type == 'richtext' %}
+                <section><div class="cyber-box">{{ block.body | safe }}</div></section>
                 {% endif %}
             {% endfor %}
         </div>
@@ -165,7 +167,6 @@
         const playBtn = document.getElementById('play-btn');
         let isPlaying = false;
 
-        // HAMBURGER TOGGLE
         const toggleMenu = () => document.getElementById('nav-menu').classList.toggle('active');
         document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
         swup.on('contentReplaced', () => document.getElementById('nav-menu').classList.remove('active'));
@@ -173,12 +174,16 @@
         if(sessionStorage.getItem('zairok_access')) { document.getElementById('the-gate').style.display = 'none'; }
 
         document.getElementById('enter-btn').addEventListener('click', function() {
-            // ΗΧΟΣ ΑΜΕΣΩΣ ΜΕ ΤΟ ΚΛΙΚ
-            if(audioEl.querySelector('source').getAttribute('src')) {
-                audioEl.volume = 0.4; audioEl.play().then(() => { isPlaying = true; playBtn.innerText = "❚❚"; });
+            // ΗΧΟΣ ΑΜΕΣΩΣ ΜΕ ΤΟ ΚΛΙΚ - Robust Check
+            const loopSrc = audioEl.querySelector('source').getAttribute('src');
+            const accessSrc = accessSound.querySelector('source').getAttribute('src');
+
+            if(loopSrc && loopSrc !== "") {
+                audioEl.volume = 0.4;
+                audioEl.play().then(() => { isPlaying = true; playBtn.innerText = "❚❚"; }).catch(e => console.log("Loop blocked"));
             }
-            if(accessSound.querySelector('source').getAttribute('src')) {
-                accessSound.volume = 1.0; accessSound.play();
+            if(accessSrc && accessSrc !== "") {
+                accessSound.volume = 1.0; accessSound.play().catch(e => console.log("Access sound blocked"));
             }
 
             this.style.display = 'none';
@@ -186,7 +191,10 @@
             document.getElementById('gate-msg').innerText = "{{ settings.scan_start_text }}";
             
             setTimeout(() => { document.getElementById('gate-msg').innerText = "{{ settings.scan_success_text }}"; }, 2000);
-            setTimeout(() => { document.getElementById('the-gate').style.opacity = '0'; sessionStorage.setItem('zairok_access', 'true'); }, 3000);
+            setTimeout(() => { 
+                document.getElementById('the-gate').style.opacity = '0';
+                sessionStorage.setItem('zairok_access', 'true');
+            }, 3000);
             setTimeout(() => { document.getElementById('the-gate').style.display = 'none'; }, 4000);
         });
 
