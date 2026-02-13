@@ -16,6 +16,11 @@
       "type": "Modal",
       "modal_title": "CLASSIFIED ITEMS",
       "modal_text": "Έχω λίγα Quest Items. Δεν είναι για όλους.\n\nΑν νιώθεις ότι πρέπει να έχεις ένα... έλα να βρεις τους Απόρρητους Φακέλους στο Hobby Festival."
+    },
+    {
+      "type": "Link",
+      "label": "Public Archives",
+      "url": "/public-archives/"
     }
   ]
 }
