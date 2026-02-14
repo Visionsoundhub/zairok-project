@@ -62,6 +62,10 @@
         
         .hidden { display: none !important; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 40000; display: flex; align-items: center; justify-content: center; }
+        
+        /* Loading Spinner */
+        .loading-spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: var(--accent-color); animation: spin 1s ease-in-out infinite; margin: 10px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -125,58 +129,74 @@
                         {% endif %}
                     
                     {% elif block.type == 'signup_form' %}
-                        <div id="mlb2-{{ block.ml_form_id | default('179335714605893061') }}" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-{{ block.ml_form_id | default('179335714605893061') }}" style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
-                            <div class="ml-form-embedWrapper embedForm">
-                                <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
-                                    <h3 style="color:var(--accent-color); font-family:var(--font-display);">{{ block.title }}</h3>
-                                    <p style="margin-bottom:20px;">{{ block.desc }}</p>
+                        <div class="resistance-form-container" style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
+                            <div class="row-form">
+                                <h3 style="color:var(--accent-color); font-family:var(--font-display);">{{ block.title }}</h3>
+                                <p style="margin-bottom:20px;">{{ block.desc }}</p>
+                                
+                                <form id="resistance-gateway">
+                                    <input type="text" id="form-name" placeholder="CODE NAME" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" required>
+                                    <input type="email" id="form-email" placeholder="FREQUENCY (Email)" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" required>
                                     
-                                    <form class="ml-block-form" id="vip-form-{{ loop.index }}" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id | default('179335714605893061') }}/subscribe" data-code="" method="post">
-                                        <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
-                                        <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
-                                        
-                                        {% if block.form_type == "resistance" %}
-                                        <input id="resistance-code-{{ loop.index }}" type="text" name="fields[z_i_p]" style="width:100%; background:transparent; border:1px solid var(--accent-color); color:#fff; padding:15px; margin-bottom:15px;" placeholder="Κωδικός Φυσικού Κλειδιού (π.χ. 1001)" required>
-                                        {% endif %}
+                                    {% if block.form_type == "resistance" %}
+                                    <input type="text" id="form-code" placeholder="Κωδικός Φυσικού Κλειδιού (4 ψηφία)" style="width:100%; background:transparent; border:1px solid var(--accent-color); color:#fff; padding:15px; margin-bottom:15px;" required>
+                                    {% endif %}
 
-                                        <input type="hidden" name="ml-submit" value="1">
-                                        <input type="hidden" name="anticsrf" value="true">
-                                        <button type="submit" class="primary" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
-                                        
-                                        {% if block.form_type == "resistance" %}
-                                        <div id="error-msg-{{ loop.index }}" style="color: var(--error-color); display: none; margin-top: 15px; font-weight: bold;">
-                                            [ΣΦΑΛΜΑ] Άκυρο Σήμα. Ο κωδικός δεν αναγνωρίστηκε.
-                                        </div>
-                                        {% endif %}
-                                    </form>
-                                </div>
-                                <div class="ml-form-successBody row-success" style="display: none">
-                                    <div class="ml-form-successContent">
-                                        <h3 style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px;">SIGNAL ESTABLISHED</h3>
-                                        <p style="color:#aaa;">You have successfully joined the resistance database.</p>
-                                    </div>
-                                </div>
+                                    <button type="submit" id="form-submit-btn" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
+                                    
+                                    <div class="loading-spinner" id="form-spinner"></div>
+                                    <div id="form-error" style="color: var(--error-color); display: none; margin-top: 15px; font-weight: bold;"></div>
+                                </form>
+                            </div>
+
+                            <div class="row-success" style="display: none; text-align: center;">
+                                <h3 id="success-title" style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px;">SIGNAL ESTABLISHED</h3>
+                                <p id="success-msg" style="color:#aaa;">You have successfully joined the resistance database.</p>
                             </div>
                         </div>
-                        
-                        {% if block.form_type == "resistance" %}
+
                         <script>
-                          document.getElementById('vip-form-{{ loop.index }}').addEventListener('submit', function(e) {
-                            // Οι κωδικοί των VIPs
-                            const validCodes = ['1001', '2045', '3099', '4040']; 
-                            
-                            const inputCode = document.getElementById('resistance-code-{{ loop.index }}').value.trim();
-                            const errorMsg = document.getElementById('error-msg-{{ loop.index }}');
-                            
-                            if (!validCodes.includes(inputCode)) {
-                              e.preventDefault(); 
-                              errorMsg.style.display = 'block'; 
-                            } else {
-                              errorMsg.style.display = 'none'; 
-                            }
-                          });
+                            document.getElementById('resistance-gateway').addEventListener('submit', function(e) {
+                                e.preventDefault();
+                                
+                                const btn = document.getElementById('form-submit-btn');
+                                const spinner = document.getElementById('form-spinner');
+                                const errorDiv = document.getElementById('form-error');
+                                const successDiv = document.querySelector('.row-success');
+                                const formDiv = document.querySelector('.row-form');
+
+                                const name = document.getElementById('form-name').value;
+                                const email = document.getElementById('form-email').value;
+                                const code = document.getElementById('form-code') ? document.getElementById('form-code').value : 'GENERAL';
+
+                                // UI State
+                                btn.style.display = 'none';
+                                spinner.style.display = 'block';
+                                errorDiv.style.display = 'none';
+
+                                // Σύνδεση με το Google Sheet Web App σου
+                                fetch('https://script.google.com/macros/s/AKfycbybXm1HjHdlJFxyzHZ9de-l2KR2zz47rMsBfiYGsr7cAcc-J_Kvp_Ir_RpvAijRVO9XYA/exec', {
+                                    method: 'POST',
+                                    mode: 'no-cors', // Σημαντικό για Google Apps Script
+                                    cache: 'no-cache',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ name, email, code })
+                                })
+                                .then(() => {
+                                    // Επειδή χρησιμοποιούμε no-cors, δεν μπορούμε να διαβάσουμε το JSON response
+                                    // αλλά το Google Script θα έχει κάνει ήδη τη δουλειά του (Sheet + MailerLite)
+                                    formDiv.style.display = 'none';
+                                    successDiv.style.display = 'block';
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                    btn.style.display = 'block';
+                                    spinner.style.display = 'none';
+                                    errorDiv.innerText = '[ΣΦΑΛΜΑ] Αδυναμία σύνδεσης με τη βάση δεδομένων.';
+                                    errorDiv.style.display = 'block';
+                                });
+                            });
                         </script>
-                        {% endif %}
 
                     {% elif block.type == 'media_block' %}
                         {% if block.image %}<img src="{{ block.image }}" style="max-width:100%; border:1px solid var(--accent-color); margin-bottom:20px;">{% endif %}
@@ -233,14 +253,6 @@
         function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
         audioEl.ontimeupdate = () => { if(audioEl.duration) document.getElementById('progress-bar').style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%"; };
         swup.on('contentReplaced', () => { document.getElementById('nav-menu').classList.remove('active'); });
-    </script>
-    <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
-    <script>fetch("https://assets.mailerlite.com/jsonp/2113368/forms/179335714605893061/takel")</script>
-    <script>
-        function ml_webform_success_37130907() {
-            document.querySelector('.ml-subscribe-form-37130907 .row-success').style.display = 'block';
-            document.querySelector('.ml-subscribe-form-37130907 .row-form').style.display = 'none';
-        }
     </script>
 </body>
 </html>
