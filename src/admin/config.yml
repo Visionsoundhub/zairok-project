@@ -26,26 +26,33 @@ collections:
             widget: "list"
             fields:
               - {label: "Label", name: "label", widget: "string"}
-              - {label: "Link", name: "link", widget: "string"}
+              - {label: "Type", name: "type", widget: "select", options: ["Link", "Modal"], default: "Link"}
+              - {label: "Link URL", name: "url", widget: "string", required: false}
+              - {label: "Modal Title", name: "modal_title", widget: "string", required: false}
+              - {label: "Modal Text", name: "modal_text", widget: "text", required: false}
 
   - name: "pages"
     label: "📄 Pages"
     folder: "src/pages"
     create: true
+    slug: "{{slug}}"
     fields:
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Permalink", name: "permalink", widget: "string"}
       - {label: "Layout", name: "layout", widget: "hidden", default: "base.njk"}
-      - label: "Page Blocks"
-        name: "page_blocks"
+      - {label: "ΤΙΤΛΟΣ ΣΕΛΙΔΑΣ", name: "title", widget: "string"}
+      - {label: "PERMALINK", name: "permalink", widget: "string"}
+      - {label: "ΕΜΦΑΝΙΣΗ ΣΤΟ ΜΕΝΟΥ;", name: "in_menu", widget: "boolean", default: true}
+      - label: "PAGE BLOCKS"
+        name: "blocks"
         widget: "list"
         types:
-          - label: "Hero Section"
+          - label: "Hero (Μεγάλα Γράμματα)"
             name: "hero"
             widget: "object"
             fields:
-              - {label: "Main Title", name: "title", widget: "string"}
-              - {label: "Subtitle", name: "subtitle", widget: "text"}
+              - {label: "Status", name: "status", widget: "select", options: ["INIT", "INFO", "DATA", "SECRET", "ALERT", "ARCHIVE", "CLASSIFIED", "REDACTED"], default: "INIT"}
+              - {label: "Title", name: "title", widget: "string"}
+              - {label: "Subtitle", name: "subtitle", widget: "string", required: false}
+              - {label: "Text", name: "text", widget: "text"}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
           - label: "Lore Section (Database Style)"
@@ -72,7 +79,6 @@ collections:
                 name: "ml_form_id"
                 widget: "string"
                 default: "179391629910606883"
-                help: "Το ID από το MailerLite για τη συγκεκριμένη φόρμα."
           - label: "Video / Image"
             name: "media_block"
             widget: "object"
@@ -81,3 +87,8 @@ collections:
               - {label: "Image", name: "image", widget: "image", required: false}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
+          - label: "Rich Text (Markdown)"
+            name: "richtext"
+            widget: "object"
+            fields:
+              - {label: "Body", name: "body", widget: "markdown"}
