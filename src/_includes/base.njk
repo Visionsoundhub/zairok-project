@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://unpkg.com/swup@4"></script>
-<style>
+    <style>
         :root {
             --bg-color: #000000;
             --accent-color: {{ settings.color_accent | default('#ff8c00') }};
@@ -16,70 +16,55 @@
             --text-color: #e0e0e0;
             --font-display: 'Orbitron', sans-serif;
             --font-body: 'Inter', sans-serif;
-        } /* <--- Εδώ κλείνει το root */
-
-        /* ΑΥΤΟ ΠΡΕΠΕΙ ΝΑ ΕΙΝΑΙ ΑΠΟ ΚΑΤΩ ΕΞΩ ΑΠΟ ΤΟ ROOT */
-        nav .menu-modal-trigger { 
-            color: var(--error-color) !important; 
-            font-weight: bold; 
-            opacity: 0.9; 
         }
-        nav .menu-modal-trigger:hover { 
-            opacity: 1; 
-            text-shadow: 0 0 10px var(--error-color); 
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        /* ... ο υπόλοιπος κώδικας ... */
+        
+        nav .menu-modal-trigger { color: var(--error-color) !important; font-weight: bold; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); overflow-x: hidden; padding-bottom: 110px; }
         
-        /* CRT EFFECTS */
+        /* CRT & SCAN EFFECTS */
         .scanlines, .crt-flicker { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; pointer-events: none; }
         .scanlines { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; }
         .crt-flicker { animation: flicker 0.15s infinite; background: rgba(255, 140, 0, 0.01); }
+        @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
 
-        /* GATE OVERLAY - ΔΕΝ ΤΟ ΠΕΙΡΑΖΟΥΜΕ, ΛΕΙΤΟΥΡΓΕΙ */
-        #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 2147483647; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; pointer-events: all; }
-        .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 40px; box-shadow: 0 0 50px var(--accent-dim); max-width: 90%; position: relative; z-index: 2147483647; }
-        .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 20px 40px; font-family: var(--font-display); font-size: 1.2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; pointer-events: auto !important; position: relative; }
+        /* GATE OVERLAY */
+        #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 2147483647; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
+        .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 40px; box-shadow: 0 0 50px var(--accent-dim); max-width: 90%; position: relative; overflow: hidden; }
+        
+        .face-scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; background-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); opacity: 0; pointer-events: none; }
+        .scanning .face-scan-line { opacity: 1; animation: scanFace 1.5s ease-in-out infinite; }
+        @keyframes scanFace { 0%, 100% { top: 0%; } 50% { top: 100%; } }
 
-        /* HEADER & NAVIGATION */
+        .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 20px 40px; font-family: var(--font-display); font-size: 1.2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* MODAL RED OVERRIDE */
+        #modal-container h2 { color: var(--error-color) !important; font-family: var(--font-display); }
+        #modal-container button { background: var(--error-color) !important; color: #000 !important; font-weight: bold; }
+
+        /* HEADER & NAV */
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 20px 0; margin-bottom: 50px; position: relative; z-index: 1000; }
         .logo-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-decoration: none; }
         
         .menu-toggle { display: none; font-size: 2.5rem; color: var(--accent-color); background: none; border: none; cursor: pointer; z-index: 10005; padding: 10px; }
         nav { display: flex; gap: 20px; align-items: center; }
         nav a, nav button { color: #888; text-decoration: none; font-family: var(--font-display); font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; background: none; border: none; cursor: pointer; }
-        nav a:hover, nav button:hover { color: var(--accent-color); }
 
-        /* MOBILE MENU FIX - ΚΕΝΤΡΑΡΙΣΜΕΝΟ & ΣΩΣΤΟ ΜΕΓΕΘΟΣ */
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
-            nav { 
-                position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; 
-                background: rgba(0,0,0,0.98); backdrop-filter: blur(15px); z-index: 10004; 
-                flex-direction: column; justify-content: center; align-items: center; transition: 0.4s ease-in-out;
-                gap: 30px;
-            }
+            nav { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(15px); z-index: 10004; flex-direction: column; justify-content: center; align-items: center; transition: 0.4s ease-in-out; gap: 30px; }
             nav.active { right: 0; }
-            nav a, nav button { font-size: 1.6rem !important; color: var(--accent-color); font-weight: 700; letter-spacing: 2px; margin: 0; }
+            nav a, nav button { font-size: 1.6rem !important; color: var(--accent-color); font-weight: 700; }
         }
 
         .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
         section { margin-bottom: 80px; }
         .section-header { font-family: monospace; color: #666; margin-bottom: 15px; border-left: 3px solid var(--accent-color); padding-left: 15px; text-transform: uppercase; }
 
-        /* LORE GRID */
-        .lore-grid { display: grid; gap: 40px; }
-        .lore-item h3 { color: var(--accent-color); margin-bottom: 5px; font-family: var(--font-display); }
-        .lore-item p { color: #aaa; line-height: 1.6; }
-
-        /* AUDIO BAR */
         #audio-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 85px; background: #050505; border-top: 1px solid var(--accent-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 2000000; pointer-events: auto; }
-        .player-controls button { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-
+        .player-controls button { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); width: 50px; height: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
         .hidden { display: none !important; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 40000; display: flex; align-items: center; justify-content: center; }
     </style>
@@ -89,7 +74,8 @@
     <div class="crt-flicker"></div>
 
     <div id="the-gate">
-        <div class="gate-content">
+        <div class="gate-content" id="gate-box">
+            <div class="face-scan-line"></div>
             <h1 style="font-family: var(--font-display); margin-bottom: 10px;">SYSTEM: FOUNDATION ZAIRA</h1>
             <p style="font-size: 0.8rem; color: #666; margin-bottom: 30px;">SECURE CONNECTION REQUIRED</p>
             <button id="enter-btn" class="btn-access" onclick="handleAccess(this)">PRESS FOR ENCRYPTED ACCESS</button>
@@ -131,18 +117,14 @@
                         <p style="white-space: pre-line;">{{ block.text }}</p>
                     {% elif block.type == 'lore' %}
                         <span class="section-header">{{ nr }} // DATABASE</span>
-                        <div class="lore-grid">
+                        <div style="display: grid; gap: 40px;">
                         {% for item in block.items %}
-                            <div class="lore-item">
-                                <h3>{{ item.item_title }}</h3>
-                                <p style="white-space: pre-line;">{{ item.item_desc }}</p>
-                            </div>
+                            <div><h3 style="color:var(--accent-color); font-family:var(--font-display);">{{ item.item_title }}</h3><p style="white-space: pre-line; color:#aaa;">{{ item.item_desc }}</p></div>
                         {% endfor %}
                         </div>
                     {% elif block.type == 'signup_form' %}
                         <div style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
-                            <h3>{{ block.title }}</h3>
-                            <p style="margin-bottom:20px;">{{ block.desc }}</p>
+                            <h3>{{ block.title }}</h3><p style="margin-bottom:20px;">{{ block.desc }}</p>
                             <form name="contact" method="POST" data-netlify="true">
                                 <input type="text" name="name" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
                                 <input type="email" name="email" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="EMAIL" required>
@@ -160,9 +142,9 @@
 
     <div id="modal-container" class="modal-overlay hidden">
         <div style="border: 1px solid #333; padding: 30px; background: #000; max-width: 500px; width: 90%; text-align: center;">
-            <h2 id="modal-title" style="color: var(--accent-color); font-family: var(--font-display); margin-bottom: 15px;"></h2>
+            <h2 id="modal-title" style="margin-bottom: 15px;"></h2>
             <p id="modal-body" style="margin-bottom: 25px; white-space: pre-line; color: #aaa;"></p>
-            <button onclick="closeModal()" style="background: var(--accent-color); color: #000; border: none; padding: 10px 25px; cursor: pointer; font-family: var(--font-display); font-weight: bold;">CLOSE</button>
+            <button onclick="closeModal()" style="padding: 10px 25px; cursor: pointer; font-family: var(--font-display);">CLOSE</button>
         </div>
     </div>
 
@@ -176,6 +158,7 @@
         if(sessionStorage.getItem('zairok_access')) { document.getElementById('the-gate').style.display = 'none'; }
 
         function handleAccess(btn) {
+            document.getElementById('gate-box').classList.add('scanning');
             try {
                 audioEl.volume = 0.4; audioEl.play().then(() => { isPlaying = true; playBtn.innerText = "❚❚"; });
                 accessSound.volume = 1.0; accessSound.play();
@@ -197,12 +180,8 @@
             document.getElementById('modal-body').innerText = text;
             document.getElementById('modal-container').classList.remove('hidden');
         }
-
         function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
-
         audioEl.ontimeupdate = () => { if(audioEl.duration) document.getElementById('progress-bar').style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%"; };
-        
-        // Close menu on link click (mobile)
         swup.on('contentReplaced', () => { document.getElementById('nav-menu').classList.remove('active'); });
     </script>
 </body>
