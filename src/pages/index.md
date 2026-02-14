@@ -5,35 +5,30 @@ permalink: /
 in_menu: true
 blocks:
   - type: hero
-    title: THE SYSTEM IS BROKEN.
-    subtitle: WE ARE THE GLITCH.
-    text: Μια διαδραστική Hybrid Sci-Fi εμπειρία. Το Ίδρυμα Ζάιρα παρακολουθεί. Η
-      Ε.ΝΕ.ΔΙΑ δεν είναι ασθένεια. Είναι η δύναμή μας.
-    status: INFO
+    title: NORKEN CITY GRID
+    subtitle: YOU ARE BEING WATCHED.
+    text: |-
+      Το Ίδρυμα Ζάιρα ελέγχει τα πάντα. Η Ε.ΝΕ.ΔΙΑ δεν είναι αυτό που λένε.
+      Έχεις μπει σε μη εξουσιοδοτημένη συχνότητα.
+    status: ALERT
     button_text: ""
     button_url: ""
-  - type: lore
-    title: DATABASE
-    items:
-      - item_title: THE FOUNDATION
-        item_desc: Το καθεστώς που ελέγχει τη Norken. Μετατρέπουν τους διαφορετικούς σε
-          'μπαταρίες'.
-      - item_title: KRIVA (THE EVENT)
-        item_desc: Η στιγμή της αφύπνισης. Λιποθυμία; Ή σύνδεση με το δίκτυο;
+  - type: media_block
+    video: https://www.youtube.com/@Zairok.universe
+    image: /assets/images/zairoklogo.jpg
+    button_text: Δες το κρυπτογραφημένο βίντεο
+    button_url: https://www.youtube.com/watch?v=lGDubSRiIWo
+  - type: hero
+    status: CLASSIFIED
+    title: "ACCESS LEVEL: GRANTED"
+    subtitle: "ACCESS LEVEL: GRANTED"
+    text: Ξεκλείδωσες ένα άκρως απόρρητο αρχείο. Διάβασε τον πρόλογο πριν το σύστημα
+      εντοπίσει το ίχνος σου
+    button_text: ΔΙΑΒΑΣΤΕ ΤΟΝ ΠΡΟΛΟΓΟ
   - type: signup_form
     title: FIRST WAVE RECRUITMENT.
-    desc: Μόνο οι πρώτοι 100 θα έχουν πρόσβαση στα Κρυφά Κεφάλαια. Λάβετε
-      ενημερώσεις υψηλής ασφαλείας απευθείας στο νευρικό σας δίκτυο.
-  - type: hero
-    status: INIT
-    title: THE SYSTEM IS BROKEN.
-    subtitle: WE ARE THE GLITCH.
-    text: Μια διαδραστική Hybrid Sci-Fi εμπειρία. Το Ίδρυμα Ζάιρα παρακολουθεί. Η
-      Ε.ΝΕ.ΔΙΑ δεν είναι ασθένεια. Είναι η δύναμή μας.
-  - type: lore
-    title: DATABASE
-    items:
-      - item_title: THE FOUNDATION
-        item_desc: Το καθεστώς που ελέγχει τη Norken. Μετατρέπουν τους διαφορετικούς σε
-          'μπαταρίες'.
+    desc: >-
+      Μόνο οι πρώτοι 100 αποκτούν πρόσβαση στα Κρυφά Κεφάλαια. 
+
+      Δώστε συντεταγμένες επικοινωνίας για να λάβετε την επόμενη επιτυχή μετάδοση
 ---
