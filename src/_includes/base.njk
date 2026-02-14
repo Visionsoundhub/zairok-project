@@ -139,7 +139,7 @@
                                     <input type="email" id="form-email" placeholder="FREQUENCY (Email)" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" required>
                                     
                                     {% if block.form_type == "resistance" %}
-                                    <input type="text" id="form-code" placeholder="Κωδικός Φυσικού Κλειδιού (4 ψηφία)" style="width:100%; background:transparent; border:1px solid var(--accent-color); color:#fff; padding:15px; margin-bottom:15px;" required>
+                                    <input type="text" id="form-code" placeholder="Κωδικός Φυσικού Κλειδιού" style="width:100%; background:transparent; border:1px solid var(--accent-color); color:#fff; padding:15px; margin-bottom:15px;" required>
                                     {% endif %}
 
                                     <button type="submit" id="form-submit-btn" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
@@ -169,22 +169,18 @@
                                 const email = document.getElementById('form-email').value;
                                 const code = document.getElementById('form-code') ? document.getElementById('form-code').value : 'GENERAL';
 
-                                // UI State
                                 btn.style.display = 'none';
                                 spinner.style.display = 'block';
                                 errorDiv.style.display = 'none';
 
-                                // Σύνδεση με το Google Sheet Web App σου
+                                // Σύνδεση με το Google Sheet Web App
                                 fetch('https://script.google.com/macros/s/AKfycbybXm1HjHdlJFxyzHZ9de-l2KR2zz47rMsBfiYGsr7cAcc-J_Kvp_Ir_RpvAijRVO9XYA/exec', {
                                     method: 'POST',
-                                    mode: 'no-cors', // Σημαντικό για Google Apps Script
-                                    cache: 'no-cache',
+                                    mode: 'no-cors', 
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ name, email, code })
+                                    body: JSON.stringify({ name: name, email: email, code: code })
                                 })
                                 .then(() => {
-                                    // Επειδή χρησιμοποιούμε no-cors, δεν μπορούμε να διαβάσουμε το JSON response
-                                    // αλλά το Google Script θα έχει κάνει ήδη τη δουλειά του (Sheet + MailerLite)
                                     formDiv.style.display = 'none';
                                     successDiv.style.display = 'block';
                                 })
