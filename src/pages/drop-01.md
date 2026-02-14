@@ -37,4 +37,6 @@ blocks:
 
       Δώστε συντεταγμένες επικοινωνίας για να λάβετε την επόμενη επιτυχή μετάδοση
     title: FIRST WAVE RECRUITMENT.
+    form_type: resistance
+    ml_form_id: "179391629910606883"
 ---
