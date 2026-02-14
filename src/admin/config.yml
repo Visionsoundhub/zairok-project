@@ -75,10 +75,7 @@ collections:
                 options: 
                   - { label: "General (First 100)", value: "general" }
                   - { label: "Resistance (VIP Code)", value: "resistance" }
-              - label: "MailerLite Form ID"
-                name: "ml_form_id"
-                widget: "string"
-                default: "179391629910606883"
+              - {label: "MailerLite Form ID", name: "ml_form_id", widget: "string", default: "179391629910606883"}
           - label: "Video / Image"
             name: "media_block"
             widget: "object"
