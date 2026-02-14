@@ -1,0 +1,59 @@
+{# Φόρμα Εγγραφής Zairok #}
+<div id="mlb2-{{ block.ml_form_id }}" class="ml-form-embedContainer ml-subscribe-form">
+  <div class="ml-form-align-center">
+    <div class="ml-form-embedWrapper embedForm">
+      
+      <div class="ml-form-embedBody row-form">
+        <div class="ml-form-embedContent">
+          <h4>{{ block.title }}</h4>
+          <p>{{ block.desc }}</p>
+        </div>
+
+        {# Η δράση στέλνεται στο ID που ορίζεις στο CMS #}
+        <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id }}/subscribe" method="post" target="_blank">
+          <div class="ml-form-formContent">
+            
+            {# ΠΕΔΙΟ EMAIL #}
+            <div class="ml-form-fieldRow">
+              <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                <input aria-label="email" aria-required="true" type="email" class="form-control" name="fields[email]" placeholder="Email" autocomplete="email">
+              </div>
+            </div>
+
+            {# ΠΕΔΙΟ CODE NAME #}
+            <div class="ml-form-fieldRow">
+              <div class="ml-field-group ml-field-name">
+                <input aria-label="name" type="text" class="form-control" name="fields[name]" placeholder="CODE NAME" autocomplete="given-name">
+              </div>
+            </div>
+
+            {# ΠΕΔΙΟ ΚΩΔΙΚΟΥ: Εμφανίζεται ΜΟΝΟ αν στο CMS επέλεξες "Resistance" #}
+            {% if block.form_type == "resistance" %}
+            <div class="ml-form-fieldRow ml-last-item">
+              <div class="ml-field-group ml-field-z_i_p ml-validate-required">
+                <input aria-label="z_i_p" aria-required="true" type="text" class="form-control" id="resistance-code" name="fields[z_i_p]" placeholder="Κωδικός Αντίστασης (4 ψηφία)">
+              </div>
+            </div>
+            {% endif %}
+
+          </div>
+
+          <input type="hidden" name="ml-submit" value="1">
+          <div class="ml-form-embedSubmit">
+            <button type="submit" class="primary">ΕΚΤΕΛΕΣΗ ΣΥΝΔΕΣΗΣ</button>
+          </div>
+          <input type="hidden" name="anticsrf" value="true">
+        </form>
+      </div>
+
+      {# Μήνυμα επιτυχίας #}
+      <div class="ml-form-successBody row-success" style="display: none">
+        <div class="ml-form-successContent">
+          <h4>ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ</h4>
+          <p>Το σήμα σας ελήφθη. Η Αντίσταση θα επικοινωνήσει μαζί σας.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
