@@ -10,8 +10,8 @@ blocks:
     text: Μια διαδραστική Hybrid Sci-Fi εμπειρία. Το Ίδρυμα Ζάιρα παρακολουθεί. Η
       Ε.ΝΕ.ΔΙΑ δεν είναι ασθένεια. Είναι η δύναμή μας.
     status: INFO
-    button_text: Download archives
-    button_url: https://www.youtube.com/watch?v=PL_izvWJVLU
+    button_text: ""
+    button_url: ""
   - type: lore
     title: DATABASE
     items:
