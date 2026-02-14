@@ -15,7 +15,7 @@ blocks:
     button_url: ""
   - type: media_block
     video: http://youtube.com/watch?v=lGDubSRiIWo
-    image: /assets/images/zairoklogo.jpg
+    image: ""
     button_text: Δες το κρυπτογραφημένο βίντεο
     button_url: https://www.youtube.com/watch?v=lGDubSRiIWo
   - type: hero
