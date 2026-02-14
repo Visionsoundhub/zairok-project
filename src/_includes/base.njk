@@ -118,14 +118,28 @@
                         {% endfor %}
                         </div>
                     {% elif block.type == 'signup_form' %}
-                        <div style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
-                            <h3>{{ block.title }}</h3><p style="margin-bottom:20px;">{{ block.desc }}</p>
-                            <form action="https://assets.mailerlite.com/jsonp/2113368/forms/179335714605893061/subscribe" method="post" target="_blank">
-                                <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
-                                <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
-                                <button type="submit" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
-                            </form>
-                        </div>
+                        <div id="mlb2-37130907" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-37130907" style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
+    <div class="ml-form-embedWrapper embedForm">
+        <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+            <h3 style="color:var(--accent-color); font-family:var(--font-display);">{{ block.title }}</h3>
+            <p style="margin-bottom:20px;">{{ block.desc }}</p>
+            <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2113368/forms/179335714605893061/subscribe" data-code="" method="post">
+                <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
+                <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
+                <input type="hidden" name="ml-submit" value="1">
+                <input type="hidden" name="anticsrf" value="true">
+                <button type="submit" class="primary" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
+            </form>
+        </div>
+
+        <div class="ml-form-successBody row-success" style="display: none">
+            <div class="ml-form-successContent">
+                <h3 style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px;">SIGNAL ESTABLISHED</h3>
+                <p style="color:#aaa;">You have successfully joined the resistance database.</p>
+            </div>
+        </div>
+    </div>
+</div>
                     {% elif block.type == 'media_block' %}
                         {% if block.image %}<img src="{{ block.image }}" style="max-width:100%; border:1px solid var(--accent-color); margin-bottom:20px;">{% endif %}
                         {% if block.video %}<div style="position:relative;padding-bottom:56.25%;height:0;"><iframe src="{{ block.video | replace('watch?v=', 'embed/') }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe></div>{% endif %}
@@ -182,4 +196,12 @@
     <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
     <script>fetch("https://assets.mailerlite.com/jsonp/2113368/forms/179335714605893061/takel")</script>
 </body>
+<script>
+    function ml_webform_success_37130907() {
+        // Αυτό το script κρύβει τη φόρμα και δείχνει το "SIGNAL ESTABLISHED"
+        document.querySelector('.ml-subscribe-form-37130907 .row-success').style.display = 'block';
+        document.querySelector('.ml-subscribe-form-37130907 .row-form').style.display = 'none';
+    }
+</script>
 </html>
+
