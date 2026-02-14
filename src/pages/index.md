@@ -21,10 +21,11 @@ blocks:
   - type: hero
     status: CLASSIFIED
     title: "ACCESS LEVEL: GRANTED"
-    subtitle: "ACCESS LEVEL: GRANTED"
+    subtitle: Κατάφερες να προσπεράσεις το firewall
     text: Ξεκλείδωσες ένα άκρως απόρρητο αρχείο. Διάβασε τον πρόλογο πριν το σύστημα
       εντοπίσει το ίχνος σου
     button_text: ΔΙΑΒΑΣΤΕ ΤΟΝ ΠΡΟΛΟΓΟ
+    button_url: https://www.youtube.com/@Zairok.universe
   - type: signup_form
     title: FIRST WAVE RECRUITMENT.
     desc: >-
