@@ -1,4 +1,4 @@
-<div id="mlb2-{{ block.ml_form_id }}" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-{{ block.ml_form_id }}">
+<div id="mlb2-179391629910606883" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-179391629910606883">
   <div class="ml-form-align-center">
     <div class="ml-form-embedWrapper embedForm">
       <div class="ml-form-embedBody row-form">
@@ -7,7 +7,7 @@
           <p>{{ block.desc }}</p>
         </div>
 
-        <form class="ml-block-form" id="vip-form-{{ block.ml_form_id }}" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id }}/subscribe" method="post" target="_blank">
+        <form class="ml-block-form" id="vip-form" action="https://assets.mailerlite.com/jsonp/2113368/forms/179391629910606883/subscribe" method="post" target="_blank">
           <div class="ml-form-formContent">
             
             <div class="ml-form-fieldRow">
@@ -22,13 +22,11 @@
               </div>
             </div>
 
-            {% if block.form_type == "resistance" %}
             <div class="ml-form-fieldRow ml-last-item">
               <div class="ml-field-group ml-field-z_i_p ml-validate-required">
                 <input id="resistance-code" aria-label="z_i_p" aria-required="true" type="text" class="form-control" name="fields[z_i_p]" placeholder="Κωδικός Φυσικού Κλειδιού (π.χ. 1001)">
               </div>
             </div>
-            {% endif %}
             
           </div>
 
@@ -38,11 +36,9 @@
           </div>
           <input type="hidden" name="anticsrf" value="true">
           
-          {% if block.form_type == "resistance" %}
           <div id="error-msg" style="color: #ff003c; display: none; margin-top: 15px; font-weight: bold;">
             [ΣΦΑΛΜΑ] Άκυρο Σήμα. Ο κωδικός δεν αναγνωρίστηκε.
           </div>
-          {% endif %}
         </form>
       </div>
 
@@ -56,12 +52,11 @@
   </div>
 </div>
 
-{% if block.form_type == "resistance" %}
 <script>
   // Βάλε εδώ μέσα σε εισαγωγικά τους κωδικούς που γράφεις στις κάρτες
   const validCodes = ['1001', '2045', '3099', '4040']; 
 
-  document.getElementById('vip-form-{{ block.ml_form_id }}').addEventListener('submit', function(e) {
+  document.getElementById('vip-form').addEventListener('submit', function(e) {
     const inputCode = document.getElementById('resistance-code').value.trim();
     const errorMsg = document.getElementById('error-msg');
     
@@ -73,6 +68,5 @@
     }
   });
 </script>
-{% endif %}
 
 <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
