@@ -16,4 +16,10 @@ blocks:
       Το υλικό που ακολουθεί είναι ακατέργαστο (raw) και αυστηρά εμπιστευτικό.
     button_text: Κατέβασέ το
     button_url: https://www.youtube.com/@Zairok.universe
+  - type: signup_form
+    desc: >-
+      Μόνο οι πρώτοι 100 αποκτούν πρόσβαση στα Κρυφά Κεφάλαια. 
+
+      Δώστε συντεταγμένες επικοινωνίας για να λάβετε την επόμενη επιτυχή μετάδοση
+    title: FIRST WAVE RECRUITMENT.
 ---
