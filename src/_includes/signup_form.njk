@@ -1,59 +1,78 @@
-{# Φόρμα Εγγραφής Zairok #}
-<div id="mlb2-{{ block.ml_form_id }}" class="ml-form-embedContainer ml-subscribe-form">
+<div id="mlb2-{{ block.ml_form_id }}" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-{{ block.ml_form_id }}">
   <div class="ml-form-align-center">
     <div class="ml-form-embedWrapper embedForm">
-      
       <div class="ml-form-embedBody row-form">
         <div class="ml-form-embedContent">
           <h4>{{ block.title }}</h4>
           <p>{{ block.desc }}</p>
         </div>
 
-        {# Η δράση στέλνεται στο ID που ορίζεις στο CMS #}
-        <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id }}/subscribe" method="post" target="_blank">
+        <form class="ml-block-form" id="vip-form-{{ block.ml_form_id }}" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id }}/subscribe" method="post" target="_blank">
           <div class="ml-form-formContent">
             
-            {# ΠΕΔΙΟ EMAIL #}
             <div class="ml-form-fieldRow">
               <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
                 <input aria-label="email" aria-required="true" type="email" class="form-control" name="fields[email]" placeholder="Email" autocomplete="email">
               </div>
             </div>
 
-            {# ΠΕΔΙΟ CODE NAME #}
             <div class="ml-form-fieldRow">
               <div class="ml-field-group ml-field-name">
                 <input aria-label="name" type="text" class="form-control" name="fields[name]" placeholder="CODE NAME" autocomplete="given-name">
               </div>
             </div>
 
-            {# ΠΕΔΙΟ ΚΩΔΙΚΟΥ: Εμφανίζεται ΜΟΝΟ αν στο CMS επέλεξες "Resistance" #}
             {% if block.form_type == "resistance" %}
             <div class="ml-form-fieldRow ml-last-item">
               <div class="ml-field-group ml-field-z_i_p ml-validate-required">
-                <input aria-label="z_i_p" aria-required="true" type="text" class="form-control" id="resistance-code" name="fields[z_i_p]" placeholder="Κωδικός Αντίστασης (4 ψηφία)">
+                <input id="resistance-code" aria-label="z_i_p" aria-required="true" type="text" class="form-control" name="fields[z_i_p]" placeholder="Κωδικός Φυσικού Κλειδιού (π.χ. 1001)">
               </div>
             </div>
             {% endif %}
-
+            
           </div>
 
           <input type="hidden" name="ml-submit" value="1">
           <div class="ml-form-embedSubmit">
-            <button type="submit" class="primary">ΕΚΤΕΛΕΣΗ ΣΥΝΔΕΣΗΣ</button>
+            <button type="submit" class="primary" id="submit-btn">ΕΠΙΒΕΒΑΙΩΣΗ</button>
           </div>
           <input type="hidden" name="anticsrf" value="true">
+          
+          {% if block.form_type == "resistance" %}
+          <div id="error-msg" style="color: #ff003c; display: none; margin-top: 15px; font-weight: bold;">
+            [ΣΦΑΛΜΑ] Άκυρο Σήμα. Ο κωδικός δεν αναγνωρίστηκε.
+          </div>
+          {% endif %}
         </form>
       </div>
 
-      {# Μήνυμα επιτυχίας #}
       <div class="ml-form-successBody row-success" style="display: none">
         <div class="ml-form-successContent">
-          <h4>ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ</h4>
-          <p>Το σήμα σας ελήφθη. Η Αντίσταση θα επικοινωνήσει μαζί σας.</p>
+          <h4>ΣΗΜΑ ΕΛΗΦΘΗ</h4>
+          <p>Η σύνδεση με το δίκτυο της Αντίστασης ολοκληρώθηκε.</p>
         </div>
       </div>
-
     </div>
   </div>
 </div>
+
+{% if block.form_type == "resistance" %}
+<script>
+  // Βάλε εδώ μέσα σε εισαγωγικά τους κωδικούς που γράφεις στις κάρτες
+  const validCodes = ['1001', '2045', '3099', '4040']; 
+
+  document.getElementById('vip-form-{{ block.ml_form_id }}').addEventListener('submit', function(e) {
+    const inputCode = document.getElementById('resistance-code').value.trim();
+    const errorMsg = document.getElementById('error-msg');
+    
+    if (!validCodes.includes(inputCode)) {
+      e.preventDefault(); 
+      errorMsg.style.display = 'block'; 
+    } else {
+      errorMsg.style.display = 'none'; 
+    }
+  });
+</script>
+{% endif %}
+
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
