@@ -23,27 +23,22 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); overflow-x: hidden; padding-bottom: 110px; }
         
-        /* CRT & SCAN EFFECTS */
         .scanlines, .crt-flicker { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 998; pointer-events: none; }
         .scanlines { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2)); background-size: 100% 4px; }
         .crt-flicker { animation: flicker 0.15s infinite; background: rgba(255, 140, 0, 0.01); }
-        @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
 
-        /* GATE OVERLAY */
         #the-gate { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--bg-color); z-index: 2147483647; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s ease-out; }
         .gate-content { text-align: center; border: 1px solid var(--accent-color); padding: 40px; box-shadow: 0 0 50px var(--accent-dim); max-width: 90%; position: relative; overflow: hidden; }
-        
         .face-scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 5px; background-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); opacity: 0; pointer-events: none; }
         .scanning .face-scan-line { opacity: 1; animation: scanFace 1.5s ease-in-out infinite; }
         @keyframes scanFace { 0%, 100% { top: 0%; } 50% { top: 100%; } }
+        @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1.0; } 100% { opacity: 0.98; } }
 
         .btn-access { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 20px 40px; font-family: var(--font-display); font-size: 1.2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* MODAL RED OVERRIDE */
         #modal-container h2 { color: var(--error-color) !important; font-family: var(--font-display); }
         #modal-container button { background: var(--error-color) !important; color: #000 !important; font-weight: bold; }
 
-        /* HEADER & NAV */
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 20px 0; margin-bottom: 50px; position: relative; z-index: 1000; }
         .logo-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-decoration: none; }
         
@@ -125,9 +120,9 @@
                     {% elif block.type == 'signup_form' %}
                         <div style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
                             <h3>{{ block.title }}</h3><p style="margin-bottom:20px;">{{ block.desc }}</p>
-                            <form name="contact" method="POST" data-netlify="true">
-                                <input type="text" name="name" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
-                                <input type="email" name="email" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="EMAIL" required>
+                            <form action="https://assets.mailerlite.com/jsonp/2113368/forms/179335714605893061/subscribe" method="post" target="_blank">
+                                <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
+                                <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
                                 <button type="submit" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
                             </form>
                         </div>
@@ -184,5 +179,7 @@
         audioEl.ontimeupdate = () => { if(audioEl.duration) document.getElementById('progress-bar').style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%"; };
         swup.on('contentReplaced', () => { document.getElementById('nav-menu').classList.remove('active'); });
     </script>
+    <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
+    <script>fetch("https://assets.mailerlite.com/jsonp/2113368/forms/179335714605893061/takel")</script>
 </body>
 </html>
