@@ -30,6 +30,14 @@
               </div>
             </div>
             {% endif %}
+
+            {# ΠΡΟΣΘΗΚΗ: CHECKBOX ΟΡΩΝ ΧΡΗΣΗΣ #}
+            <div class="ml-form-fieldRow terms-container" style="margin-top: 15px; margin-bottom: 20px; text-align: left;">
+              <input type="checkbox" id="terms-checkbox-{{ block.ml_form_id }}" name="terms" required style="display: inline-block; width: auto; margin-right: 8px; accent-color: #ff8c00;">
+              <label for="terms-checkbox-{{ block.ml_form_id }}" style="display: inline; color: #cccccc; font-size: 0.85em; cursor: pointer;">
+                Αποδέχομαι τους <span class="open-terms-modal terms-link" style="color: #ff8c00; text-decoration: underline; cursor: pointer;">Όρους Χρήσης & Προστασία Δεδομένων</span>.
+              </label>
+            </div>
             
           </div>
 
@@ -57,6 +65,68 @@
   </div>
 </div>
 
+{# ΠΡΟΣΘΗΚΗ: MODAL ΚΑΙ STYLING ΟΡΩΝ ΧΡΗΣΗΣ #}
+<style>
+  .terms-link:hover { color: #ffffff !important; }
+  .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(2px); }
+  .terms-modal-content { background-color: #0d0d0d; color: #cccccc; margin: 10% auto; padding: 30px; border: 1px solid #ff8c00; width: 90%; max-width: 600px; border-radius: 4px; box-shadow: 0 0 15px rgba(255, 140, 0, 0.2); font-family: inherit; text-align: left; }
+  .terms-modal-content h2 { color: #ff8c00; border-bottom: 1px solid #333333; padding-bottom: 15px; margin-top: 0; font-size: 1.2em; }
+  .terms-modal-content ul { padding-left: 20px; line-height: 1.6; font-size: 0.9em; }
+  .terms-modal-content li { margin-bottom: 12px; }
+  .terms-modal-content strong { color: #ffffff; }
+  .close-modal-btn { color: #888888; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1; margin-top: -5px; }
+  .close-modal-btn:hover { color: #ffffff; }
+</style>
+
+<div id="terms-modal-{{ block.ml_form_id }}" class="modal-overlay">
+  <div class="terms-modal-content">
+    <span class="close-modal-btn">&times;</span>
+    <h2>Όροι Χρήσης & Προστασία Δεδομένων</h2>
+    <ul>
+      <li><strong>Σκοπός Συλλογής:</strong> Το email σας συλλέγεται αποκλειστικά και μόνο για την αποστολή ενημερωτικών δελτίων (newsletter). Οι ενημερώσεις περιλαμβάνουν:
+        <ul style="margin-top: 8px;">
+          <li>Νέα και εξελίξεις για το project "Zairok".</li>
+          <li>Μουσικά θέματα και κυκλοφορίες συνδεδεμένες με τα κεφάλαια του βιβλίου.</li>
+          <li>Ενημερώσεις για "in-character" live events.</li>
+          <li>"In-character" μεταδόσεις (αυτοματοποιημένα emails) στα πλαίσια του Alternate Reality Game (ARG).</li>
+        </ul>
+      </li>
+      <li><strong>Ασφάλεια:</strong> Τα δεδομένα σας παραμένουν αυστηρά στην κατοχή μας και δεν παραχωρούνται σε τρίτους.</li>
+      <li><strong>Πλατφόρμα:</strong> Η διαχείριση γίνεται μέσω ασφαλούς εξωτερικής πλατφόρμας, πλήρως συμβατής με τον κανονισμό GDPR.</li>
+      <li><strong>Διαγραφή:</strong> Έχετε το δικαίωμα διαγραφής ανά πάσα στιγμή μέσω του συνδέσμου (Unsubscribe) στο τέλος κάθε email.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const formId = "{{ block.ml_form_id }}";
+    const modal = document.getElementById('terms-modal-' + formId);
+    const openBtn = document.querySelector('#vip-form-' + formId + ' .open-terms-modal');
+    const closeBtn = modal.querySelector('.close-modal-btn');
+
+    if(openBtn && modal) {
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.style.display = 'block';
+      });
+    }
+
+    if(closeBtn && modal) {
+      closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+    }
+
+    window.addEventListener('click', function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+{# ΤΟ ΔΙΚΟ ΣΟΥ JAVASCRIPT ΓΙΑ ΤΟΥΣ ΚΩΔΙΚΟΥΣ ΤΗΣ ΑΝΤΙΣΤΑΣΗΣ (ΑΘΙΚΤΟ) #}
 {% if block.form_type == "resistance" %}
 <script>
   // Οι κωδικοί των VIPs
