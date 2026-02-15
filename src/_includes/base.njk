@@ -66,6 +66,20 @@
         /* Loading Spinner */
         .loading-spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: var(--accent-color); animation: spin 1s ease-in-out infinite; margin: 10px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* GDPR Terms Styling */
+        .gdpr-terms-container { margin-top: 15px; margin-bottom: 20px; text-align: left; }
+        .gdpr-checkbox { display: inline-block; width: auto; margin-right: 8px; accent-color: var(--accent-color); }
+        .gdpr-label { display: inline; color: #cccccc; font-size: 0.85em; cursor: pointer; }
+        .gdpr-link { color: var(--accent-color); text-decoration: underline; cursor: pointer; }
+        .gdpr-link:hover { color: #ffffff; }
+        .gdpr-modal-content { background-color: #0d0d0d; color: #cccccc; padding: 30px; border: 1px solid var(--accent-color); width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; text-align: left; font-family: var(--font-body); }
+        .gdpr-modal-content h2 { color: var(--accent-color) !important; border-bottom: 1px solid #333; padding-bottom: 15px; margin-top: 0; font-family: var(--font-display); font-size: 1.2em; text-align: left; }
+        .gdpr-modal-content ul { padding-left: 20px; line-height: 1.6; font-size: 0.9em; margin-bottom: 20px; }
+        .gdpr-modal-content li { margin-bottom: 12px; }
+        .gdpr-modal-content strong { color: #ffffff; }
+        .gdpr-close-btn { background: transparent !important; border: 1px solid #333 !important; color: #888 !important; padding: 10px 20px !important; width: 100%; transition: 0.3s; }
+        .gdpr-close-btn:hover { background: #333 !important; color: #fff !important; }
     </style>
 </head>
 <body>
@@ -96,6 +110,7 @@
             <header>
                 <a href="/" class="logo-text">{% if settings.site_logo %}<img src="{{ settings.site_logo }}" style="max-height:45px;">{% else %}ZAIROK{% endif %}</a>
                 <button class="menu-toggle" onclick="document.getElementById('nav-menu').classList.toggle('active')">☰</button>
+            
                 <nav id="nav-menu">
                     {% for item in settings.menu_items %}
                         {% if item.type == 'Modal' %}
@@ -109,6 +124,7 @@
 
             {% for block in blocks %}
                 {% set nr = loop.index if loop.index > 9 else "0" ~ loop.index %}
+                
                 <section>
                     {% if block.type == 'hero' %}
                         <span class="section-header">{{ nr }} // {{ block.status | default('INIT') }}</span>
@@ -141,6 +157,13 @@
                                     <input type="email" id="form-email" placeholder="FREQUENCY (Email)" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" required>
                                     <input type="text" id="form-code" placeholder="Κωδικός Φυσικού Κλειδιού" style="width:100%; background:transparent; border:1px solid var(--accent-color); color:#fff; padding:15px; margin-bottom:15px;" required>
                                     
+                                    <div class="gdpr-terms-container">
+                                        <input type="checkbox" id="resistance-terms" name="terms" required class="gdpr-checkbox">
+                                        <label for="resistance-terms" class="gdpr-label">
+                                            Αποδέχομαι τους <span class="gdpr-link" onclick="openGdprModal()">Όρους Χρήσης & Προστασία Δεδομένων</span>.
+                                        </label>
+                                    </div>
+
                                     <button type="submit" id="form-submit-btn" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
                                     
                                     <div class="loading-spinner" id="form-spinner"></div>
@@ -163,6 +186,14 @@
                                 const errorDiv = document.getElementById('form-error');
                                 const successDiv = document.querySelector('.row-success');
                                 const formDiv = document.querySelector('.row-form');
+                                const termsCheckbox = document.getElementById('resistance-terms');
+
+                                // ΕΛΕΓΧΟΣ ΟΡΩΝ ΧΡΗΣΗΣ
+                                if (!termsCheckbox.checked) {
+                                    errorDiv.innerText = '[ΣΦΑΛΜΑ] ΑΠΟΤΥΧΙΑ ΣΥΝΔΕΣΗΣ: Πρέπει να αποδεχτείτε τους Όρους Χρήσης.';
+                                    errorDiv.style.display = 'block';
+                                    return;
+                                }
 
                                 const name = document.getElementById('form-name').value;
                                 const email = document.getElementById('form-email').value;
@@ -171,7 +202,7 @@
                                 btn.style.display = 'none';
                                 spinner.style.display = 'block';
                                 errorDiv.style.display = 'none';
-
+                                
                                 fetch('https://script.google.com/macros/s/AKfycbybXm1HjHdlJFxyzHZ9de-l2KR2zz47rMsBfiYGsr7cAcc-J_Kvp_Ir_RpvAijRVO9XYA/exec', {
                                     method: 'POST',
                                     mode: 'no-cors', 
@@ -203,6 +234,13 @@
                                         <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
                                         <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
                                         
+                                        <div class="gdpr-terms-container">
+                                            <input type="checkbox" id="general-terms-{{ loop.index }}" name="terms" required class="gdpr-checkbox">
+                                            <label for="general-terms-{{ loop.index }}" class="gdpr-label">
+                                                Αποδέχομαι τους <span class="gdpr-link" onclick="openGdprModal()">Όρους Χρήσης & Προστασία Δεδομένων</span>.
+                                            </label>
+                                        </div>
+
                                         <input type="hidden" name="ml-submit" value="1">
                                         <input type="hidden" name="anticsrf" value="true">
                                         <button type="submit" class="primary" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
@@ -248,6 +286,26 @@
         </div>
     </div>
 
+    <div id="gdpr-modal" class="modal-overlay hidden">
+        <div class="gdpr-modal-content">
+            <h2>Όροι Χρήσης & Προστασία Δεδομένων</h2>
+            <ul>
+                <li><strong>Σκοπός Συλλογής:</strong> Το email σας συλλέγεται αποκλειστικά και μόνο για την αποστολή ενημερωτικών δελτίων (newsletter). Οι ενημερώσεις περιλαμβάνουν:
+                    <ul style="margin-top: 8px; margin-bottom: 0;">
+                        <li>Νέα και εξελίξεις για το project "Zairok".</li>
+                        <li>Μουσικά θέματα και κυκλοφορίες συνδεδεμένες με τα κεφάλαια του βιβλίου.</li>
+                        <li>Ενημερώσεις για "in-character" live events.</li>
+                        <li>"In-character" μεταδόσεις (αυτοματοποιημένα emails) στα πλαίσια του Alternate Reality Game (ARG).</li>
+                    </ul>
+                </li>
+                <li><strong>Ασφάλεια Δεδομένων:</strong> Τα προσωπικά σας δεδομένα παραμένουν αυστηρά στην κατοχή μας. Δεν πρόκειται ποτέ να πουληθούν, να ενοικιαστούν ή να παραχωρηθούν σε τρίτους.</li>
+                <li><strong>Πλατφόρμα Αποστολής:</strong> Η διαχείριση της λίστας γίνεται μέσω ασφαλούς εξωτερικής πλατφόρμας η οποία συμμορφώνεται πλήρως με τους ευρωπαϊκούς κανονισμούς προστασίας δεδομένων (GDPR).</li>
+                <li><strong>Δικαίωμα Διαγραφής:</strong> Έχετε το δικαίωμα να διαγραφείτε ανά πάσα στιγμή. Κάθε email που λαμβάνετε περιέχει στο τέλος ειδικό σύνδεσμο διαγραφής (Unsubscribe).</li>
+            </ul>
+            <button class="gdpr-close-btn" onclick="closeGdprModal()" style="cursor: pointer; font-family: var(--font-display);">ΚΛΕΙΣΙΜΟ</button>
+        </div>
+    </div>
+
     <script>
         const swup = new Swup();
         const audioEl = document.getElementById('main-audio');
@@ -281,6 +339,11 @@
             document.getElementById('modal-container').classList.remove('hidden');
         }
         function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
+        
+        // ΣΥΝΑΡΤΗΣΕΙΣ ΓΙΑ ΤΟ ΝΕΟ GDPR MODAL
+        function openGdprModal() { document.getElementById('gdpr-modal').classList.remove('hidden'); }
+        function closeGdprModal() { document.getElementById('gdpr-modal').classList.add('hidden'); }
+
         audioEl.ontimeupdate = () => { if(audioEl.duration) document.getElementById('progress-bar').style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%"; };
         swup.on('contentReplaced', () => { document.getElementById('nav-menu').classList.remove('active'); });
     </script>
