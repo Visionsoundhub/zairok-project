@@ -147,37 +147,85 @@
                     {% elif block.type == 'signup_form' %}
                         
                         {% if block.form_type == "resistance" %}
-                        <div class="resistance-form-container" style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
+                        <div class="resistance-form-container" style="border: 1px solid var(--accent-color); padding: 25px; background: rgba(5,5,5,0.9); position: relative;">
+                            
+                            <button onclick="document.getElementById('terminal-instructions').classList.toggle('hidden')" style="position: absolute; top: -15px; right: 20px; background: #000; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 5px 15px; font-family: var(--font-display); font-size: 0.8rem; cursor: pointer; z-index: 10;">[ ? ] ΟΔΗΓΙΕΣ</button>
+
+                            <div id="terminal-instructions" class="hidden" style="background: #111; border: 1px dashed #555; padding: 15px; margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">
+                                <strong style="color:var(--accent-color);">ΟΔΗΓΙΕΣ ΠΡΟΣΒΑΣΗΣ:</strong><br>
+                                1. Πατήστε "ΕΝΑΡΞΗ ΣΥΝΔΕΣΗΣ" για να ανοίξει το ασφαλές κανάλι.<br>
+                                2. Διαβάστε την εισερχόμενη μετάδοση.<br>
+                                3. Μόλις ολοκληρωθεί, θα εμφανιστούν τα πεδία εισαγωγής.<br>
+                                4. Συμπληρώστε το Code Name, το Email σας και τον Μοναδικό Κωδικό από τη φυσική σας κάρτα (αν έχετε).<br>
+                                5. Αποδεχτείτε το Πρωτόκολλο Ασφαλείας (Όροι Χρήσης) και πατήστε "ESTABLISH LINK".
+                            </div>
+
                             <div class="row-form">
-                                <h3 style="color:var(--accent-color); font-family:var(--font-display);">{{ block.title }}</h3>
-                                <p style="margin-bottom:20px;">{{ block.desc }}</p>
+                                <h3 style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;">{{ block.title }}</h3>
                                 
-                                <form id="resistance-gateway">
-                                    <input type="text" id="form-name" placeholder="CODE NAME" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" required>
-                                    <input type="email" id="form-email" placeholder="FREQUENCY (Email)" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" required>
-                                    <input type="text" id="form-code" placeholder="Κωδικός Φυσικού Κλειδιού" style="width:100%; background:transparent; border:1px solid var(--accent-color); color:#fff; padding:15px; margin-bottom:15px;" required>
+                                <div id="terminal-screen" style="font-family: monospace; color: #0f0; min-height: 200px; margin-bottom: 20px; white-space: pre-line; text-shadow: 0 0 5px #0f0; display: none;"></div>
+
+                                <button id="start-terminal-btn" onclick="startTerminal()" style="background:transparent; color:var(--accent-color); border:2px solid var(--accent-color); padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; letter-spacing: 2px;">[ ΕΝΑΡΞΗ ΣΥΝΔΕΣΗΣ ]</button>
+                                
+                                <form id="resistance-gateway" style="display: none; margin-top: 20px;">
+                                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">[ ΠΕΔΙΑ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ ]</div>
+                                    <input type="text" id="form-name" placeholder="[1] CODE NAME" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace;" required>
+                                    <input type="email" id="form-email" placeholder="[2] ΚΑΝΑΛΙ ΕΠΙΚΟΙΝΩΝΙΑΣ (Email)" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace;" required>
+                                    <input type="text" id="form-code" placeholder="[3] ΦΥΣΙΚΟ ΚΛΕΙΔΙ ΠΡΟΣΒΑΣΗΣ" style="width:100%; background:rgba(20,10,0,0.5); border:1px solid var(--accent-color); color:var(--accent-color); padding:15px; margin-bottom:15px; font-family: monospace;" required>
                                     
-                                    <div class="gdpr-terms-container">
+                                    <div class="gdpr-terms-container" style="background: #0a0a0a; padding: 10px; border: 1px solid #222;">
                                         <input type="checkbox" id="resistance-terms" name="terms" required class="gdpr-checkbox">
                                         <label for="resistance-terms" class="gdpr-label">
-                                            Αποδέχομαι τους <span class="gdpr-link" onclick="openGdprModal()">Όρους Χρήσης & Προστασία Δεδομένων</span>.
+                                            [ ] ΑΠΟΔΟΧΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΣΦΑΛΕΙΑΣ <span class="gdpr-link" onclick="openGdprModal()">(Όροι Χρήσης)</span>
                                         </label>
                                     </div>
 
-                                    <button type="submit" id="form-submit-btn" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
+                                    <button type="submit" id="form-submit-btn" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; margin-top: 15px;">ESTABLISH LINK</button>
                                     
                                     <div class="loading-spinner" id="form-spinner"></div>
-                                    <div id="form-error" style="color: var(--error-color); display: none; margin-top: 15px; font-weight: bold;"></div>
+                                    <div id="form-error" style="color: var(--error-color); display: none; margin-top: 15px; font-weight: bold; font-family: monospace;"></div>
                                 </form>
                             </div>
 
-                            <div class="row-success" style="display: none; text-align: center;">
-                                <h3 id="success-title" style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px;">SIGNAL ESTABLISHED</h3>
-                                <p id="success-msg" style="color:#aaa;">You have successfully joined the resistance database.</p>
+                            <div class="row-success" style="display: none; text-align: center; padding: 30px 0;">
+                                <h3 id="success-title" style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px; text-shadow: 0 0 10px var(--accent-color);">SIGNAL ESTABLISHED</h3>
+                                <p id="success-msg" style="color:#0f0; font-family: monospace;">> Πρόσβαση εγκρίθηκε. Η κρυπτογράφηση ολοκληρώθηκε.<br>> Αναμείνατε για περαιτέρω οδηγίες.</p>
                             </div>
                         </div>
 
                         <script>
+                            const terminalText = `> ΕΓΚΑΘΙΔΡΥΣΗ ΑΣΦΑΛΟΥΣ ΣΥΝΔΕΣΗΣ...
+> Καλώς ήρθες στο δίκτυο του ZAIROK.
+> Η Διοκρατεία του Νόρκεν πουλάει ένα καλοστημένο ψέμα.
+> Μπορεί να μην είμαστε φυλακισμένοι με την παραδοσιακή έννοια, αλλά η ελευθερία που μας δίνουν είναι μια ψευδαίσθηση.
+> Χρειαζόμαστε πράκτορες σαν κι εσένα.
+> 
+> ΑΠΑΙΤΕΙΤΑΙ ΤΑΥΤΟΠΟΙΗΣΗ:
+> Βγάλε το Μυστικό Κλειδί από την κάρτα σου.
+> Αν ο κωδικός είναι έγκυρος, περνάς στην VIP λίστα προσβάσεων.
+> Αν δεν έχεις σωστό κωδικό, καταγράφεσαι στη λίστα Υπόπτων.
+> 
+> ΑΝΑΜΟΝΗ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ...`;
+
+                            let terminalI = 0;
+                            const terminalSpeed = 30; // Ταχύτητα
+
+                            function typeWriterTerminal() {
+                                if (terminalI < terminalText.length) {
+                                    document.getElementById("terminal-screen").innerHTML += terminalText.charAt(terminalI);
+                                    terminalI++;
+                                    setTimeout(typeWriterTerminal, terminalSpeed);
+                                } else {
+                                    document.getElementById("resistance-gateway").style.display = "block";
+                                }
+                            }
+
+                            function startTerminal() {
+                                document.getElementById("start-terminal-btn").style.display = "none";
+                                document.getElementById("terminal-screen").style.display = "block";
+                                typeWriterTerminal();
+                            }
+
                             document.getElementById('resistance-gateway').addEventListener('submit', function(e) {
                                 e.preventDefault();
                                 
@@ -188,9 +236,8 @@
                                 const formDiv = document.querySelector('.row-form');
                                 const termsCheckbox = document.getElementById('resistance-terms');
 
-                                // ΕΛΕΓΧΟΣ ΟΡΩΝ ΧΡΗΣΗΣ
                                 if (!termsCheckbox.checked) {
-                                    errorDiv.innerText = '[ΣΦΑΛΜΑ] ΑΠΟΤΥΧΙΑ ΣΥΝΔΕΣΗΣ: Πρέπει να αποδεχτείτε τους Όρους Χρήσης.';
+                                    errorDiv.innerText = '> [ΣΦΑΛΜΑ] ΑΠΟΤΥΧΙΑ ΣΥΝΔΕΣΗΣ: Πρέπει να αποδεχτείτε το Πρωτόκολλο Ασφαλείας.';
                                     errorDiv.style.display = 'block';
                                     return;
                                 }
@@ -217,7 +264,7 @@
                                     console.error(err);
                                     btn.style.display = 'block';
                                     spinner.style.display = 'none';
-                                    errorDiv.innerText = '[ΣΦΑΛΜΑ] Αδυναμία σύνδεσης με τη βάση δεδομένων.';
+                                    errorDiv.innerText = '> [ΣΦΑΛΜΑ] Κρίσιμη αποτυχία επικοινωνίας με τη βάση.';
                                     errorDiv.style.display = 'block';
                                 });
                             });
