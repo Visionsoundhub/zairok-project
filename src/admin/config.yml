@@ -1,7 +1,9 @@
 backend:
   name: git-gateway
   branch: main
-  site_domain: zairok.gr # Προσθέτουμε αυτή τη γραμμή
+  site_domain: zairok.gr
+  identity_url: "https://zairok.gr/.netlify/identity"
+  gateway_url: "https://zairok.gr/.netlify/git"
 
 media_folder: "src/assets/images"
 public_folder: "/assets/images"
@@ -90,4 +92,5 @@ collections:
             widget: "object"
             fields:
               - {label: "Body", name: "body", widget: "markdown"}
+
 
