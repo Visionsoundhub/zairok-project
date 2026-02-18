@@ -1,7 +1,7 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Visionsoundhub/zairok-project
   branch: main
-  site_domain: zairok.gr
 
 media_folder: "src/assets/images"
 public_folder: "/assets/images"
@@ -90,6 +90,7 @@ collections:
             widget: "object"
             fields:
               - {label: "Body", name: "body", widget: "markdown"}
+
 
 
 
