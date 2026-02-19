@@ -342,7 +342,7 @@
                             #crt-box-{{ loop.index }}::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
                             #crt-box-{{ loop.index }}::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 50px #000; z-index: 3; pointer-events: none; }
                             
-                            .crt-content-area { position: relative; z-index: 4; white-space: pre-wrap; }
+                            .crt-content-area { position: relative; z-index: 4; white-space: pre-wrap; margin-top: 20px; }
                             .blinking-cursor { font-weight: bold; font-size: 1.2rem; animation: blink 1s step-end infinite; }
                             @keyframes blink { 50% { opacity: 0; } }
                             
@@ -352,20 +352,26 @@
                             .terminal-btn.link-btn { border-color: #555; color: #888; text-decoration: none; }
                             .terminal-btn.link-btn:hover { background: #222; color: #fff; border-color: #888; box-shadow: none; }
 
+                            /* Το νέο SKIP κουμπί */
+                            .skip-btn { display: none; position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.8); border: 1px dashed var(--term-color); color: var(--term-color); padding: 5px 15px; cursor: pointer; font-family: var(--font-display); font-size: 0.8rem; z-index: 10; transition: 0.3s; }
+                            .skip-btn:hover { background: var(--term-color); color: #000; }
+
                             .manga-panel { display: none; width: 100%; max-width: 600px; border: 1px solid var(--term-color); margin-top: 40px; position: relative; z-index: 5; filter: grayscale(100%) contrast(120%); animation: crtGlitch 0.5s ease-in-out forwards; }
                             @keyframes crtGlitch { 0% { filter: invert(1) hue-rotate(180deg); opacity: 0.5; transform: skewX(5deg) scale(1.02); } 20% { filter: invert(0); opacity: 1; transform: skewX(-5deg) scale(0.98); } 40% { filter: invert(1); opacity: 0.8; transform: skewX(2deg) scale(1.01); } 60% { filter: invert(0); opacity: 1; transform: skewX(0) scale(1); } 100% { transform: translate(0, 0); filter: grayscale(100%) contrast(120%) drop-shadow(0 0 10px rgba(255,255,255,0.2)); } }
                         </style>
 
                         <div id="crt-box-{{ loop.index }}">
+                            <button id="skip-btn-{{ loop.index }}" class="skip-btn" onclick="skipTyping_{{ loop.index }}()">[ SKIP ]</button>
+
                             <div id="terminal-options-{{ loop.index }}" class="terminal-menu">
                                 {% if block.buttons %}
                                     <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
                                     {% for btn in block.buttons %}
-                                        {% if btn.action == 'Read Text' %}
+                                        {% if 'Text' in btn.action %}
                                             <button class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('text')">{{ btn.label }}</button>
-                                        {% elif btn.action == 'Read + Audio' %}
+                                        {% elif 'Audio' in btn.action %}
                                             <button class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('audio')">{{ btn.label }}</button>
-                                        {% elif btn.action == 'Link / PDF' %}
+                                        {% elif 'Link' in btn.action or 'PDF' in btn.action %}
                                             <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
                                         {% endif %}
                                     {% endfor %}
@@ -389,30 +395,50 @@
                             const rawText_{{ loop.index }} = `{{ block.terminal_text | replace('\n', '\\n') | replace('\r', '') | safe }}`;
                             let pIndex_{{ loop.index }} = 0;
                             let pSpeed_{{ loop.index }} = 25; 
+                            let isSkipped_{{ loop.index }} = false;
+                            let typeTimer_{{ loop.index }};
                             const textContainer_{{ loop.index }} = document.getElementById("prologue-text-{{ loop.index }}");
+                            const skipBtn_{{ loop.index }} = document.getElementById("skip-btn-{{ loop.index }}");
 
                             function typePrologue_{{ loop.index }}() {
+                                if (isSkipped_{{ loop.index }}) return;
+                                
                                 if (pIndex_{{ loop.index }} < rawText_{{ loop.index }}.length) {
                                     textContainer_{{ loop.index }}.innerHTML = textContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
                                     textContainer_{{ loop.index }}.innerHTML += rawText_{{ loop.index }}.charAt(pIndex_{{ loop.index }}) + '<span class="blinking-cursor">_</span>';
                                     pIndex_{{ loop.index }}++;
                                     window.scrollTo(0, document.body.scrollHeight);
-                                    setTimeout(typePrologue_{{ loop.index }}, pSpeed_{{ loop.index }});
+                                    
+                                    // Αποθηκεύουμε τον timer για να μπορούμε να τον κάνουμε skip
+                                    typeTimer_{{ loop.index }} = setTimeout(typePrologue_{{ loop.index }}, pSpeed_{{ loop.index }});
                                 } else {
-                                    textContainer_{{ loop.index }}.innerHTML = textContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
-                                    const imgPanel = document.getElementById("manga-panel-{{ loop.index }}");
-                                    if(imgPanel) {
-                                        setTimeout(() => {
-                                            imgPanel.style.display = "block";
-                                            window.scrollTo(0, document.body.scrollHeight);
-                                        }, 1000);
-                                    }
+                                    finishTyping_{{ loop.index }}();
                                 }
+                            }
+
+                            function finishTyping_{{ loop.index }}() {
+                                textContainer_{{ loop.index }}.innerHTML = textContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+                                skipBtn_{{ loop.index }}.style.display = "none";
+                                const imgPanel = document.getElementById("manga-panel-{{ loop.index }}");
+                                if(imgPanel) {
+                                    setTimeout(() => {
+                                        imgPanel.style.display = "block";
+                                        window.scrollTo(0, document.body.scrollHeight);
+                                    }, 800);
+                                }
+                            }
+
+                            function skipTyping_{{ loop.index }}() {
+                                isSkipped_{{ loop.index }} = true;
+                                clearTimeout(typeTimer_{{ loop.index }});
+                                textContainer_{{ loop.index }}.innerHTML = rawText_{{ loop.index }};
+                                finishTyping_{{ loop.index }}();
                             }
 
                             function startTerminalMode_{{ loop.index }}(mode) {
                                 document.getElementById("terminal-options-{{ loop.index }}").style.display = "none";
                                 textContainer_{{ loop.index }}.style.display = "block";
+                                skipBtn_{{ loop.index }}.style.display = "block";
                                 
                                 if (mode === 'audio') {
                                     pSpeed_{{ loop.index }} = 45; 
