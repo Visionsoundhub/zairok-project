@@ -63,11 +63,9 @@
         .hidden { display: none !important; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 40000; display: flex; align-items: center; justify-content: center; }
         
-        /* Loading Spinner */
         .loading-spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: var(--accent-color); animation: spin 1s ease-in-out infinite; margin: 10px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* GDPR Terms Styling */
         .gdpr-terms-container { margin-top: 15px; margin-bottom: 20px; text-align: left; }
         .gdpr-checkbox { display: inline-block; width: auto; margin-right: 8px; accent-color: var(--accent-color); }
         .gdpr-label { display: inline; color: #cccccc; font-size: 0.85em; cursor: pointer; }
@@ -92,6 +90,7 @@
             <h1 style="font-family: var(--font-display); margin-bottom: 10px;">SYSTEM: FOUNDATION ZAIRA</h1>
             <p style="font-size: 0.8rem; color: #666; margin-bottom: 30px;">SECURE CONNECTION REQUIRED</p>
             <button id="enter-btn" class="btn-access" onclick="handleAccess(this)">PRESS FOR ENCRYPTED ACCESS</button>
+  
             <div id="gate-msg" style="margin-top:20px; font-family:var(--font-display); color:var(--accent-color); min-height: 1.2em;"></div>
         </div>
     </div>
@@ -124,7 +123,7 @@
 
             {% for block in blocks %}
                 {% set nr = loop.index if loop.index > 9 else "0" ~ loop.index %}
-                
+    
                 <section>
                     {% if block.type == 'hero' %}
                         <span class="section-header">{{ nr }} // {{ block.status | default('INIT') }}</span>
@@ -133,6 +132,7 @@
                         {% if block.button_url %}
                             <a href="{{ block.button_url }}" target="_blank" class="btn-access" style="display:inline-block; margin-top:20px; text-decoration:none;">{{ block.button_text | default('INITIATE LINK') }}</a>
                         {% endif %}
+                    
                     {% elif block.type == 'lore' %}
                         <span class="section-header">{{ nr }} // DATABASE</span>
                         <div style="display: grid; gap: 40px;">
@@ -162,7 +162,7 @@
 
                             <div class="row-form">
                                 <h3 style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;">{{ block.title }}</h3>
-                                
+                            
                                 <div id="terminal-screen" style="font-family: monospace; color: #0f0; min-height: 200px; margin-bottom: 20px; white-space: pre-line; text-shadow: 0 0 5px #0f0; display: none;"></div>
 
                                 <button id="start-terminal-btn" onclick="startTerminal()" style="background:transparent; color:var(--accent-color); border:2px solid var(--accent-color); padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; letter-spacing: 2px;">[ ΕΝΑΡΞΗ ΣΥΝΔΕΣΗΣ ]</button>
@@ -183,6 +183,7 @@
                                     <button type="submit" id="form-submit-btn" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; margin-top: 15px;">ESTABLISH LINK</button>
                                     
                                     <div class="loading-spinner" id="form-spinner"></div>
+                
                                     <div id="form-error" style="color: var(--error-color); display: none; margin-top: 15px; font-weight: bold; font-family: monospace;"></div>
                                 </form>
                             </div>
@@ -249,7 +250,6 @@
                                 btn.style.display = 'none';
                                 spinner.style.display = 'block';
                                 errorDiv.style.display = 'none';
-                                
                                 fetch('https://script.google.com/macros/s/AKfycbybXm1HjHdlJFxyzHZ9de-l2KR2zz47rMsBfiYGsr7cAcc-J_Kvp_Ir_RpvAijRVO9XYA/exec', {
                                     method: 'POST',
                                     mode: 'no-cors', 
@@ -319,6 +319,111 @@
                         {% if block.button_url %}
                             <a href="{{ block.button_url }}" target="_blank" class="btn-access" style="display:inline-block; margin-top:20px; text-decoration:none;">{{ block.button_text | default('VIEW TRANSMISSION') }}</a>
                         {% endif %}
+                    
+                    {% elif block.type == 'crt_terminal' %}
+                        <style>
+                            #crt-box-{{ loop.index }} {
+                                --term-color: {{ block.text_color | default('#00ff00') }};
+                                background-color: #050505;
+                                border: 2px solid #333;
+                                border-radius: 12px;
+                                padding: 40px 30px;
+                                position: relative;
+                                overflow: hidden;
+                                box-shadow: inset 0 0 100px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.5);
+                                margin-top: 30px;
+                                color: var(--term-color);
+                                font-family: 'Courier New', Courier, monospace;
+                                font-size: 1.15rem;
+                                line-height: 1.7;
+                                text-shadow: 0 0 5px var(--term-color);
+                                min-height: 400px;
+                            }
+                            #crt-box-{{ loop.index }}::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
+                            #crt-box-{{ loop.index }}::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 50px #000; z-index: 3; pointer-events: none; }
+                            
+                            .crt-content-area { position: relative; z-index: 4; white-space: pre-wrap; }
+                            .blinking-cursor { font-weight: bold; font-size: 1.2rem; animation: blink 1s step-end infinite; }
+                            @keyframes blink { 50% { opacity: 0; } }
+                            
+                            .terminal-menu { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5; margin-bottom: 20px; }
+                            .terminal-btn { background: rgba(0,0,0,0.6); border: 1px solid var(--term-color); color: var(--term-color); padding: 20px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; text-align: left; letter-spacing: 1px; }
+                            .terminal-btn:hover { background: var(--term-color); color: #000; box-shadow: 0 0 15px var(--term-color); }
+                            .terminal-btn.link-btn { border-color: #555; color: #888; text-decoration: none; }
+                            .terminal-btn.link-btn:hover { background: #222; color: #fff; border-color: #888; box-shadow: none; }
+
+                            .manga-panel { display: none; width: 100%; max-width: 600px; border: 1px solid var(--term-color); margin-top: 40px; position: relative; z-index: 5; filter: grayscale(100%) contrast(120%); animation: crtGlitch 0.5s ease-in-out forwards; }
+                            @keyframes crtGlitch { 0% { filter: invert(1) hue-rotate(180deg); opacity: 0.5; transform: skewX(5deg) scale(1.02); } 20% { filter: invert(0); opacity: 1; transform: skewX(-5deg) scale(0.98); } 40% { filter: invert(1); opacity: 0.8; transform: skewX(2deg) scale(1.01); } 60% { filter: invert(0); opacity: 1; transform: skewX(0) scale(1); } 100% { transform: translate(0, 0); filter: grayscale(100%) contrast(120%) drop-shadow(0 0 10px rgba(255,255,255,0.2)); } }
+                        </style>
+
+                        <div id="crt-box-{{ loop.index }}">
+                            <div id="terminal-options-{{ loop.index }}" class="terminal-menu">
+                                {% if block.buttons %}
+                                    <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
+                                    {% for btn in block.buttons %}
+                                        {% if btn.action == 'Read Text' %}
+                                            <button class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('text')">{{ btn.label }}</button>
+                                        {% elif btn.action == 'Read + Audio' %}
+                                            <button class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('audio')">{{ btn.label }}</button>
+                                        {% elif btn.action == 'Link / PDF' %}
+                                            <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
+                            <div id="prologue-text-{{ loop.index }}" class="crt-content-area" style="display: none;"></div>
+                            
+                            {% if block.image_url %}
+                            <img id="manga-panel-{{ loop.index }}" src="{{ block.image_url }}" class="manga-panel" alt="Terminal Image">
+                            {% endif %}
+                        </div>
+
+                        {% if block.audio_url %}
+                        <audio id="terminal-audio-{{ loop.index }}" preload="none">
+                            <source src="{{ block.audio_url }}" type="audio/mpeg">
+                        </audio>
+                        {% endif %}
+
+                        <script>
+                            const rawText_{{ loop.index }} = `{{ block.terminal_text | replace('\n', '\\n') | replace('\r', '') | safe }}`;
+                            let pIndex_{{ loop.index }} = 0;
+                            let pSpeed_{{ loop.index }} = 25; 
+                            const textContainer_{{ loop.index }} = document.getElementById("prologue-text-{{ loop.index }}");
+
+                            function typePrologue_{{ loop.index }}() {
+                                if (pIndex_{{ loop.index }} < rawText_{{ loop.index }}.length) {
+                                    textContainer_{{ loop.index }}.innerHTML = textContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+                                    textContainer_{{ loop.index }}.innerHTML += rawText_{{ loop.index }}.charAt(pIndex_{{ loop.index }}) + '<span class="blinking-cursor">_</span>';
+                                    pIndex_{{ loop.index }}++;
+                                    window.scrollTo(0, document.body.scrollHeight);
+                                    setTimeout(typePrologue_{{ loop.index }}, pSpeed_{{ loop.index }});
+                                } else {
+                                    textContainer_{{ loop.index }}.innerHTML = textContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+                                    const imgPanel = document.getElementById("manga-panel-{{ loop.index }}");
+                                    if(imgPanel) {
+                                        setTimeout(() => {
+                                            imgPanel.style.display = "block";
+                                            window.scrollTo(0, document.body.scrollHeight);
+                                        }, 1000);
+                                    }
+                                }
+                            }
+
+                            function startTerminalMode_{{ loop.index }}(mode) {
+                                document.getElementById("terminal-options-{{ loop.index }}").style.display = "none";
+                                textContainer_{{ loop.index }}.style.display = "block";
+                                
+                                if (mode === 'audio') {
+                                    pSpeed_{{ loop.index }} = 45; 
+                                    const vAudio = document.getElementById("terminal-audio-{{ loop.index }}");
+                                    if(vAudio) { vAudio.play().catch(e => console.log("Audio play prevented")); }
+                                    const mainAudio = document.getElementById('main-audio');
+                                    if(mainAudio) { mainAudio.volume = 0.2; }
+                                }
+                                typePrologue_{{ loop.index }}();
+                            }
+                        </script>
                     {% endif %}
                 </section>
             {% endfor %}
