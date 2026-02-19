@@ -85,12 +85,23 @@ collections:
               - {label: "Image", name: "image", widget: "image", required: false}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
+          - label: "Terminal (CRT)"
+            name: "crt_terminal"
+            widget: "object"
+            fields:
+              - {label: "Terminal Text Color", name: "text_color", widget: "color", default: "#00ff00"}
+              - {label: "Terminal Full Text", name: "terminal_text", widget: "text"}
+              - {label: "Reveal Image (Glitch)", name: "image_url", widget: "image", required: false}
+              - {label: "Voiceover Audio", name: "audio_url", widget: "file", required: false}
+              - label: "Terminal Menu Buttons"
+                name: "buttons"
+                widget: "list"
+                fields:
+                  - {label: "Button Text", name: "label", widget: "string"}
+                  - {label: "Button Action", name: "action", widget: "select", options: ["Read Text", "Read + Audio", "Link / PDF"]}
+                  - {label: "Button URL (If Link/PDF)", name: "url", widget: "string", required: false}
           - label: "Rich Text (Markdown)"
             name: "richtext"
             widget: "object"
             fields:
               - {label: "Body", name: "body", widget: "markdown"}
-
-
-
-
