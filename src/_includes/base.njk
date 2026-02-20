@@ -323,8 +323,9 @@
                         {% endif %}
                     
                     {% elif block.type == 'crt_terminal' %}
+                        {% set blockIndex = loop.index %}
                         <style>
-                            #crt-box-{{ loop.index }} {
+                            #crt-box-{{ blockIndex }} {
                                 --term-color: {{ block.text_color | default('#00ff00') }};
                                 background-color: #050505;
                                 border: 2px solid #333;
@@ -340,8 +341,8 @@
                                 line-height: 1.7;
                                 text-shadow: 0 0 5px var(--term-color);
                             }
-                            #crt-box-{{ loop.index }}::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
-                            #crt-box-{{ loop.index }}::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 50px #000; z-index: 3; pointer-events: none; }
+                            #crt-box-{{ blockIndex }}::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
+                            #crt-box-{{ blockIndex }}::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 50px #000; z-index: 3; pointer-events: none; }
                             
                             .crt-content-area { position: relative; z-index: 4; white-space: pre-wrap; margin-top: 20px; }
                             .blinking-cursor { font-weight: bold; font-size: 1.2rem; animation: blink 1s step-end infinite; }
@@ -371,24 +372,24 @@
                             .decrypted-doc { background: #0a0a0a; color: #e0e0e0; padding: 40px 30px; border-top: 2px solid var(--accent-color); border-bottom: 2px solid var(--accent-color); margin-top: 40px; font-family: var(--font-body); font-size: 1.1rem; line-height: 1.8; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); white-space: pre-line; }
                         </style>
 
-                        <div id="crt-box-{{ loop.index }}">
-                            <button id="skip-btn-{{ loop.index }}" type="button" class="skip-btn" onclick="skipTyping_{{ loop.index }}()">[ SKIP ]</button>
+                        <div id="crt-box-{{ blockIndex }}">
+                            <button id="skip-btn-{{ blockIndex }}" type="button" class="skip-btn" onclick="skipTyping_{{ blockIndex }}()">[ SKIP ]</button>
 
-                            <div id="boot-text-{{ loop.index }}" class="crt-content-area"></div>
+                            <div id="boot-text-{{ blockIndex }}" class="crt-content-area"></div>
 
-                            <div id="waveform-{{ loop.index }}" class="waveform">
+                            <div id="waveform-{{ blockIndex }}" class="waveform">
                                 <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
                                 <span style="margin-left: 15px; font-family: var(--font-display); animation: blink 1s infinite;">PLAYING TRANSMISSION...</span>
                             </div>
 
-                            <div id="terminal-options-{{ loop.index }}" class="terminal-menu" style="display: none; margin-top: 30px;">
+                            <div id="terminal-options-{{ blockIndex }}" class="terminal-menu" style="display: none; margin-top: 30px;">
                                 {% if block.buttons %}
                                     <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
                                     {% for btn in block.buttons %}
-                                        {% if btn.action == 'Read Text' %}
-                                            <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('text')">{{ btn.label }}</button>
-                                        {% elif btn.action == 'Play Audio' %}
-                                            <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('audio')">{{ btn.label }}</button>
+                                        {% if 'Text' in btn.action %}
+                                            <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ blockIndex }}('text')">{{ btn.label }}</button>
+                                        {% elif 'Audio' in btn.action %}
+                                            <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ blockIndex }}('audio')">{{ btn.label }}</button>
                                         {% else %}
                                             <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
                                         {% endif %}
@@ -397,76 +398,79 @@
                             </div>
                         </div>
 
-                        <div id="decrypted-doc-{{ loop.index }}" class="decrypted-doc">
+                        <div id="decrypted-doc-{{ blockIndex }}" class="decrypted-doc">
                             {% if block.document_text %}
                                 {{ block.document_text | safe }}
                             {% endif %}
                         </div>
 
                         {% if block.audio_url %}
-                        <audio id="terminal-audio-{{ loop.index }}" preload="none">
+                        <audio id="terminal-audio-{{ blockIndex }}" preload="none">
                             <source src="{{ block.audio_url }}" type="audio/mpeg">
                         </audio>
                         {% endif %}
 
                         <script>
-                            const rawBoot_{{ loop.index }} = `{{ block.boot_text | replace('\n', '\\n') | replace('\r', '') | safe }}`;
-                            let pIndex_{{ loop.index }} = 0;
-                            let pSpeed_{{ loop.index }} = 35; 
-                            let isSkipped_{{ loop.index }} = false;
-                            let typeTimer_{{ loop.index }};
+                            const rawBoot_{{ blockIndex }} = `{{ block.boot_text | replace('\\', '\\\\') | replace('`', '\\`') | replace('$', '\\$') | safe }}`;
+                            let pIndex_{{ blockIndex }} = 0;
+                            let pSpeed_{{ blockIndex }} = 35; 
+                            let isSkipped_{{ blockIndex }} = false;
+                            let typeTimer_{{ blockIndex }};
                             
-                            const bootContainer_{{ loop.index }} = document.getElementById("boot-text-{{ loop.index }}");
-                            const skipBtn_{{ loop.index }} = document.getElementById("skip-btn-{{ loop.index }}");
-                            const menuOptions_{{ loop.index }} = document.getElementById("terminal-options-{{ loop.index }}");
-                            const waveform_{{ loop.index }} = document.getElementById("waveform-{{ loop.index }}");
-                            const docReader_{{ loop.index }} = document.getElementById("decrypted-doc-{{ loop.index }}");
+                            const bootContainer_{{ blockIndex }} = document.getElementById("boot-text-{{ blockIndex }}");
+                            const skipBtn_{{ blockIndex }} = document.getElementById("skip-btn-{{ blockIndex }}");
+                            const menuOptions_{{ blockIndex }} = document.getElementById("terminal-options-{{ blockIndex }}");
+                            const waveform_{{ blockIndex }} = document.getElementById("waveform-{{ blockIndex }}");
+                            const docReader_{{ blockIndex }} = document.getElementById("decrypted-doc-{{ blockIndex }}");
 
-                            // Ξεκινάει το Typing με το που φορτώσει η σελίδα
                             setTimeout(() => {
-                                skipBtn_{{ loop.index }}.style.display = "block";
-                                typeBoot_{{ loop.index }}();
+                                if(skipBtn_{{ blockIndex }}) skipBtn_{{ blockIndex }}.style.display = "block";
+                                typeBoot_{{ blockIndex }}();
                             }, 500);
 
-                            function typeBoot_{{ loop.index }}() {
-                                if (isSkipped_{{ loop.index }}) return;
+                            function typeBoot_{{ blockIndex }}() {
+                                if (isSkipped_{{ blockIndex }}) return;
                                 
-                                if (pIndex_{{ loop.index }} < rawBoot_{{ loop.index }}.length) {
-                                    bootContainer_{{ loop.index }}.innerHTML = bootContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
-                                    bootContainer_{{ loop.index }}.innerHTML += rawBoot_{{ loop.index }}.charAt(pIndex_{{ loop.index }}) + '<span class="blinking-cursor">_</span>';
-                                    pIndex_{{ loop.index }}++;
+                                if (pIndex_{{ blockIndex }} < rawBoot_{{ blockIndex }}.length) {
+                                    bootContainer_{{ blockIndex }}.innerHTML = bootContainer_{{ blockIndex }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+                                    bootContainer_{{ blockIndex }}.innerHTML += rawBoot_{{ blockIndex }}.charAt(pIndex_{{ blockIndex }}) + '<span class="blinking-cursor">_</span>';
+                                    pIndex_{{ blockIndex }}++;
                                     
-                                    typeTimer_{{ loop.index }} = setTimeout(typeBoot_{{ loop.index }}, pSpeed_{{ loop.index }});
+                                    typeTimer_{{ blockIndex }} = setTimeout(typeBoot_{{ blockIndex }}, pSpeed_{{ blockIndex }});
                                 } else {
-                                    finishTyping_{{ loop.index }}();
+                                    finishTyping_{{ blockIndex }}();
                                 }
                             }
 
-                            function finishTyping_{{ loop.index }}() {
-                                bootContainer_{{ loop.index }}.innerHTML = bootContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
-                                skipBtn_{{ loop.index }}.style.display = "none";
-                                menuOptions_{{ loop.index }}.style.display = "flex";
+                            function finishTyping_{{ blockIndex }}() {
+                                bootContainer_{{ blockIndex }}.innerHTML = bootContainer_{{ blockIndex }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+                                if(skipBtn_{{ blockIndex }}) skipBtn_{{ blockIndex }}.style.display = "none";
+                                if(menuOptions_{{ blockIndex }}) menuOptions_{{ blockIndex }}.style.display = "flex";
                             }
 
-                            function skipTyping_{{ loop.index }}() {
-                                isSkipped_{{ loop.index }} = true;
-                                clearTimeout(typeTimer_{{ loop.index }});
-                                bootContainer_{{ loop.index }}.innerHTML = rawBoot_{{ loop.index }};
-                                finishTyping_{{ loop.index }}();
+                            function skipTyping_{{ blockIndex }}() {
+                                isSkipped_{{ blockIndex }} = true;
+                                clearTimeout(typeTimer_{{ blockIndex }});
+                                bootContainer_{{ blockIndex }}.innerHTML = rawBoot_{{ blockIndex }};
+                                finishTyping_{{ blockIndex }}();
                             }
 
-                            function startTerminalMode_{{ loop.index }}(mode) {
-                                menuOptions_{{ loop.index }}.style.display = "none";
+                            function startTerminalMode_{{ blockIndex }}(mode) {
+                                if(menuOptions_{{ blockIndex }}) menuOptions_{{ blockIndex }}.style.display = "none";
                                 
                                 if (mode === 'audio') {
-                                    waveform_{{ loop.index }}.style.display = "flex";
-                                    const vAudio = document.getElementById("terminal-audio-{{ loop.index }}");
+                                    if(waveform_{{ blockIndex }}) waveform_{{ blockIndex }}.style.display = "flex";
+                                    const vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
                                     if(vAudio) { vAudio.play().catch(e => console.log("Audio play prevented")); }
                                     const mainAudio = document.getElementById('main-audio');
                                     if(mainAudio) { mainAudio.volume = 0.2; }
                                 } else if (mode === 'text') {
-                                    docReader_{{ loop.index }}.style.display = "block";
-                                    docReader_{{ loop.index }}.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                    if(docReader_{{ blockIndex }}) {
+                                        docReader_{{ blockIndex }}.style.display = "block";
+                                        setTimeout(() => {
+                                            docReader_{{ blockIndex }}.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                        }, 100);
+                                    }
                                 }
                             }
                         </script>
