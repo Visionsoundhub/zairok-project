@@ -3,6 +3,7 @@ layout: base.njk
 title: Prologue
 permalink: /secure-prologue/
 in_menu: false
+require_gate: false
 blocks:
   - type: hero
     status: CLASSIFIED
@@ -18,25 +19,17 @@ blocks:
       Η ιστορία του Μέρβιν είναι η πρώτη ρωγμή στο σύστημά τους.
 
 
-      Η σύνδεσή σου είναι κρυπτογραφημένη. Προχώρα στην ανάγνωση του Προλόγου στο τερματικό παρακάτω, πριν εντοπιστεί το ίχνος σου.
+      Η σύνδεσή σου είναι κρυπτογραφημένη. Προχώρα στην επιλογή πρωτοκόλλου στο τερματικό παρακάτω, πριν εντοπιστεί το ίχνος σου.
     subtitle: "NORKEN GRID: SECURE CONNECTION ESTABLISHED"
 
   - type: crt_terminal
     text_color: "#00ff00"
-    image_url: "/images/klet.jpg"
-    audio_url: "/audio/prologue-voiceover.mp3"
-    buttons:
-      - label: "[ 1 ] ΑΝΑΓΝΩΣΗ ΣΤΟ ΤΕΡΜΑΤΙΚΟ"
-        action: Read Text
-      - label: "[ 2 ] FULL EXPERIENCE (AUDIO & VISUAL)"
-        action: Read + Audio
-      - label: "[ 3 ] ΛΗΨΗ ΑΡΧΕΙΟΥ ΓΙΑ OFFLINE ΑΝΑΓΝΩΣΗ (PDF)"
-        action: Link / PDF
-        url: "/assets/zairok-prologue.pdf"
-    terminal_text: |
-      [ ΕΓΚΑΘΙΔΡΥΣΗ ΣΥΝΔΕΣΗΣ... OK ]
-      [ ΦΟΡΤΩΣΗ ΑΡΧΕΙΟΥ: "ΠΡΟΛΟΓΟΣ" ]
-
+    boot_text: |
+      > ΕΓΚΑΘΙΔΡΥΣΗ ΣΥΝΔΕΣΗΣ... OK
+      > ΠΡΟΣΒΑΣΗ ΣΤΑ ΑΡΧΕΙΑ ΤΟΥ ΙΔΡΥΜΑΤΟΣ ΖΑΪΡΑ.
+      > ΠΡΟΕΙΔΟΠΟΙΗΣΗ: ΤΟ ΠΕΡΙΕΧΟΜΕΝΟ ΕΙΝΑΙ ΑΚΑΤΕΡΓΑΣΤΟ ΚΑΙ ΑΥΣΤΗΡΑ ΕΜΠΙΣΤΕΥΤΙΚΟ.
+      > ΠΑΡΑΚΑΛΩ ΕΠΙΛΕΞΤΕ ΤΟΝ ΤΡΟΠΟ ΑΝΑΓΝΩΣΗΣ.
+    document_text: |
       Η πρωτεύουσα της Νόρκεν απλωνόταν κάτω από τον γκρίζο ουρανό σαν ένα τεράστιο, παγωμένο κύκλωμα. Από ψηλά, οι δρόμοι έμοιαζαν με φλέβες που διοχέτευαν ζωή ανάμεσα στα κτίρια, αλλά όλα τα βλέμματα, όλα τα φώτα, οδηγούσαν σε ένα και μόνο σημείο.
 
       Στο κέντρο της πόλης, δέσποζε το Ίδρυμα Ζάιρα.
@@ -86,4 +79,13 @@ blocks:
       Τα έντονα φώτα των οθονών καθρεφτίστηκαν στα γυαλιά του Κελτ, κρύβοντας τα μάτια του πίσω από μια λευκή λάμψη δεδομένων. Η σιωπή έπεσε ξανά στην αίθουσα. Ακουγόταν μόνο το μονότονο βουητό των μηχανημάτων.
 
       [ ΤΕΛΟΣ ΑΡΧΕΙΟΥ ]
+    audio_url: "/audio/prologue-voiceover.mp3"
+    buttons:
+      - label: "[ 1 ] ΑΝΑΓΝΩΣΗ ΠΡΟΛΟΓΟΥ"
+        action: Read Text
+      - label: "[ 2 ] FULL EXPERIENCE (AUDIO & VISUAL)"
+        action: Play Audio
+      - label: "[ 3 ] ΛΗΨΗ ΑΡΧΕΙΟΥ ΓΙΑ OFFLINE ΑΝΑΓΝΩΣΗ (PDF)"
+        action: Link / PDF
+        url: "/assets/zairok-prologue.pdf"
 ---
