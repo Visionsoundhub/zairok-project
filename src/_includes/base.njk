@@ -385,9 +385,9 @@
                                 {% if block.buttons %}
                                     <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
                                     {% for btn in block.buttons %}
-                                        {% if btn.action == 'Read Text' or 'Text' in btn.action %}
+                                        {% if btn.action == 'Read Text' %}
                                             <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('text')">{{ btn.label }}</button>
-                                        {% elif btn.action == 'Play Audio' or 'Audio' in btn.action %}
+                                        {% elif btn.action == 'Play Audio' %}
                                             <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('audio')">{{ btn.label }}</button>
                                         {% else %}
                                             <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
@@ -410,7 +410,7 @@
                         {% endif %}
 
                         <script>
-                            const rawBoot_{{ loop.index }} = {{ block.boot_text | dump | safe }} || "";
+                            const rawBoot_{{ loop.index }} = `{{ block.boot_text | replace('\n', '\\n') | replace('\r', '') | safe }}`;
                             let pIndex_{{ loop.index }} = 0;
                             let pSpeed_{{ loop.index }} = 35; 
                             let isSkipped_{{ loop.index }} = false;
