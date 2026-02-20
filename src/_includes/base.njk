@@ -325,6 +325,13 @@
                     {% elif block.type == 'crt_terminal' %}
                         {% set blockIndex = loop.index %}
                         <style>
+                            /* Σκοτεινό Overlay για το Focus στο Audio */
+                            .lights-out-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.88); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 1s ease; }
+                            .lights-out-overlay.active { opacity: 1; }
+
+                            /* Τα στοιχεία που πρέπει να παραμείνουν φωτεινά πάνω από το σκοτάδι */
+                            .focus-element { position: relative; z-index: 1001 !important; }
+
                             #crt-box-{{ blockIndex }} {
                                 --term-color: {{ block.text_color | default('#00ff00') }};
                                 background-color: #050505;
@@ -348,18 +355,19 @@
                             .blinking-cursor { font-weight: bold; font-size: 1.2rem; animation: blink 1s step-end infinite; }
                             @keyframes blink { 50% { opacity: 0; } }
                             
-                            .terminal-menu { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5; margin-bottom: 20px; }
+                            .terminal-menu { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5; margin-top: 30px; }
                             .terminal-btn { background: rgba(0,0,0,0.6); border: 1px solid var(--term-color); color: var(--term-color); padding: 20px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; text-align: left; letter-spacing: 1px; }
+                            .terminal-btn.mini { padding: 12px 20px; font-size: 0.9rem; flex: 1; text-align: center; min-width: 200px; }
                             .terminal-btn:hover { background: var(--term-color); color: #000; box-shadow: 0 0 15px var(--term-color); }
                             .terminal-btn.link-btn { border-color: #555; color: #888; text-decoration: none; }
                             .terminal-btn.link-btn:hover { background: #222; color: #fff; border-color: #888; box-shadow: none; }
 
-                            /* Το SKIP κουμπί είναι καρφωμένο πάνω δεξιά */
                             .skip-btn { position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.8); border: 1px dashed var(--term-color); color: var(--term-color); padding: 5px 15px; cursor: pointer; font-family: var(--font-display); font-size: 0.8rem; z-index: 10; transition: 0.3s; display: none; }
                             .skip-btn:hover { background: var(--term-color); color: #000; }
 
                             /* Waveform Animation για το Audio */
-                            .waveform { display: none; align-items: center; gap: 8px; height: 60px; justify-content: flex-start; margin-top: 20px; position: relative; z-index: 5; }
+                            .waveform-container { display: none; flex-direction: column; align-items: flex-start; margin-top: 30px; position: relative; z-index: 5; border-top: 1px dashed #333; padding-top: 30px; }
+                            .waveform { display: flex; align-items: center; gap: 8px; height: 60px; }
                             .waveform .bar { width: 8px; background: var(--term-color); height: 10px; animation: wave 1s ease-in-out infinite; }
                             .waveform .bar:nth-child(1) { animation-delay: 0.0s; }
                             .waveform .bar:nth-child(2) { animation-delay: 0.2s; }
@@ -367,22 +375,21 @@
                             .waveform .bar:nth-child(4) { animation-delay: 0.6s; }
                             .waveform .bar:nth-child(5) { animation-delay: 0.8s; }
                             @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 60px; box-shadow: 0 0 10px var(--term-color); } }
+                            
+                            /* Pause Waveform Class */
+                            .waveform.paused .bar { animation-play-state: paused; }
 
-                            /* Καθαρό Block Ανάγνωσης Κειμένου */
                             .decrypted-doc { background: #0a0a0a; color: #e0e0e0; padding: 40px 30px; border-top: 2px solid var(--accent-color); border-bottom: 2px solid var(--accent-color); margin-top: 40px; font-family: var(--font-body); font-size: 1.1rem; line-height: 1.8; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); white-space: pre-line; }
                         </style>
 
-                        <div id="crt-box-{{ blockIndex }}">
+                        <div id="lights-out-{{ blockIndex }}" class="lights-out-overlay"></div>
+
+                        <div id="crt-box-{{ blockIndex }}" class="focus-element">
                             <button id="skip-btn-{{ blockIndex }}" type="button" class="skip-btn" onclick="skipTyping_{{ blockIndex }}()">[ SKIP ]</button>
 
                             <div id="boot-text-{{ blockIndex }}" class="crt-content-area"></div>
 
-                            <div id="waveform-{{ blockIndex }}" class="waveform">
-                                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                                <span style="margin-left: 15px; font-family: var(--font-display); animation: blink 1s infinite;">PLAYING TRANSMISSION...</span>
-                            </div>
-
-                            <div id="terminal-options-{{ blockIndex }}" class="terminal-menu" style="display: none; margin-top: 30px;">
+                            <div id="terminal-options-{{ blockIndex }}" class="terminal-menu" style="display: none;">
                                 {% if block.buttons %}
                                     <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
                                     {% for btn in block.buttons %}
@@ -396,9 +403,24 @@
                                     {% endfor %}
                                 {% endif %}
                             </div>
+
+                            <div id="audio-interface-{{ blockIndex }}" class="waveform-container">
+                                <div style="display: flex; align-items: center; width: 100%;">
+                                    <div id="waveform-{{ blockIndex }}" class="waveform">
+                                        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                                    </div>
+                                    <span id="audio-status-{{ blockIndex }}" style="margin-left: 25px; font-family: var(--font-display); font-size: 1.2rem; animation: blink 1s infinite;">PLAYING TRANSMISSION...</span>
+                                </div>
+                                
+                                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 30px; width: 100%;">
+                                    <button id="btn-pause-{{ blockIndex }}" class="terminal-btn mini" onclick="toggleVoiceover_{{ blockIndex }}()">[ ⏸ ΠΑΥΣΗ ]</button>
+                                    <button id="btn-readalong-{{ blockIndex }}" class="terminal-btn mini" onclick="toggleReadAlong_{{ blockIndex }}()" style="border-color: var(--accent-color); color: var(--accent-color);">[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]</button>
+                                    <button class="terminal-btn mini" onclick="stopAudioMode_{{ blockIndex }}()" style="border-color: var(--error-color); color: var(--error-color);">[ ⏹ ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ]</button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div id="decrypted-doc-{{ blockIndex }}" class="decrypted-doc">
+                        <div id="decrypted-doc-{{ blockIndex }}" class="decrypted-doc focus-element">
                             {% if block.document_text %}
                                 {{ block.document_text | safe }}
                             {% endif %}
@@ -416,12 +438,20 @@
                             let pSpeed_{{ blockIndex }} = 35; 
                             let isSkipped_{{ blockIndex }} = false;
                             let typeTimer_{{ blockIndex }};
+                            let isVoiceoverPlaying_{{ blockIndex }} = false;
+                            let isDocOpen_{{ blockIndex }} = false;
                             
                             const bootContainer_{{ blockIndex }} = document.getElementById("boot-text-{{ blockIndex }}");
                             const skipBtn_{{ blockIndex }} = document.getElementById("skip-btn-{{ blockIndex }}");
                             const menuOptions_{{ blockIndex }} = document.getElementById("terminal-options-{{ blockIndex }}");
-                            const waveform_{{ blockIndex }} = document.getElementById("waveform-{{ blockIndex }}");
+                            const audioInterface_{{ blockIndex }} = document.getElementById("audio-interface-{{ blockIndex }}");
                             const docReader_{{ blockIndex }} = document.getElementById("decrypted-doc-{{ blockIndex }}");
+                            const vAudio_{{ blockIndex }} = document.getElementById("terminal-audio-{{ blockIndex }}");
+                            const waveformDiv_{{ blockIndex }} = document.getElementById("waveform-{{ blockIndex }}");
+                            const audioStatus_{{ blockIndex }} = document.getElementById("audio-status-{{ blockIndex }}");
+                            const btnPause_{{ blockIndex }} = document.getElementById("btn-pause-{{ blockIndex }}");
+                            const btnReadAlong_{{ blockIndex }} = document.getElementById("btn-readalong-{{ blockIndex }}");
+                            const lightsOutOverlay_{{ blockIndex }} = document.getElementById("lights-out-{{ blockIndex }}");
 
                             setTimeout(() => {
                                 if(skipBtn_{{ blockIndex }}) skipBtn_{{ blockIndex }}.style.display = "block";
@@ -456,22 +486,101 @@
                             }
 
                             function startTerminalMode_{{ blockIndex }}(mode) {
-                                if(menuOptions_{{ blockIndex }}) menuOptions_{{ blockIndex }}.style.display = "none";
+                                const mainAudio = document.getElementById('main-audio');
                                 
-                                if (mode === 'audio') {
-                                    if(waveform_{{ blockIndex }}) waveform_{{ blockIndex }}.style.display = "flex";
-                                    const vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
-                                    if(vAudio) { vAudio.play().catch(e => console.log("Audio play prevented")); }
-                                    const mainAudio = document.getElementById('main-audio');
-                                    if(mainAudio) { mainAudio.volume = 0.2; }
-                                } else if (mode === 'text') {
+                                if (mode === 'text') {
+                                    // Αν επιλέξει απλή ανάγνωση: Κλείνει τον ήχο (αν έπαιζε), ανοίγει το κείμενο κανονικά
+                                    stopAudioMode_{{ blockIndex }}();
                                     if(docReader_{{ blockIndex }}) {
                                         docReader_{{ blockIndex }}.style.display = "block";
                                         setTimeout(() => {
                                             docReader_{{ blockIndex }}.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                         }, 100);
                                     }
+                                } 
+                                else if (mode === 'audio') {
+                                    // Αν επιλέξει Audio: Κρύβει το μενού, ανάβει "Lights Out", εμφανίζει Waveform
+                                    if(menuOptions_{{ blockIndex }}) menuOptions_{{ blockIndex }}.style.display = "none";
+                                    if(audioInterface_{{ blockIndex }}) audioInterface_{{ blockIndex }}.style.display = "flex";
+                                    if(lightsOutOverlay_{{ blockIndex }}) lightsOutOverlay_{{ blockIndex }}.classList.add("active");
+                                    
+                                    // Παίζει τον ήχο
+                                    if(vAudio_{{ blockIndex }}) { 
+                                        vAudio_{{ blockIndex }}.play().catch(e => console.log("Audio play prevented")); 
+                                        isVoiceoverPlaying_{{ blockIndex }} = true;
+                                        waveformDiv_{{ blockIndex }}.classList.remove("paused");
+                                        audioStatus_{{ blockIndex }}.innerText = "PLAYING TRANSMISSION...";
+                                        audioStatus_{{ blockIndex }}.style.animation = "blink 1s infinite";
+                                        btnPause_{{ blockIndex }}.innerText = "[ ⏸ ΠΑΥΣΗ ]";
+                                    }
+                                    if(mainAudio) { mainAudio.volume = 0.1; }
+                                    
+                                    // Σιγουρευόμαστε ότι το κείμενο είναι κλειστό
+                                    if(docReader_{{ blockIndex }}) docReader_{{ blockIndex }}.style.display = "none";
+                                    isDocOpen_{{ blockIndex }} = false;
+                                    btnReadAlong_{{ blockIndex }}.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
                                 }
+                            }
+
+                            function toggleVoiceover_{{ blockIndex }}() {
+                                if(!vAudio_{{ blockIndex }}) return;
+                                
+                                if(isVoiceoverPlaying_{{ blockIndex }}) {
+                                    vAudio_{{ blockIndex }}.pause();
+                                    isVoiceoverPlaying_{{ blockIndex }} = false;
+                                    waveformDiv_{{ blockIndex }}.classList.add("paused");
+                                    audioStatus_{{ blockIndex }}.innerText = "TRANSMISSION PAUSED.";
+                                    audioStatus_{{ blockIndex }}.style.animation = "none";
+                                    btnPause_{{ blockIndex }}.innerText = "[ ▶ PLAY ]";
+                                } else {
+                                    vAudio_{{ blockIndex }}.play();
+                                    isVoiceoverPlaying_{{ blockIndex }} = true;
+                                    waveformDiv_{{ blockIndex }}.classList.remove("paused");
+                                    audioStatus_{{ blockIndex }}.innerText = "PLAYING TRANSMISSION...";
+                                    audioStatus_{{ blockIndex }}.style.animation = "blink 1s infinite";
+                                    btnPause_{{ blockIndex }}.innerText = "[ ⏸ ΠΑΥΣΗ ]";
+                                }
+                            }
+
+                            function toggleReadAlong_{{ blockIndex }}() {
+                                if(isDocOpen_{{ blockIndex }}) {
+                                    // Κλείσιμο κειμένου
+                                    if(docReader_{{ blockIndex }}) docReader_{{ blockIndex }}.style.display = "none";
+                                    isDocOpen_{{ blockIndex }} = false;
+                                    btnReadAlong_{{ blockIndex }}.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
+                                } else {
+                                    // Άνοιγμα κειμένου
+                                    if(docReader_{{ blockIndex }}) {
+                                        docReader_{{ blockIndex }}.style.display = "block";
+                                        isDocOpen_{{ blockIndex }} = true;
+                                        btnReadAlong_{{ blockIndex }}.innerText = "[ ❌ ΚΛΕΙΣΙΜΟ ΚΕΙΜΕΝΟΥ ]";
+                                        setTimeout(() => {
+                                            docReader_{{ blockIndex }}.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                        }, 100);
+                                    }
+                                }
+                            }
+
+                            function stopAudioMode_{{ blockIndex }}() {
+                                // Σταματάει τελείως το Audio Interface και επαναφέρει το Μενού
+                                if(vAudio_{{ blockIndex }}) {
+                                    vAudio_{{ blockIndex }}.pause();
+                                    vAudio_{{ blockIndex }}.currentTime = 0;
+                                    isVoiceoverPlaying_{{ blockIndex }} = false;
+                                }
+                                
+                                const mainAudio = document.getElementById('main-audio');
+                                if(mainAudio && typeof isPlaying !== 'undefined' && isPlaying) {
+                                    mainAudio.volume = 0.4;
+                                }
+                                
+                                if(lightsOutOverlay_{{ blockIndex }}) lightsOutOverlay_{{ blockIndex }}.classList.remove("active");
+                                if(audioInterface_{{ blockIndex }}) audioInterface_{{ blockIndex }}.style.display = "none";
+                                if(docReader_{{ blockIndex }}) docReader_{{ blockIndex }}.style.display = "none";
+                                isDocOpen_{{ blockIndex }} = false;
+                                btnReadAlong_{{ blockIndex }}.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
+                                
+                                if(menuOptions_{{ blockIndex }}) menuOptions_{{ blockIndex }}.style.display = "flex";
                             }
                         </script>
                     {% endif %}
