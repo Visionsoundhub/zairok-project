@@ -119,5 +119,5 @@ blocks:
         action: Play Audio
       - label: "[ 3 ] ΛΗΨΗ ΑΡΧΕΙΟΥ ΓΙΑ OFFLINE ΑΝΑΓΝΩΣΗ (PDF)"
         action: Link / PDF
-        url: /assets/zairok-prologue.pdf
+        url: https://drive.google.com/file/d/121Ou42-9c6tjXrrQ5LatxwnyHqynB9tW/view?usp=sharing
 ---
