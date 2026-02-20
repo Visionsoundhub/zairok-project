@@ -84,6 +84,7 @@
     <div class="scanlines"></div>
     <div class="crt-flicker"></div>
 
+    {% if require_gate %}
     <div id="the-gate">
         <div class="gate-content" id="gate-box">
             <div class="face-scan-line"></div>
@@ -94,9 +95,10 @@
             <div id="gate-msg" style="margin-top:20px; font-family:var(--font-display); color:var(--accent-color); min-height: 1.2em;"></div>
         </div>
     </div>
+    {% endif %}
 
     <audio id="main-audio" loop preload="auto"><source src="{{ settings.audio_loop }}" type="audio/mpeg"></audio>
-    <audio id="access-sound" preload="auto"><source src="{{ settings.audio_access }}" type="audio/mpeg"></audio>
+    {% if require_gate %}<audio id="access-sound" preload="auto"><source src="{{ settings.audio_access }}" type="audio/mpeg"></audio>{% endif %}
 
     <div id="audio-bar">
         <div class="player-controls"><button id="play-btn" onclick="toggleAudio()">▶</button></div>
@@ -337,7 +339,6 @@
                                 font-size: 1.15rem;
                                 line-height: 1.7;
                                 text-shadow: 0 0 5px var(--term-color);
-                                min-height: 400px;
                             }
                             #crt-box-{{ loop.index }}::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
                             #crt-box-{{ loop.index }}::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 50px #000; z-index: 3; pointer-events: none; }
@@ -352,36 +353,53 @@
                             .terminal-btn.link-btn { border-color: #555; color: #888; text-decoration: none; }
                             .terminal-btn.link-btn:hover { background: #222; color: #fff; border-color: #888; box-shadow: none; }
 
-                            /* Το νέο SKIP κουμπί */
-                            .skip-btn { display: none; position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.8); border: 1px dashed var(--term-color); color: var(--term-color); padding: 5px 15px; cursor: pointer; font-family: var(--font-display); font-size: 0.8rem; z-index: 10; transition: 0.3s; }
+                            /* Το SKIP κουμπί είναι καρφωμένο πάνω δεξιά */
+                            .skip-btn { position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.8); border: 1px dashed var(--term-color); color: var(--term-color); padding: 5px 15px; cursor: pointer; font-family: var(--font-display); font-size: 0.8rem; z-index: 10; transition: 0.3s; display: none; }
                             .skip-btn:hover { background: var(--term-color); color: #000; }
 
-                            .manga-panel { display: none; width: 100%; max-width: 600px; border: 1px solid var(--term-color); margin-top: 40px; position: relative; z-index: 5; filter: grayscale(100%) contrast(120%); animation: crtGlitch 0.5s ease-in-out forwards; }
-                            @keyframes crtGlitch { 0% { filter: invert(1) hue-rotate(180deg); opacity: 0.5; transform: skewX(5deg) scale(1.02); } 20% { filter: invert(0); opacity: 1; transform: skewX(-5deg) scale(0.98); } 40% { filter: invert(1); opacity: 0.8; transform: skewX(2deg) scale(1.01); } 60% { filter: invert(0); opacity: 1; transform: skewX(0) scale(1); } 100% { transform: translate(0, 0); filter: grayscale(100%) contrast(120%) drop-shadow(0 0 10px rgba(255,255,255,0.2)); } }
+                            /* Waveform Animation για το Audio */
+                            .waveform { display: none; align-items: center; gap: 8px; height: 60px; justify-content: flex-start; margin-top: 20px; position: relative; z-index: 5; }
+                            .waveform .bar { width: 8px; background: var(--term-color); height: 10px; animation: wave 1s ease-in-out infinite; }
+                            .waveform .bar:nth-child(1) { animation-delay: 0.0s; }
+                            .waveform .bar:nth-child(2) { animation-delay: 0.2s; }
+                            .waveform .bar:nth-child(3) { animation-delay: 0.4s; }
+                            .waveform .bar:nth-child(4) { animation-delay: 0.6s; }
+                            .waveform .bar:nth-child(5) { animation-delay: 0.8s; }
+                            @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 60px; box-shadow: 0 0 10px var(--term-color); } }
+
+                            /* Καθαρό Block Ανάγνωσης Κειμένου */
+                            .decrypted-doc { background: #0a0a0a; color: #e0e0e0; padding: 40px 30px; border-top: 2px solid var(--accent-color); border-bottom: 2px solid var(--accent-color); margin-top: 40px; font-family: var(--font-body); font-size: 1.1rem; line-height: 1.8; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); white-space: pre-line; }
                         </style>
 
                         <div id="crt-box-{{ loop.index }}">
-                            <button id="skip-btn-{{ loop.index }}" class="skip-btn" onclick="skipTyping_{{ loop.index }}()">[ SKIP ]</button>
+                            <button id="skip-btn-{{ loop.index }}" type="button" class="skip-btn" onclick="skipTyping_{{ loop.index }}()">[ SKIP ]</button>
 
-                            <div id="terminal-options-{{ loop.index }}" class="terminal-menu">
+                            <div id="boot-text-{{ loop.index }}" class="crt-content-area"></div>
+
+                            <div id="waveform-{{ loop.index }}" class="waveform">
+                                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                                <span style="margin-left: 15px; font-family: var(--font-display); animation: blink 1s infinite;">PLAYING TRANSMISSION...</span>
+                            </div>
+
+                            <div id="terminal-options-{{ loop.index }}" class="terminal-menu" style="display: none; margin-top: 30px;">
                                 {% if block.buttons %}
                                     <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
                                     {% for btn in block.buttons %}
-                                        {% if 'Text' in btn.action %}
-                                            <button class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('text')">{{ btn.label }}</button>
-                                        {% elif 'Audio' in btn.action %}
-                                            <button class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('audio')">{{ btn.label }}</button>
-                                        {% elif 'Link' in btn.action or 'PDF' in btn.action %}
+                                        {% if btn.action == 'Read Text' or 'Text' in btn.action %}
+                                            <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('text')">{{ btn.label }}</button>
+                                        {% elif btn.action == 'Play Audio' or 'Audio' in btn.action %}
+                                            <button type="button" class="terminal-btn" onclick="startTerminalMode_{{ loop.index }}('audio')">{{ btn.label }}</button>
+                                        {% else %}
                                             <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
                             </div>
+                        </div>
 
-                            <div id="prologue-text-{{ loop.index }}" class="crt-content-area" style="display: none;"></div>
-                            
-                            {% if block.image_url %}
-                            <img id="manga-panel-{{ loop.index }}" src="{{ block.image_url }}" class="manga-panel" alt="Terminal Image">
+                        <div id="decrypted-doc-{{ loop.index }}" class="decrypted-doc">
+                            {% if block.document_text %}
+                                {{ block.document_text | safe }}
                             {% endif %}
                         </div>
 
@@ -392,62 +410,64 @@
                         {% endif %}
 
                         <script>
-                            const rawText_{{ loop.index }} = `{{ block.terminal_text | replace('\n', '\\n') | replace('\r', '') | safe }}`;
+                            const rawBoot_{{ loop.index }} = {{ block.boot_text | dump | safe }} || "";
                             let pIndex_{{ loop.index }} = 0;
-                            let pSpeed_{{ loop.index }} = 25; 
+                            let pSpeed_{{ loop.index }} = 35; 
                             let isSkipped_{{ loop.index }} = false;
                             let typeTimer_{{ loop.index }};
-                            const textContainer_{{ loop.index }} = document.getElementById("prologue-text-{{ loop.index }}");
+                            
+                            const bootContainer_{{ loop.index }} = document.getElementById("boot-text-{{ loop.index }}");
                             const skipBtn_{{ loop.index }} = document.getElementById("skip-btn-{{ loop.index }}");
+                            const menuOptions_{{ loop.index }} = document.getElementById("terminal-options-{{ loop.index }}");
+                            const waveform_{{ loop.index }} = document.getElementById("waveform-{{ loop.index }}");
+                            const docReader_{{ loop.index }} = document.getElementById("decrypted-doc-{{ loop.index }}");
 
-                            function typePrologue_{{ loop.index }}() {
+                            // Ξεκινάει το Typing με το που φορτώσει η σελίδα
+                            setTimeout(() => {
+                                skipBtn_{{ loop.index }}.style.display = "block";
+                                typeBoot_{{ loop.index }}();
+                            }, 500);
+
+                            function typeBoot_{{ loop.index }}() {
                                 if (isSkipped_{{ loop.index }}) return;
                                 
-                                if (pIndex_{{ loop.index }} < rawText_{{ loop.index }}.length) {
-                                    textContainer_{{ loop.index }}.innerHTML = textContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
-                                    textContainer_{{ loop.index }}.innerHTML += rawText_{{ loop.index }}.charAt(pIndex_{{ loop.index }}) + '<span class="blinking-cursor">_</span>';
+                                if (pIndex_{{ loop.index }} < rawBoot_{{ loop.index }}.length) {
+                                    bootContainer_{{ loop.index }}.innerHTML = bootContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+                                    bootContainer_{{ loop.index }}.innerHTML += rawBoot_{{ loop.index }}.charAt(pIndex_{{ loop.index }}) + '<span class="blinking-cursor">_</span>';
                                     pIndex_{{ loop.index }}++;
-                                    window.scrollTo(0, document.body.scrollHeight);
                                     
-                                    // Αποθηκεύουμε τον timer για να μπορούμε να τον κάνουμε skip
-                                    typeTimer_{{ loop.index }} = setTimeout(typePrologue_{{ loop.index }}, pSpeed_{{ loop.index }});
+                                    typeTimer_{{ loop.index }} = setTimeout(typeBoot_{{ loop.index }}, pSpeed_{{ loop.index }});
                                 } else {
                                     finishTyping_{{ loop.index }}();
                                 }
                             }
 
                             function finishTyping_{{ loop.index }}() {
-                                textContainer_{{ loop.index }}.innerHTML = textContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+                                bootContainer_{{ loop.index }}.innerHTML = bootContainer_{{ loop.index }}.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
                                 skipBtn_{{ loop.index }}.style.display = "none";
-                                const imgPanel = document.getElementById("manga-panel-{{ loop.index }}");
-                                if(imgPanel) {
-                                    setTimeout(() => {
-                                        imgPanel.style.display = "block";
-                                        window.scrollTo(0, document.body.scrollHeight);
-                                    }, 800);
-                                }
+                                menuOptions_{{ loop.index }}.style.display = "flex";
                             }
 
                             function skipTyping_{{ loop.index }}() {
                                 isSkipped_{{ loop.index }} = true;
                                 clearTimeout(typeTimer_{{ loop.index }});
-                                textContainer_{{ loop.index }}.innerHTML = rawText_{{ loop.index }};
+                                bootContainer_{{ loop.index }}.innerHTML = rawBoot_{{ loop.index }};
                                 finishTyping_{{ loop.index }}();
                             }
 
                             function startTerminalMode_{{ loop.index }}(mode) {
-                                document.getElementById("terminal-options-{{ loop.index }}").style.display = "none";
-                                textContainer_{{ loop.index }}.style.display = "block";
-                                skipBtn_{{ loop.index }}.style.display = "block";
+                                menuOptions_{{ loop.index }}.style.display = "none";
                                 
                                 if (mode === 'audio') {
-                                    pSpeed_{{ loop.index }} = 45; 
+                                    waveform_{{ loop.index }}.style.display = "flex";
                                     const vAudio = document.getElementById("terminal-audio-{{ loop.index }}");
                                     if(vAudio) { vAudio.play().catch(e => console.log("Audio play prevented")); }
                                     const mainAudio = document.getElementById('main-audio');
                                     if(mainAudio) { mainAudio.volume = 0.2; }
+                                } else if (mode === 'text') {
+                                    docReader_{{ loop.index }}.style.display = "block";
+                                    docReader_{{ loop.index }}.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                 }
-                                typePrologue_{{ loop.index }}();
                             }
                         </script>
                     {% endif %}
@@ -487,10 +507,16 @@
     <script>
         const swup = new Swup();
         const audioEl = document.getElementById('main-audio');
-        const accessSound = document.getElementById('access-sound');
         const playBtn = document.getElementById('play-btn');
         let isPlaying = false;
 
+        function toggleAudio() {
+            if(!isPlaying) { audioEl.play(); playBtn.innerText = "❚❚"; isPlaying = true; } 
+            else { audioEl.pause(); playBtn.innerText = "▶"; isPlaying = false; }
+        }
+
+        {% if require_gate %}
+        const accessSound = document.getElementById('access-sound');
         if(sessionStorage.getItem('zairok_access')) { document.getElementById('the-gate').style.display = 'none'; }
 
         function handleAccess(btn) {
@@ -505,11 +531,7 @@
             setTimeout(() => { document.getElementById('the-gate').style.opacity = '0'; sessionStorage.setItem('zairok_access', 'true'); }, 3000);
             setTimeout(() => { document.getElementById('the-gate').style.display = 'none'; }, 4000);
         }
-
-        function toggleAudio() {
-            if(!isPlaying) { audioEl.play(); playBtn.innerText = "❚❚"; isPlaying = true; } 
-            else { audioEl.pause(); playBtn.innerText = "▶"; isPlaying = false; }
-        }
+        {% endif %}
 
         function openModal(title, text) {
             document.getElementById('modal-title').innerText = title;
@@ -518,7 +540,6 @@
         }
         function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
         
-        // ΣΥΝΑΡΤΗΣΕΙΣ ΓΙΑ ΤΟ ΝΕΟ GDPR MODAL
         function openGdprModal() { document.getElementById('gdpr-modal').classList.remove('hidden'); }
         function closeGdprModal() { document.getElementById('gdpr-modal').classList.add('hidden'); }
 
