@@ -86,6 +86,15 @@ collections:
               - {label: "Χρώμα Γραμμάτων", name: "color", widget: "color", default: "#00ff00"}
               - {label: "Μέγεθος Γραμμάτων π.χ. 1.2rem", name: "size", widget: "string", default: "1.1rem"}
               - {label: "Ταχύτητα Πληκτρολόγησης (ms)", name: "speed", widget: "number", default: 30}
+              
+          - label: "VIP Chapter (Interactive)"
+            name: "vip_chapter"
+            widget: "object"
+            fields:
+              - {label: "Τίτλος Κεφαλαίου (π.χ. [ 1 ] ΑΝΑΓΝΩΣΗ ΠΡΟΛΟΓΟΥ)", name: "title", widget: "string"}
+              - {label: "Κείμενο Κεφαλαίου", name: "content", widget: "markdown"}
+              - {label: "Αρχείο Ήχου (Audio/Voiceover)", name: "audio", widget: "file", required: false}
+              - {label: "Αρχείο PDF (Για κατέβασμα)", name: "pdf", widget: "file", required: false}
                   
           - label: "Lore Section (Database Style)"
             name: "lore"
