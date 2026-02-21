@@ -21,7 +21,7 @@
   "audio_label": "encrypted frequency",
   "scan_success_text": "IDENTITY CONFIRMED: SUBJECT #9204",
   "global_typography": {
-    "title_desk": "25",
+    "title_desk": "10rem",
     "title_mob": "1.5"
   },
   "scan_start_text": "SCANNING RETINA...",
