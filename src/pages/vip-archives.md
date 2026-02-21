@@ -95,4 +95,5 @@ blocks:
       \[ ΤΕΛΟΣ ΑΡΧΕΙΟΥ ]
     title: Πρόλογος
     pdf: https://drive.google.com/file/d/121Ou42-9c6tjXrrQ5LatxwnyHqynB9tW/view?usp=sharing
+    audio: /assets/images/dark-proof.mp3
 ---
