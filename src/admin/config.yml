@@ -107,6 +107,7 @@ collections:
                 options: 
                   - { label: "General (First 100)", value: "general" }
                   - { label: "Resistance (VIP Code)", value: "resistance" }
+              - {label: "Κείμενο Τερματικού (ΜΟΝΟ για Resistance)", name: "terminal_text", widget: "text", required: false}
               - {label: "MailerLite Form ID", name: "ml_form_id", widget: "string", default: "179391629910606883"}
               - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
                 name: "custom_styles"
