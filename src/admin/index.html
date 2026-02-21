@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ZAIROK | ADMIN PANEL</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
@@ -18,6 +19,16 @@
           }
         });
       }
+
+      // ΚΩΔΙΚΑΣ ΓΙΑ ΤΟ LIVE PREVIEW (ΣΚΟΥΡΟ ΘΕΜΑ & ΣΩΣΤΑ ΚΕΝΑ)
+      CMS.registerPreviewStyle(`
+        body { background-color: #050505; color: #e0e0e0; font-family: 'Inter', sans-serif; padding: 30px; }
+        h1, h2, h3 { color: #ff8c00; font-family: 'Orbitron', sans-serif; margin-bottom: 10px; }
+        p { white-space: pre-line; line-height: 1.7; color: #ccc; margin-bottom: 20px; }
+        .nc-preview-pane { background: #050505 !important; }
+        img { max-width: 100%; border: 1px solid #ff8c00; }
+        hr { border: 1px dashed #333; margin: 30px 0; }
+      `, { raw: true });
     </script>
   </body>
 </html>
