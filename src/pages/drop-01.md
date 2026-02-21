@@ -39,6 +39,8 @@ blocks:
       > ΑΝΑΜΟΝΗ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ...
     custom_styles:
       text_size: ""
+      terminal_color: "#ff8100"
+      terminal_size: "1.5"
   - type: hero
     status: ALERT
     title: ΟΔΗΓΙΑ ΑΣΦΑΛΕΙΑΣ
