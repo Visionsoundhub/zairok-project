@@ -125,4 +125,7 @@ blocks:
       read: Ανάγνωση
       cinematic: Audio Chapter
       pdf_btn: Download Pdf
+  - type: vip_feedback
+    title: "[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]"
+    topic_id: prologue
 ---
