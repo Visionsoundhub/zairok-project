@@ -6,8 +6,8 @@ in_menu: true
 require_gate: true
 blocks:
   - type: hero
-    title: NORKEN CITY GRID
-    subtitle: YOU ARE BEING WATCHED.
+    title: "ΔΙΚΤΥΟ ΠΟΛΗΣ: NORKEN"
+    subtitle: ΣΕ ΠΑΡΑΚΟΛΟΥΘΟΥΝ.
     text: |-
       Η Ε.ΝΕ.ΔΙΑ δεν είναι αυτό που λένε.
       Έχεις μπει σε μη εξουσιοδοτημένη συχνότητα.
