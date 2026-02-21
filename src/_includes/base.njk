@@ -100,10 +100,19 @@
         @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 60px; box-shadow: 0 0 10px var(--accent-color); } }
         .waveform.paused .bar { animation-play-state: paused; }
 
-        /* MARKDOWN TEXT FIXES (Για να δείχνουν σωστά εικόνες και κείμενα) */
+        /* MARKDOWN TEXT FIXES */
         .markdown-content img { max-width: 100%; height: auto; border: 1px solid #333; border-radius: 4px; display: block; margin: 30px auto; box-shadow: 0 5px 25px rgba(0,0,0,0.8); }
         .markdown-content p { margin-bottom: 25px; line-height: 1.8; }
         .markdown-content strong { color: #fff; }
+
+        /* ACCORDION (VIP FOLDER) STYLES */
+        .vip-folder { border: 1px solid var(--accent-color, #ff8c00); margin-bottom: 15px; background: rgba(0,0,0,0.6); transition: 0.3s; }
+        .vip-folder-header { padding: 20px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .vip-folder-header:hover { background: rgba(255,140,0,0.1); }
+        .vip-folder-title { color: var(--accent-color, #ff8c00); margin: 0; font-family: monospace; font-size: 1.3rem; font-weight: bold; }
+        .vip-folder-icon { color: var(--accent-color, #ff8c00); font-family: monospace; font-size: 1.5rem; transition: transform 0.3s; }
+        .vip-folder.active .vip-folder-icon { transform: rotate(45deg); }
+        .vip-folder-content { display: none; padding: 0 25px 25px 25px; border-top: 1px dashed #444; margin-top: 15px; padding-top: 25px; }
     </style>
 </head>
 <body>
@@ -196,23 +205,36 @@
                 </div>
 
                     {% elif block.type == 'vip_chapter' %}
-                <div class="vip-chapter-block" style="border: 1px solid var(--accent-color, #ff8c00); padding: 25px; margin-bottom: 40px; background: rgba(0,0,0,0.6); position: relative;">
-                    <h3 style="color: var(--accent-color, #ff8c00); margin-top: 0; font-family: monospace; font-size: 1.5rem;">{{ block.title }}</h3>
+                
+                <div id="vip-folder-{{ loop.index }}" class="vip-folder">
                     
-                    <div class="vip-actions" style="display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap;">
-                        <button onclick="document.getElementById('vip-content-{{ loop.index }}').style.display = document.getElementById('vip-content-{{ loop.index }}').style.display === 'none' ? 'block' : 'none'" style="background: transparent; border: 1px solid #aaa; color: #fff; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; transition: 0.3s;">[ 📖 ΔΙΑΒΑΣΕ ]</button>
-                        
-                        {% if block.audio %}
-                        <button onclick="openCinematic{{ loop.index }}()" style="background: var(--accent-color, #ff8c00); border: 1px solid var(--accent-color, #ff8c00); color: #000; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; font-weight: bold; transition: 0.3s;">[ 🎧 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]</button>
-                        {% endif %}
-
-                        {% if block.pdf %}
-                        <a href="{{ block.pdf }}" target="_blank" style="background: transparent; border: 1px dashed #555; color: #aaa; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; text-decoration: none; transition: 0.3s;">[ 💾 PDF (OFFLINE) ]</a>
-                        {% endif %}
+                    <div class="vip-folder-header" onclick="toggleFolder{{ loop.index }}()">
+                        <h3 class="vip-folder-title">{{ block.title }}</h3>
+                        <span class="vip-folder-icon" id="vip-icon-{{ loop.index }}">+</span>
                     </div>
 
-                    <div id="vip-content-{{ loop.index }}" class="markdown-content" style="display: none; margin-top: 30px; border-top: 1px dashed #555; padding-top: 25px; color: #ddd; font-size: 1.1rem;">
-                        {{ block.content | markdown | safe }}
+                    <div id="vip-folder-content-{{ loop.index }}" class="vip-folder-content">
+                        <div class="vip-actions" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                            <button onclick="toggleVipSimpleText{{ loop.index }}()" style="background: transparent; border: 1px solid #aaa; color: #fff; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; transition: 0.3s;">
+                                {{ block.button_labels.read | default('[ ΔΙΑΒΑΣΕ ]') }}
+                            </button>
+                            
+                            {% if block.audio %}
+                            <button onclick="openCinematic{{ loop.index }}()" style="background: var(--accent-color, #ff8c00); border: 1px solid var(--accent-color, #ff8c00); color: #000; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; font-weight: bold; transition: 0.3s;">
+                                {{ block.button_labels.cinematic | default('[ ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]') }}
+                            </button>
+                            {% endif %}
+
+                            {% if block.pdf %}
+                            <a href="{{ block.pdf }}" target="_blank" style="background: transparent; border: 1px dashed #555; color: #aaa; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; text-decoration: none; transition: 0.3s;">
+                                {{ block.button_labels.pdf_btn | default('[ PDF (OFFLINE) ]') }}
+                            </a>
+                            {% endif %}
+                        </div>
+
+                        <div id="vip-content-{{ loop.index }}" class="markdown-content" style="display: none; margin-top: 30px; border-top: 1px dashed #555; padding-top: 25px; color: #ddd; font-size: 1.1rem;">
+                            {{ block.content | markdown | safe }}
+                        </div>
                     </div>
                 </div>
 
@@ -220,7 +242,7 @@
                 <div id="cinematic-overlay-{{ loop.index }}" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 99999; overflow-y: auto; padding: 60px 20px; box-sizing: border-box;">
                     
                     <button onclick="closeCinematic{{ loop.index }}()" style="position: fixed; top: 25px; right: 25px; background: rgba(255, 0, 60, 0.1); color: #ff003c; border: 1px solid #ff003c; padding: 10px 20px; cursor: pointer; font-family: monospace; font-weight: bold; font-size: 1rem; z-index: 100000; backdrop-filter: blur(5px); transition: 0.3s;">
-                        [ 🛑 ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ]
+                        {{ block.button_labels.stop | default('[ ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ]') }}
                     </button>
 
                     <div style="max-width: 800px; margin: 0 auto; position: relative;">
@@ -235,9 +257,9 @@
                             </div>
                             
                             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                                <button id="vip-btn-play-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipAudio{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); font-family: monospace; cursor: pointer; font-weight: bold;">[ ▶ PLAY ]</button>
+                                <button id="vip-btn-play-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipAudio{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); font-family: monospace; cursor: pointer; font-weight: bold;">[ PLAY ]</button>
                                 
-                                <button id="vip-btn-readalong-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipReadAlong{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid #aaa; color: #aaa; font-family: monospace; cursor: pointer;">[ 📖 ΑΝΟΙΓΜΑ ΚΕΙΜΕΝΟΥ ]</button>
+                                <button id="vip-btn-readalong-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipReadAlong{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid #aaa; color: #aaa; font-family: monospace; cursor: pointer;">{{ block.button_labels.open_text | default('[ ΑΝΟΙΓΜΑ ΚΕΙΜΕΝΟΥ ]') }}</button>
                             </div>
                             
                             <audio id="vip-audio-{{ loop.index }}" preload="none">
@@ -254,6 +276,26 @@
                 <script>
                     var isVipPlaying{{ loop.index }} = false;
                     var isVipTextOpen{{ loop.index }} = false;
+
+                    // Λειτουργία για το άνοιγμα/κλείσιμο του φακέλου (Accordion)
+                    function toggleFolder{{ loop.index }}() {
+                        var folder = document.getElementById('vip-folder-{{ loop.index }}');
+                        var content = document.getElementById('vip-folder-content-{{ loop.index }}');
+                        
+                        if (folder.classList.contains('active')) {
+                            folder.classList.remove('active');
+                            content.style.display = 'none';
+                        } else {
+                            folder.classList.add('active');
+                            content.style.display = 'block';
+                        }
+                    }
+
+                    // Λειτουργία για το κουμπί Απλής Ανάγνωσης
+                    function toggleVipSimpleText{{ loop.index }}() {
+                        var simpleText = document.getElementById('vip-content-{{ loop.index }}');
+                        simpleText.style.display = simpleText.style.display === 'none' ? 'block' : 'none';
+                    }
 
                     function openCinematic{{ loop.index }}() {
                         document.getElementById('cinematic-overlay-{{ loop.index }}').style.display = 'block';
@@ -284,7 +326,7 @@
                             status.style.color = "#555";
                             status.style.animation = "none";
                         }
-                        if(playBtn) playBtn.innerText = "[ ▶ PLAY ]";
+                        if(playBtn) playBtn.innerText = "[ PLAY ]";
 
                         if(mainAudio && typeof isPlaying !== 'undefined' && isPlaying) { mainAudio.volume = 0.4; }
                         document.body.style.overflow = 'auto';
@@ -305,7 +347,7 @@
                             status.innerText = "TRANSMISSION PAUSED...";
                             status.style.color = "#555";
                             status.style.animation = "none";
-                            playBtn.innerText = "[ ▶ PLAY ]";
+                            playBtn.innerText = "[ PLAY ]";
                         } else {
                             audio.play();
                             isVipPlaying{{ loop.index }} = true;
@@ -313,7 +355,7 @@
                             status.innerText = "PLAYING TRANSMISSION...";
                             status.style.color = "var(--accent-color, #ff8c00)";
                             status.style.animation = "blink 1s infinite";
-                            playBtn.innerText = "[ ⏸ ΠΑΥΣΗ ]";
+                            playBtn.innerText = "[ ΠΑΥΣΗ ]";
                         }
                     }
 
@@ -324,11 +366,11 @@
                         if(isVipTextOpen{{ loop.index }}) {
                             textDiv.style.display = 'none';
                             isVipTextOpen{{ loop.index }} = false;
-                            readBtn.innerText = "[ 📖 ΑΝΟΙΓΜΑ ΚΕΙΜΕΝΟΥ ]";
+                            readBtn.innerText = "{{ block.button_labels.open_text | default('[ ΑΝΟΙΓΜΑ ΚΕΙΜΕΝΟΥ ]') }}";
                         } else {
                             textDiv.style.display = 'block';
                             isVipTextOpen{{ loop.index }} = true;
-                            readBtn.innerText = "[ ❌ ΚΛΕΙΣΙΜΟ ΚΕΙΜΕΝΟΥ ]";
+                            readBtn.innerText = "{{ block.button_labels.close_text | default('[ ΚΛΕΙΣΙΜΟ ΚΕΙΜΕΝΟΥ ]') }}";
                             setTimeout(() => { textDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
                         }
                     }
