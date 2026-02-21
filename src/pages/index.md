@@ -21,11 +21,9 @@ blocks:
     button_url: https://www.youtube.com/watch?v=lGDubSRiIWo
   - type: hero
     status: CLASSIFIED
-    title: "Η ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ "
-    subtitle: Κατάφερες να προσπεράσεις το firewall
-    text: |-
-      Ξεκλείδωσε ένα άκρως απόρρητο αρχείο.
-      Διάβασε τον πρόλογο πριν το σύστημα εντοπίσει το ίχνος σου
+    title: ΚΑΤΑΦΕΡΕΣ ΝΑ ΠΡΟΣΠΕΡΑΣΕΙΣ ΤΟ FIREWALL
+    subtitle: Ξεκλείδωσε ένα άκρως απόρρητο αρχείο.
+    text: Διάβασε τον πρόλογο πριν το σύστημα εντοπίσει το ίχνος σου
     button_text: ""
     button_url: ""
   - type: signup_form
