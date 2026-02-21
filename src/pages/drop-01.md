@@ -20,10 +20,7 @@ blocks:
     button_text: ""
     button_url: ""
   - type: signup_form
-    desc: >-
-      Μόνο οι πρώτοι 100 αποκτούν πρόσβαση στα Κρυφά Κεφάλαια. 
-
-      Δώστε συντεταγμένες επικοινωνίας για να λάβετε την επόμενη επιτυχή μετάδοση
+    desc: "   "
     title: FIRST WAVE RECRUITMENT.
     form_type: resistance
     ml_form_id: "179391629910606883"
