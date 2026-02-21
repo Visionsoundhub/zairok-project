@@ -95,7 +95,18 @@ collections:
               - {label: "Κείμενο Κεφαλαίου", name: "content", widget: "markdown"}
               - {label: "Αρχείο Ήχου (Audio/Voiceover)", name: "audio", widget: "file", required: false}
               - {label: "Αρχείο PDF (Για κατέβασμα)", name: "pdf", widget: "file", required: false}
-                  
+              - label: "ΕΛΕΓΧΟΣ ΚΟΥΜΠΙΩΝ (Αν αφήσεις κενό ένα πεδίο, θα πάρει την προεπιλεγμένη τιμή)"
+                name: "button_labels"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - {label: "Κουμπί Απλής Ανάγνωσης (π.χ. [ ΔΙΑΒΑΣΕ ])", name: "read", widget: "string", required: false}
+                  - {label: "Κουμπί Cinematic (π.χ. [ ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ])", name: "cinematic", widget: "string", required: false}
+                  - {label: "Κουμπί PDF (π.χ. [ PDF (OFFLINE) ])", name: "pdf_btn", widget: "string", required: false}
+                  - {label: "Κουμπί ΣΤΟΠ στη Μαύρη Οθόνη (π.χ. [ ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ])", name: "stop", widget: "string", required: false}
+                  - {label: "Κουμπί 'Άνοιγμα Κειμένου' (Κατά την ακρόαση)", name: "open_text", widget: "string", required: false}
+                  - {label: "Κουμπί 'Κλείσιμο Κειμένου' (Κατά την ακρόαση)", name: "close_text", widget: "string", required: false}
+
           - label: "Lore Section (Database Style)"
             name: "lore"
             widget: "object"
