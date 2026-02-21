@@ -22,6 +22,18 @@ collections:
           - {label: "Scan Text (Success)", name: "scan_success_text", widget: "string"}
           - {label: "Main Accent Color (Neon)", name: "color_accent", widget: "color", default: "#ff8c00"}
           - {label: "Error/Alert Color (Red)", name: "color_error", widget: "color", default: "#ff003c"}
+          
+          - label: "🔠 GLOBAL TYPOGRAPHY (Προαιρετικά)"
+            name: "global_typography"
+            widget: "object"
+            required: false
+            collapsed: true
+            fields:
+              - {label: "Μέγεθος Τίτλων (Desktop) π.χ. 2.5rem", name: "title_desk", widget: "string", required: false}
+              - {label: "Μέγεθος Τίτλων (Mobile) π.χ. 1.8rem", name: "title_mob", widget: "string", required: false}
+              - {label: "Μέγεθος Κειμένου (Desktop) π.χ. 1.1rem", name: "text_desk", widget: "string", required: false}
+              - {label: "Μέγεθος Κειμένου (Mobile) π.χ. 0.95rem", name: "text_mob", widget: "string", required: false}
+
           - label: "Menu Items"
             name: "menu_items"
             widget: "list"
@@ -57,6 +69,15 @@ collections:
               - {label: "Text", name: "text", widget: "text"}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
+              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
+                name: "custom_styles"
+                widget: "object"
+                required: false
+                collapsed: true
+                fields:
+                  - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 3.5rem", name: "title_size", widget: "string", required: false}
+                  - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1.2rem", name: "text_size", widget: "string", required: false}
+                  
           - label: "Lore Section (Database Style)"
             name: "lore"
             widget: "object"
@@ -65,6 +86,15 @@ collections:
               - {label: "Items", name: "items", widget: "list", fields: [{label: "Item Title", name: "item_title", widget: "string"}, {label: "Item Desc", name: "item_desc", widget: "text"}]}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
+              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
+                name: "custom_styles"
+                widget: "object"
+                required: false
+                collapsed: true
+                fields:
+                  - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 2rem", name: "title_size", widget: "string", required: false}
+                  - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1rem", name: "text_size", widget: "string", required: false}
+
           - label: "Form (Εγγραφή)"
             name: "signup_form"
             widget: "object"
@@ -78,6 +108,15 @@ collections:
                   - { label: "General (First 100)", value: "general" }
                   - { label: "Resistance (VIP Code)", value: "resistance" }
               - {label: "MailerLite Form ID", name: "ml_form_id", widget: "string", default: "179391629910606883"}
+              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
+                name: "custom_styles"
+                widget: "object"
+                required: false
+                collapsed: true
+                fields:
+                  - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 1.8rem", name: "title_size", widget: "string", required: false}
+                  - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1rem", name: "text_size", widget: "string", required: false}
+
           - label: "Video / Image"
             name: "media_block"
             widget: "object"
@@ -86,6 +125,7 @@ collections:
               - {label: "Image", name: "image", widget: "image", required: false}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
+
           - label: "Terminal (Dynamic)"
             name: "crt_terminal"
             widget: "object"
@@ -101,6 +141,14 @@ collections:
                   - {label: "Button Text", name: "label", widget: "string"}
                   - {label: "Button Action", name: "action", widget: "select", options: ["Read Text", "Play Audio", "Link / PDF"]}
                   - {label: "Button URL (If Link/PDF)", name: "url", widget: "string", required: false}
+              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
+                name: "custom_styles"
+                widget: "object"
+                required: false
+                collapsed: true
+                fields:
+                  - {label: "Μέγεθος Κειμένου Αναγνώστη π.χ. 1.3rem", name: "text_size", widget: "string", required: false}
+
           - label: "Rich Text (Markdown)"
             name: "richtext"
             widget: "object"
