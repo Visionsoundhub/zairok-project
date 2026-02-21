@@ -162,7 +162,34 @@
                         {% if block.button_url %}
                             <a href="{{ block.button_url }}" target="_blank" class="btn-access" style="display:inline-block; margin-top:30px; text-decoration:none;">{{ block.button_text | default('ACCESS FILES') }}</a>
                         {% endif %}
+                    {% elif block.type == 'terminal_intro' %}
+                <div class="terminal-vip-container" style="margin-bottom: 40px; min-height: 100px;">
+                    <div id="vip-terminal-{{ loop.index }}" 
+                         style="font-family: monospace; 
+                                color: {{ block.color | default('#00ff00') }}; 
+                                font-size: {{ block.size | default('1.1rem') }}; 
+                                white-space: pre-line; 
+                                text-shadow: 0 0 5px {{ block.color | default('#00ff00') }};"></div>
                     
+                    <script>
+                        (function() {
+                            var text = `{{ block.text | replace('\\', '\\\\') | replace('\`', '\\\`') | replace('$', '\\$') | safe }}`;
+                            var i = 0;
+                            var speed = {{ block.speed | default(30) }};
+                            var container = document.getElementById('vip-terminal-{{ loop.index }}');
+                            
+                            function typeVIP() {
+                                if (i < text.length) {
+                                    container.innerHTML += text.charAt(i);
+                                    i++;
+                                    setTimeout(typeVIP, speed);
+                                }
+                            }
+                            // Μικρή καθυστέρηση για να προλάβει να φορτώσει η σελίδα
+                            setTimeout(typeVIP, 500);
+                        })();
+                    </script>
+                </div>
                     {% elif block.type == 'signup_form' %}
                         
                         {% if block.form_type == "resistance" %}
@@ -713,6 +740,7 @@ var terminalText = `{{ block.terminal_text | default("> ΕΓΚΑΘΙΔΡΥΣΗ �
     <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
 </body>
 </html>
+
 
 
 
