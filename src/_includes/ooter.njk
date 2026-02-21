@@ -1,0 +1,74 @@
+<div id="modal-container" class="modal-overlay hidden">
+    <div style="border: 1px solid #333; padding: 30px; background: #000; max-width: 500px; width: 90%; text-align: center;">
+        <h2 id="modal-title" style="margin-bottom: 15px;"></h2>
+        <p id="modal-body" style="margin-bottom: 25px; white-space: pre-line; color: #aaa;"></p>
+        <button onclick="closeModal()" style="padding: 10px 25px; cursor: pointer; font-family: var(--font-display);">CLOSE</button>
+    </div>
+</div>
+
+<div id="gdpr-modal" class="modal-overlay hidden">
+    <div class="gdpr-modal-content">
+        <h2>Όροι Χρήσης & Προστασία Δεδομένων</h2>
+        <ul>
+            <li><strong>Σκοπός Συλλογής:</strong> Το email σας συλλέγεται αποκλειστικά και μόνο για την αποστολή ενημερωτικών δελτίων (newsletter). Οι ενημερώσεις περιλαμβάνουν:
+                <ul style="margin-top: 8px; margin-bottom: 0;">
+                    <li>Νέα και εξελίξεις για το project "Zairok".</li>
+                    <li>Μουσικά θέματα και κυκλοφορίες συνδεδεμένες με τα κεφάλαια του βιβλίου.</li>
+                    <li>Ενημερώσεις για "in-character" live events.</li>
+                    <li>"In-character" μεταδόσεις (αυτοματοποιημένα emails) στα πλαίσια του Alternate Reality Game (ARG).</li>
+                </ul>
+            </li>
+            <li><strong>Ασφάλεια Δεδομένων:</strong> Τα προσωπικά σας δεδομένα παραμένουν αυστηρά στην κατοχή μας. Δεν πρόκειται ποτέ να πουληθούν, να ενοικιαστούν ή να παραχωρηθούν σε τρίτους.</li>
+            <li><strong>Πλατφόρμα Αποστολής:</strong> Η διαχείριση της λίστας γίνεται μέσω ασφαλούς εξωτερικής πλατφόρμας η οποία συμμορφώνεται πλήρως με τους ευρωπαϊκούς κανονισμούς προστασίας δεδομένων (GDPR).</li>
+            <li><strong>Δικαίωμα Διαγραφής:</strong> Έχετε το δικαίωμα να διαγραφείτε ανά πάσα στιγμή. Κάθε email που λαμβάνετε περιέχει στο τέλος ειδικό σύνδεσμο διαγραφής (Unsubscribe).</li>
+        </ul>
+        <button class="gdpr-close-btn" onclick="closeGdprModal()" style="cursor: pointer; font-family: var(--font-display);">ΚΛΕΙΣΙΜΟ</button>
+    </div>
+</div>
+
+<script>
+    const swup = new Swup({
+        plugins: [new SwupScriptsPlugin()]
+    });
+    const audioEl = document.getElementById('main-audio');
+    const playBtn = document.getElementById('play-btn');
+    let isPlaying = false;
+    function toggleAudio() {
+        if(!isPlaying) { audioEl.play(); playBtn.innerText = "❚❚"; isPlaying = true; } 
+        else { audioEl.pause(); playBtn.innerText = "▶"; isPlaying = false; }
+    }
+
+    {% if require_gate %}
+    const accessSound = document.getElementById('access-sound');
+    if(sessionStorage.getItem('zairok_access')) { document.getElementById('the-gate').style.display = 'none'; }
+
+    function handleAccess(btn) {
+        document.getElementById('gate-box').classList.add('scanning');
+        try {
+            audioEl.volume = 0.4;
+            audioEl.play().then(() => { isPlaying = true; playBtn.innerText = "❚❚"; });
+            accessSound.volume = 1.0; accessSound.play();
+        } catch(e) {}
+        btn.style.display = 'none';
+        document.getElementById('gate-msg').innerText = "{{ settings.scan_start_text }}";
+        setTimeout(() => { document.getElementById('gate-msg').innerText = "{{ settings.scan_success_text }}"; }, 2000);
+        setTimeout(() => { document.getElementById('the-gate').style.opacity = '0'; sessionStorage.setItem('zairok_access', 'true'); }, 3000);
+        setTimeout(() => { document.getElementById('the-gate').style.display = 'none'; }, 4000);
+    }
+    {% endif %}
+
+    function openModal(title, text) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-body').innerText = text;
+        document.getElementById('modal-container').classList.remove('hidden');
+    }
+    function closeModal() { document.getElementById('modal-container').classList.add('hidden'); }
+    
+    function openGdprModal() { document.getElementById('gdpr-modal').classList.remove('hidden'); }
+    function closeGdprModal() { document.getElementById('gdpr-modal').classList.add('hidden'); }
+
+    audioEl.ontimeupdate = () => { if(audioEl.duration) document.getElementById('progress-bar').style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%"; };
+    swup.on('contentReplaced', () => { document.getElementById('nav-menu').classList.remove('active'); });
+</script>
+
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
