@@ -22,7 +22,8 @@
   "scan_success_text": "IDENTITY CONFIRMED: SUBJECT #9204",
   "global_typography": {
     "title_desk": "3rem",
-    "title_mob": "1.5rem"
+    "title_mob": "1.5rem",
+    "text_desk": "1.5rem"
   },
   "scan_start_text": "SCANNING RETINA...",
   "color_error": "#ff003c",
