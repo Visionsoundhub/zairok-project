@@ -185,7 +185,7 @@
                                     <button id="skip-res-btn" onclick="window.skipResTerminal()" style="display: none; background: #000; border: 1px dashed var(--accent-color); color: var(--accent-color); padding: 5px 15px; font-family: var(--font-display); font-size: 0.8rem; cursor: pointer;">[ SKIP ]</button>
                                 </div>
                                 
-                                <div id="terminal-screen" style="font-family: monospace; color: #0f0; min-height: 200px; margin-bottom: 20px; white-space: pre-line; text-shadow: 0 0 5px #0f0; display: none;"></div>
+                                <div id="terminal-screen" style="font-family: monospace; color: {{ block.custom_styles.terminal_color | default('#00ff00') }}; font-size: {{ block.custom_styles.terminal_size | default('1rem') }}; min-height: 200px; margin-bottom: 20px; white-space: pre-line; text-shadow: 0 0 5px {{ block.custom_styles.terminal_color | default('#00ff00') }}; display: none;"></div>
 
                                 <button id="start-terminal-btn" onclick="window.startTerminal()" style="background:transparent; color:var(--accent-color); border:2px solid var(--accent-color); padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; letter-spacing: 2px;">[ ΕΝΑΡΞΗ ΣΥΝΔΕΣΗΣ ]</button>
                                 
@@ -713,4 +713,5 @@ var terminalText = `{{ block.terminal_text | default("> ΕΓΚΑΘΙΔΡΥΣΗ �
     <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
 </body>
 </html>
+
 
