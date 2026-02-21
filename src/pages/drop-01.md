@@ -3,6 +3,7 @@ layout: base.njk
 title: Drop 01
 permalink: /secure-link/
 in_menu: false
+require_gate: false
 blocks:
   - type: hero
     status: INIT
@@ -26,6 +27,10 @@ blocks:
     title: FIRST WAVE RECRUITMENT.
     form_type: resistance
     ml_form_id: "179391629910606883"
+    terminal_text: |-
+      τεστ
+      τεστ 
+      τεστ
   - type: hero
     status: ALERT
     title: ΟΔΗΓΙΑ ΑΣΦΑΛΕΙΑΣ
