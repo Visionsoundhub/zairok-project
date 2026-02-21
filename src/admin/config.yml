@@ -117,6 +117,8 @@ collections:
                 fields:
                   - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 1.8rem", name: "title_size", widget: "string", required: false}
                   - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1rem", name: "text_size", widget: "string", required: false}
+                  - {label: "Χρώμα Τερματικού (π.χ. #00ff00)", name: "terminal_color", widget: "color", default: "#00ff00", required: false}
+                  - {label: "Μέγεθος Τερματικού π.χ. 1.1rem", name: "terminal_size", widget: "string", required: false}
 
           - label: "Video / Image"
             name: "media_block"
