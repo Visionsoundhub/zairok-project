@@ -1,0 +1,23 @@
+<div class="scanlines"></div>
+<div class="crt-flicker"></div>
+
+{% if require_gate %}
+<div id="the-gate">
+    <div class="gate-content" id="gate-box">
+        <div class="face-scan-line"></div>
+        <h1 style="font-family: var(--font-display); margin-bottom: 10px;">SYSTEM: FOUNDATION ZAIRA</h1>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 30px;">SECURE CONNECTION REQUIRED</p>
+        <button id="enter-btn" class="btn-access" onclick="handleAccess(this)">PRESS FOR ENCRYPTED ACCESS</button>
+        <div id="gate-msg" style="margin-top:20px; font-family:var(--font-display); color:var(--accent-color); min-height: 1.2em;"></div>
+    </div>
+</div>
+{% endif %}
+
+<audio id="main-audio" loop preload="auto"><source src="{{ settings.audio_loop }}" type="audio/mpeg"></audio>
+{% if require_gate %}<audio id="access-sound" preload="auto"><source src="{{ settings.audio_access }}" type="audio/mpeg"></audio>{% endif %}
+
+<div id="audio-bar">
+    <div class="player-controls"><button id="play-btn" onclick="toggleAudio()">▶</button></div>
+    <div style="margin-left:15px; font-size:0.75rem; font-family:var(--font-display);">SIGNAL: <span style="color:var(--accent-color);">{{ settings.audio_label | default('UNKNOWN') }}</span></div>
+    <div style="flex-grow: 1; height: 2px; background: #333; margin-left: 20px;"><div id="progress-bar" style="width: 0%; height: 100%; background: var(--accent-color);"></div></div>
+</div>
