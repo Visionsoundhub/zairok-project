@@ -3,12 +3,13 @@ layout: base.njk
 title: Home
 permalink: /
 in_menu: true
+require_gate: true
 blocks:
   - type: hero
     title: NORKEN CITY GRID
     subtitle: YOU ARE BEING WATCHED.
     text: |-
-      Το Ίδρυμα Ζάιρα ελέγχει τα πάντα. Η Ε.ΝΕ.ΔΙΑ δεν είναι αυτό που λένε.
+      Η Ε.ΝΕ.ΔΙΑ δεν είναι αυτό που λένε.
       Έχεις μπει σε μη εξουσιοδοτημένη συχνότητα.
     status: ALERT
     button_text: ""
@@ -20,10 +21,11 @@ blocks:
     button_url: https://www.youtube.com/watch?v=lGDubSRiIWo
   - type: hero
     status: CLASSIFIED
-    title: "ACCESS LEVEL: GRANTED"
+    title: "Η ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ "
     subtitle: Κατάφερες να προσπεράσεις το firewall
-    text: Ξεκλείδωσε ένα άκρως απόρρητο αρχείο. Διάβασε τον πρόλογο πριν το σύστημα
-      εντοπίσει το ίχνος σου
+    text: |-
+      Ξεκλείδωσε ένα άκρως απόρρητο αρχείο.
+      Διάβασε τον πρόλογο πριν το σύστημα εντοπίσει το ίχνος σου
     button_text: ""
     button_url: ""
   - type: signup_form
