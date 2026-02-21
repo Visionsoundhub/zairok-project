@@ -6,10 +6,33 @@ in_menu: false
 require_gate: false
 blocks:
   - type: terminal_intro
-    color: "#ffa100"
+    color: "#ffd89d"
     size: 1.1rem
     speed: 30
-    text: ΑΝΑΓΝΩΡΙΣΗ VIP ΠΡΑΚΤΟ
+    text: >-
+      > STATUS: ACCESS GRANTED
+
+      > INITIALIZING SECURE CONNECTION... OK.
+
+      > 
+
+      > Καλωσήρθες, Πράκτορα.
+
+      > Βρίσκεσαι στο Black Box της Αντίστασης.
+
+      > Εδώ θα αρχειοθετούνται όλα τα αποκρυπτογραφημένα κεφάλαια πριν διαρρεύσουν.
+
+      > Κάθε νέα μετάδοση θα φτάνει πρώτα στο κρυφό σου κανάλι επικοινωνίας (email).
+
+      >
+
+      > Η Διοκρατεία δεν γνωρίζει για αυτό το δίκτυο. Κράτησέ το έτσι.
+
+      > Αξιολόγησε τα δεδομένα. Η αναφορά σου (feedback) είναι κρίσιμη για την εξέλιξη του σχεδίου.
+
+      >
+
+      > AWAITING INPUT...
   - type: vip_chapter
     content: >-
       Πρόλογος
