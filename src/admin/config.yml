@@ -107,6 +107,13 @@ collections:
                   - {label: "Κουμπί 'Άνοιγμα Κειμένου' (Κατά την ακρόαση)", name: "open_text", widget: "string", required: false}
                   - {label: "Κουμπί 'Κλείσιμο Κειμένου' (Κατά την ακρόαση)", name: "close_text", widget: "string", required: false}
 
+          - label: "VIP Feedback (Live Comments)"
+            name: "vip_feedback"
+            widget: "object"
+            fields:
+              - {label: "Τίτλος Ενότητας", name: "title", widget: "string", default: "[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]"}
+              - {label: "Μοναδικό ID Κεφαλαίου (Βάλε αγγλικά π.χ. prologue, chapter-1. Είναι απαραίτητο για να μην μπερδεύονται τα σχόλια των κεφαλαίων μεταξύ τους)", name: "topic_id", widget: "string", default: "general"}
+
           - label: "Lore Section (Database Style)"
             name: "lore"
             widget: "object"
