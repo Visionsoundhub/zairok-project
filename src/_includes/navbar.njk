@@ -1,0 +1,14 @@
+<header>
+    <a href="/" class="logo-text">{% if settings.site_logo %}<img src="{{ settings.site_logo }}" style="max-height:45px;">{% else %}ZAIROK{% endif %}</a>
+    <button class="menu-toggle" onclick="document.getElementById('nav-menu').classList.toggle('active')">☰</button>
+
+    <nav id="nav-menu">
+        {% for item in settings.menu_items %}
+            {% if item.type == 'Modal' %}
+                <button class="menu-modal-trigger" onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')">{{ item.label }}</button>
+            {% else %}
+                <a href="{{ item.url }}">{{ item.label }}</a>
+            {% endif %}
+        {% endfor %}
+    </nav>
+</header>
