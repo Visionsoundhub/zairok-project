@@ -77,6 +77,15 @@ collections:
                 fields:
                   - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 3.5rem", name: "title_size", widget: "string", required: false}
                   - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1.2rem", name: "text_size", widget: "string", required: false}
+
+          - label: "Terminal Intro (VIP/Atmospheric)"
+            name: "terminal_intro"
+            widget: "object"
+            fields:
+              - {label: "Κείμενο Τερματικού", name: "text", widget: "text"}
+              - {label: "Χρώμα Γραμμάτων", name: "color", widget: "color", default: "#00ff00"}
+              - {label: "Μέγεθος Γραμμάτων π.χ. 1.2rem", name: "size", widget: "string", default: "1.1rem"}
+              - {label: "Ταχύτητα Πληκτρολόγησης (ms)", name: "speed", widget: "number", default: 30}
                   
           - label: "Lore Section (Database Style)"
             name: "lore"
