@@ -38,7 +38,7 @@ blocks:
       >
       > ΑΝΑΜΟΝΗ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ...
     custom_styles:
-      text_size: 1.5rem
+      text_size: ""
   - type: hero
     status: ALERT
     title: ΟΔΗΓΙΑ ΑΣΦΑΛΕΙΑΣ
