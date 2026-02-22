@@ -22,7 +22,7 @@ blocks:
       Η σύνδεσή σου είναι κρυπτογραφημένη. Προχώρα στην επιλογή πρωτοκόλλου στο τερματικό παρακάτω, πριν εντοπιστεί το ίχνος σου.
     subtitle: "NORKEN GRID: SECURE CONNECTION ESTABLISHED"
   - type: crt_terminal
-    text_color: "#ff9200"
+    text_color: "#ffd49c"
     boot_text: >
       > ΕΓΚΑΘΙΔΡΥΣΗ ΣΥΝΔΕΣΗΣ... OK
 
