@@ -158,7 +158,6 @@
                     var playBtn = document.getElementById('vip-btn-play-{{ loop.index }}');
 
                     overlay.style.display = 'none';
-                    
                     if(audio) {
                         audio.pause();
                         audio.currentTime = 0;
@@ -172,7 +171,6 @@
                         status.style.animation = "none";
                     }
                     if(playBtn) playBtn.innerText = "[ PLAY ]";
-
                     if(mainAudio && typeof isPlaying !== 'undefined' && isPlaying) { mainAudio.volume = 0.4; }
                     document.body.style.overflow = 'auto';
                 }
@@ -184,7 +182,6 @@
                     var playBtn = document.getElementById('vip-btn-play-{{ loop.index }}');
 
                     if(!audio) return;
-
                     if(isVipPlaying{{ loop.index }}) {
                         audio.pause();
                         isVipPlaying{{ loop.index }} = false;
@@ -293,9 +290,7 @@
                         let starsHTML = '<span style="color: var(--accent-color);">';
                         for(let i=0; i<5; i++) { starsHTML += (i < data.rating) ? '★' : '<span style="color:#444">★</span>'; }
                         starsHTML += '</span>';
-
                         const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('el-GR') : 'LIVE DATA...';
-
                         listDiv.innerHTML += `
                             <div style="border-left: 2px solid var(--accent-color); padding-left: 15px; background: rgba(0,0,0,0.3); padding: 15px;">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px dashed #222; padding-bottom: 8px;">
@@ -400,7 +395,6 @@
                 var terminalSpeed = 30;
                 var resTypeTimer;
                 var resIsSkipped = false;
-
                 window.typeWriterTerminal = function() {
                     if (resIsSkipped) return;
                     if (terminalI < terminalText.length) {
@@ -739,7 +733,6 @@
                     window.typeBoot_{{ blockIndex }}();
                 }, 500);
             </script>
-        {% endif %}
 
         {% elif block.type == 'richtext' %}
             <div class="markdown-content">
