@@ -1,0 +1,126 @@
+vip_feedback.njk<div class="vip-feedback-container" style="border: 1px solid var(--accent-color); padding: 30px; background: rgba(0,0,0,0.7); margin-bottom: 40px; margin-top: 20px;">
+    <h3 style="color: var(--accent-color); font-family: monospace; border-bottom: 1px dashed #333; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.2rem;">{{ block.title | default('[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]') }}</h3>
+    
+    <form id="fb-form-{{ loop.index }}" style="margin-bottom: 40px; background: #0a0a0a; padding: 20px; border: 1px solid #222;">
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;">
+            <input type="text" id="fb-name-{{ loop.index }}" placeholder="[ CODE NAME ]" required style="flex: 1; min-width: 200px; background: #000; border: 1px solid #444; color: #0f0; padding: 12px; font-family: monospace;">
+            
+            <div style="display: flex; align-items: center; gap: 10px; background: #000; border: 1px solid #444; padding: 0 15px;">
+                <span style="color: #666; font-family: monospace; font-size: 0.8rem;">RATING:</span>
+                <div class="star-rating">
+                    <input type="radio" id="star5-{{ loop.index }}" name="rating-{{ loop.index }}" value="5" required/><label for="star5-{{ loop.index }}" title="5 stars">★</label>
+                    <input type="radio" id="star4-{{ loop.index }}" name="rating-{{ loop.index }}" value="4"/><label for="star4-{{ loop.index }}" title="4 stars">★</label>
+                    <input type="radio" id="star3-{{ loop.index }}" name="rating-{{ loop.index }}" value="3"/><label for="star3-{{ loop.index }}" title="3 stars">★</label>
+                    <input type="radio" id="star2-{{ loop.index }}" name="rating-{{ loop.index }}" value="2"/><label for="star2-{{ loop.index }}" title="2 stars">★</label>
+                    <input type="radio" id="star1-{{ loop.index }}" name="rating-{{ loop.index }}" value="1"/><label for="star1-{{ loop.index }}" title="1 star">★</label>
+                </div>
+            </div>
+        </div>
+        <textarea id="fb-msg-{{ loop.index }}" placeholder="> ΕΙΣΑΓΩΓΗ ΑΝΑΦΟΡΑΣ..." required rows="4" style="width: 100%; background: #000; border: 1px solid #444; color: #ccc; padding: 12px; font-family: monospace; margin-bottom: 15px; resize: vertical;"></textarea>
+        
+        <button type="submit" id="fb-btn-{{ loop.index }}" style="background: var(--accent-color); color: #000; border: none; padding: 12px 25px; font-family: monospace; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s;">[ TRANSMIT DATA ]</button>
+        <div id="fb-spinner-{{ loop.index }}" class="loading-spinner" style="display: none; border-top-color: #000; width: 20px; height: 20px; margin-top: -30px; margin-bottom: 10px;"></div>
+    </form>
+
+    <div id="fb-list-{{ loop.index }}" style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="color: #666; font-family: monospace; font-size: 0.9rem;">> ΦΟΡΤΩΣΗ ΑΡΧΕΙΟΥ...</div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyALGEhN8YHapgn6acN8SAXEz8E5eVw7JN8",
+        authDomain: "zairok-vip-network.firebaseapp.com",
+        projectId: "zairok-vip-network",
+        storageBucket: "zairok-vip-network.firebasestorage.app",
+        messagingSenderId: "488545339709",
+        appId: "1:488545339709:web:6fc94816c0d1d37943dd54"
+    };
+
+    const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    const db = getFirestore(app);
+    const feedbackRef = collection(db, "vip_feedback");
+    const topicId = "{{ block.topic_id | default('general') }}";
+
+    const q = query(feedbackRef, where("topic", "==", topicId));
+    onSnapshot(q, (snapshot) => {
+        const listDiv = document.getElementById("fb-list-{{ loop.index }}");
+        if (!listDiv) return;
+        
+        if (snapshot.empty) {
+            listDiv.innerHTML = '<div style="color: #666; font-family: monospace; font-size: 0.9rem;">> ΚΑΝΕΝΑ ΔΕΔΟΜΕΝΟ ΣΤΟ ΑΡΧΕΙΟ. ΑΝΑΜΟΝΗ ΠΡΩΤΗΣ ΑΝΑΦΟΡΑΣ...</div>';
+            return;
+        }
+
+        let docs = [];
+        snapshot.forEach(doc => docs.push(doc.data()));
+        docs.sort((a, b) => {
+            const timeA = a.timestamp ? a.timestamp.toMillis() : Date.now();
+            const timeB = b.timestamp ? b.timestamp.toMillis() : Date.now();
+            return timeB - timeA; 
+        });
+
+        listDiv.innerHTML = "";
+        docs.forEach((data) => {
+            let starsHTML = '<span style="color: var(--accent-color);">';
+            for(let i=0; i<5; i++) { starsHTML += (i < data.rating) ? '★' : '<span style="color:#444">★</span>'; }
+            starsHTML += '</span>';
+            const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('el-GR') : 'LIVE DATA...';
+            listDiv.innerHTML += `
+                <div style="border-left: 2px solid var(--accent-color); padding-left: 15px; background: rgba(0,0,0,0.3); padding: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px dashed #222; padding-bottom: 8px;">
+                        <div style="font-family: monospace; color: var(--accent-color); font-size: 1rem; font-weight: bold;">
+                            >_ ${data.name}
+                        </div>
+                        <div style="font-family: monospace; font-size: 0.8rem; color: #666;">
+                            ${dateStr} &nbsp;//&nbsp; ${starsHTML}
+                        </div>
+                    </div>
+                    <div style="color: #ccc; font-size: 1.05rem; line-height: 1.6; font-family: var(--font-body); white-space: pre-line;">
+                        ${data.message}
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    const form = document.getElementById("fb-form-{{ loop.index }}");
+    if(form) {
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("fb-btn-{{ loop.index }}");
+            const spinner = document.getElementById("fb-spinner-{{ loop.index }}");
+            
+            const name = document.getElementById("fb-name-{{ loop.index }}").value;
+            const msg = document.getElementById("fb-msg-{{ loop.index }}").value;
+            let rating = 5; 
+            const ratingInputs = document.getElementsByName("rating-{{ loop.index }}");
+            for(let radio of ratingInputs) {
+                if(radio.checked) { rating = parseInt(radio.value); break; }
+            }
+
+            btn.style.color = "transparent";
+            spinner.style.display = "block";
+
+            try {
+                await addDoc(feedbackRef, {
+                    topic: topicId,
+                    name: name,
+                    message: msg,
+                    rating: rating,
+                    timestamp: serverTimestamp()
+                });
+                form.reset();
+            } catch (err) {
+                console.error("Firebase Error: ", err);
+                alert("> ΣΦΑΛΜΑ ΣΥΣΤΗΜΑΤΟΣ. Η ΑΝΑΦΟΡΑ ΑΠΕΤΥΧΕ.");
+            } finally {
+                btn.style.color = "#000";
+                spinner.style.display = "none";
+            }
+        });
+    }
+</script>
