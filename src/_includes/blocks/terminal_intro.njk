@@ -1,0 +1,40 @@
+<div class="terminal-vip-container" style="position: relative; margin-bottom: 40px; min-height: 100px; padding-top: 30px;">
+    
+    <button id="skip-vip-{{ loop.index }}" onclick="skipVipTerminal{{ loop.index }}()" style="position: absolute; top: 0; right: 0; background: #000; border: 1px dashed {{ block.color | default('#00ff00') }}; color: {{ block.color | default('#00ff00') }}; padding: 5px 15px; font-family: var(--font-display); font-size: 0.8rem; cursor: pointer; z-index: 10; transition: 0.3s;">[ SKIP ]</button>
+
+    <div id="vip-terminal-{{ loop.index }}" style="font-family: monospace; color: {{ block.color | default('#00ff00') }}; font-size: {{ block.size | default('1.1rem') }}; white-space: pre-line; text-shadow: 0 0 5px {{ block.color | default('#00ff00') }};"></div>
+    
+    <script>
+        (function() {
+            var text = `{{ block.text | replace('\\', '\\\\') | replace('\`', '\\\`') | replace('$', '\\$') | safe }}`;
+            var i = 0;
+            var speed = {{ block.speed | default(30) }};
+            var container = document.getElementById('vip-terminal-{{ loop.index }}');
+            var skipBtn = document.getElementById('skip-vip-{{ loop.index }}');
+            
+            window.isSkippedVIP{{ loop.index }} = false;
+            window.vipTimer{{ loop.index }} = null;
+
+            function typeVIP() {
+                if (window.isSkippedVIP{{ loop.index }}) return;
+                
+                if (i < text.length) {
+                    container.innerHTML += text.charAt(i);
+                    i++;
+                    window.vipTimer{{ loop.index }} = setTimeout(typeVIP, speed);
+                } else {
+                    if(skipBtn) skipBtn.style.display = 'none';
+                }
+            }
+            
+            window.skipVipTerminal{{ loop.index }} = function() {
+                window.isSkippedVIP{{ loop.index }} = true;
+                clearTimeout(window.vipTimer{{ loop.index }});
+                container.innerHTML = text;
+                if(skipBtn) skipBtn.style.display = 'none';
+            };
+
+            setTimeout(typeVIP, 500);
+        })();
+    </script>
+</div>
