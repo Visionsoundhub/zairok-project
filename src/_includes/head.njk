@@ -4,17 +4,17 @@
 {% set seoDesc = settings.seo.description | default('Το hybrid sci-fi project ZAIROK. Επίλεξε το επίπεδό σου και μπες στο Δίκτυο.') %}
 {% set seoImg = settings.seo.og_image | default(settings.site_logo) %}
 
-<title>PROJECT ZAIROK | {{ title }}</title>
+<title>ZAIROK | {{ title }}</title>
 <meta name="description" content="{{ seoDesc }}">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://zairok.gr/">
-<meta property="og:title" content="PROJECT ZAIROK | {{ title }}">
+<meta property="og:title" content="ZAIROK | {{ title }}">
 <meta property="og:description" content="{{ seoDesc }}">
 {% if seoImg %}<meta property="og:image" content="https://zairok.gr{{ seoImg }}">{% endif %}
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PROJECT ZAIROK | {{ title }}">
+<meta name="twitter:title" content="ZAIROK | {{ title }}">
 <meta name="twitter:description" content="{{ seoDesc }}">
 {% if seoImg %}<meta name="twitter:image" content="https://zairok.gr{{ seoImg }}">{% endif %}
 
