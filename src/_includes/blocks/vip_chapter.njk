@@ -1,0 +1,172 @@
+<div id="vip-folder-{{ loop.index }}" class="vip-folder">
+    <div class="vip-folder-header" onclick="toggleFolder{{ loop.index }}()">
+        <h3 class="vip-folder-title">{{ block.title }}</h3>
+        <span class="vip-folder-icon" id="vip-icon-{{ loop.index }}">+</span>
+    </div>
+
+    <div id="vip-folder-content-{{ loop.index }}" class="vip-folder-content">
+        <div class="vip-actions" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+            <button onclick="toggleVipSimpleText{{ loop.index }}()" style="background: transparent; border: 1px solid #aaa; color: #fff; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; transition: 0.3s;">
+                {{ block.button_labels.read | default('[ ΔΙΑΒΑΣΕ ]') }}
+            </button>
+            
+            {% if block.audio %}
+            <button onclick="openCinematic{{ loop.index }}()" style="background: var(--accent-color, #ff8c00); border: 1px solid var(--accent-color, #ff8c00); color: #000; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; font-weight: bold; transition: 0.3s;">
+                {{ block.button_labels.cinematic | default('[ ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]') }}
+            </button>
+            {% else %}
+            <div style="background: rgba(255,140,0,0.05); border: 1px dashed #444; color: #666; padding: 10px 20px; font-family: monospace; font-size: 0.9rem; cursor: not-allowed; opacity: 0.8;">
+                {{ block.audio_status_msg | default('[ TRANSMISSION ENCRYPTED ]') }}
+            </div>
+            {% endif %}
+
+            {% if block.pdf %}
+            <a href="{{ block.pdf }}" target="_blank" style="background: transparent; border: 1px dashed #555; color: #aaa; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; text-decoration: none; transition: 0.3s;">
+                {{ block.button_labels.pdf_btn | default('[ PDF (OFFLINE) ]') }}
+            </a>
+            {% endif %}
+        </div>
+
+        <div id="vip-content-{{ loop.index }}" class="markdown-content" style="display: none; margin-top: 30px; border-top: 1px dashed #555; padding-top: 25px; color: #ddd; font-size: 1.1rem;">
+            {{ block.content | markdown | safe }}
+        </div>
+    </div>
+</div>
+
+{% if block.audio %}
+<div id="cinematic-overlay-{{ loop.index }}" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 99999; overflow-y: auto; padding: 60px 20px; box-sizing: border-box;">
+    
+    <button onclick="closeCinematic{{ loop.index }}()" style="position: fixed; top: 25px; right: 25px; background: rgba(255, 0, 60, 0.1); color: #ff003c; border: 1px solid #ff003c; padding: 10px 20px; cursor: pointer; font-family: monospace; font-weight: bold; font-size: 1rem; z-index: 100000; backdrop-filter: blur(5px); transition: 0.3s;">
+        {{ block.button_labels.stop | default('[ ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ]') }}
+    </button>
+
+    <div style="max-width: 800px; margin: 0 auto; position: relative;">
+        <h2 style="color: var(--accent-color, #ff8c00); font-family: monospace; text-align: center; margin-bottom: 50px; font-size: 2rem;">{{ block.title }}</h2>
+        
+        <div style="margin-bottom: 50px; padding: 40px; border: 1px dashed var(--accent-color, #ff8c00); background: rgba(255,140,0,0.03); border-radius: 8px;">
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+                <div id="vip-waveform-{{ loop.index }}" class="waveform paused">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+                <span id="vip-audio-status-{{ loop.index }}" style="margin-left: 25px; font-family: var(--font-display); font-size: 1.2rem; color: #555; transition: 0.3s;">TRANSMISSION READY...</span>
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; align-items: center;">
+                <button id="vip-btn-play-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipAudio{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); font-family: monospace; cursor: pointer; font-weight: bold;">[ PLAY ]</button>
+                
+                <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px 15px; border: 1px solid #333;">
+                    <span style="font-family: monospace; font-size: 0.8rem; color: #666;">VOL:</span>
+                    <input type="range" id="vip-vol-{{ loop.index }}" min="0" max="1" step="0.1" value="1" oninput="document.getElementById('vip-audio-{{ loop.index }}').volume = this.value" style="width: 80px; accent-color: var(--accent-color); cursor: pointer;">
+                </div>
+
+                <button id="vip-btn-readalong-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipReadAlong{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid #aaa; color: #aaa; font-family: monospace; cursor: pointer;">{{ block.button_labels.open_text | default('[ ΑΝΟΙΓΜΑ ΚΕΙΜΕΝΟΥ ]') }}</button>
+            </div>
+            
+            <audio id="vip-audio-{{ loop.index }}" preload="none">
+                <source src="{{ block.audio }}" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <div id="vip-cinematic-text-{{ loop.index }}" class="markdown-content" style="display: none; color: #ccc; font-size: 1.2rem; padding-bottom: 100px;">
+            {{ block.content | markdown | safe }}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    var isVipPlaying{{ loop.index }} = false;
+    var isVipTextOpen{{ loop.index }} = false;
+
+    function toggleFolder{{ loop.index }}() {
+        var folder = document.getElementById('vip-folder-{{ loop.index }}');
+        var content = document.getElementById('vip-folder-content-{{ loop.index }}');
+        if (folder.classList.contains('active')) {
+            folder.classList.remove('active');
+            content.style.display = 'none';
+        } else {
+            folder.classList.add('active');
+            content.style.display = 'block';
+        }
+    }
+
+    function toggleVipSimpleText{{ loop.index }}() {
+        var simpleText = document.getElementById('vip-content-{{ loop.index }}');
+        simpleText.style.display = simpleText.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function openCinematic{{ loop.index }}() {
+        document.getElementById('cinematic-overlay-{{ loop.index }}').style.display = 'block';
+        document.body.style.overflow = 'hidden'; 
+        var mainAudio = document.getElementById('main-audio');
+        if(mainAudio) { mainAudio.volume = 0.1; }
+    }
+
+    function closeCinematic{{ loop.index }}() {
+        var overlay = document.getElementById('cinematic-overlay-{{ loop.index }}');
+        var audio = document.getElementById('vip-audio-{{ loop.index }}');
+        var mainAudio = document.getElementById('main-audio');
+        var waveform = document.getElementById('vip-waveform-{{ loop.index }}');
+        var status = document.getElementById('vip-audio-status-{{ loop.index }}');
+        var playBtn = document.getElementById('vip-btn-play-{{ loop.index }}');
+
+        overlay.style.display = 'none';
+        if(audio) {
+            audio.pause();
+            audio.currentTime = 0;
+            isVipPlaying{{ loop.index }} = false;
+        }
+        
+        if(waveform) waveform.classList.add('paused');
+        if(status) {
+            status.innerText = "TRANSMISSION READY...";
+            status.style.color = "#555";
+            status.style.animation = "none";
+        }
+        if(playBtn) playBtn.innerText = "[ PLAY ]";
+        if(mainAudio && typeof isPlaying !== 'undefined' && isPlaying) { mainAudio.volume = 0.4; }
+        document.body.style.overflow = 'auto';
+    }
+
+    function toggleVipAudio{{ loop.index }}() {
+        var audio = document.getElementById('vip-audio-{{ loop.index }}');
+        var waveform = document.getElementById('vip-waveform-{{ loop.index }}');
+        var status = document.getElementById('vip-audio-status-{{ loop.index }}');
+        var playBtn = document.getElementById('vip-btn-play-{{ loop.index }}');
+
+        if(!audio) return;
+        if(isVipPlaying{{ loop.index }}) {
+            audio.pause();
+            isVipPlaying{{ loop.index }} = false;
+            waveform.classList.add('paused');
+            status.innerText = "TRANSMISSION PAUSED...";
+            status.style.color = "#555";
+            status.style.animation = "none";
+            playBtn.innerText = "[ PLAY ]";
+        } else {
+            audio.play();
+            isVipPlaying{{ loop.index }} = true;
+            waveform.classList.remove('paused');
+            status.innerText = "PLAYING TRANSMISSION...";
+            status.style.color = "var(--accent-color, #ff8c00)";
+            status.style.animation = "blink 1s infinite";
+            playBtn.innerText = "[ ΠΑΥΣΗ ]";
+        }
+    }
+
+    function toggleVipReadAlong{{ loop.index }}() {
+        var textDiv = document.getElementById('vip-cinematic-text-{{ loop.index }}');
+        var readBtn = document.getElementById('vip-btn-readalong-{{ loop.index }}');
+        
+        if(isVipTextOpen{{ loop.index }}) {
+            textDiv.style.display = 'none';
+            isVipTextOpen{{ loop.index }} = false;
+            readBtn.innerText = "{{ block.button_labels.open_text | default('[ ΑΝΟΙΓΜΑ ΚΕΙΜΕΝΟΥ ]') }}";
+        } else {
+            textDiv.style.display = 'block';
+            isVipTextOpen{{ loop.index }} = true;
+            readBtn.innerText = "{{ block.button_labels.close_text | default('[ ΚΛΕΙΣΙΜΟ ΚΕΙΜΕΝΟΥ ]') }}";
+            setTimeout(() => { textDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        }
+    }
+</script>
