@@ -1,0 +1,166 @@
+signup_form.njk{% if block.form_type == "resistance" %}
+<div class="resistance-form-container" style="border: 1px solid var(--accent-color); padding: 25px; background: rgba(5,5,5,0.9); position: relative;">
+    <button onclick="document.getElementById('terminal-instructions-{{ loop.index }}').classList.toggle('hidden')" style="position: absolute; top: -15px; right: 20px; background: #000; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 5px 15px; font-family: var(--font-display); font-size: 0.8rem; cursor: pointer; z-index: 10;">[ ? ] ΟΔΗΓΙΕΣ</button>
+    <div id="terminal-instructions-{{ loop.index }}" class="hidden" style="background: #111; border: 1px dashed #555; padding: 15px; margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">
+        <strong style="color:var(--accent-color);">ΟΔΗΓΙΕΣ ΠΡΟΣΒΑΣΗΣ:</strong><br>
+        1. Πατήστε "ΕΝΑΡΞΗ ΣΥΝΔΕΣΗΣ" για να ανοίξει το ασφαλές κανάλι.<br>
+        2. Διαβάστε την εισερχόμενη μετάδοση.<br>
+        3. Μόλις ολοκληρωθεί, θα εμφανιστούν τα πεδία εισαγωγής.<br>
+        4. Συμπληρώστε το Code Name, το Email σας και τον Μοναδικό Κωδικό από τη φυσική σας κάρτα (αν έχετε).<br>
+        5. Αποδεχτείτε το Πρωτόκολλο Ασφαλείας (Όροι Χρήσης) και πατήστε "ESTABLISH LINK".
+    </div>
+    <div class="row-form-{{ loop.index }}">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+            <h3 style="color:var(--accent-color); font-family:var(--font-display); font-size: {{ block.custom_styles.title_size | default('calc(var(--title-size) * 0.8)') }}; margin: 0;">{{ block.title }}</h3>
+            <button id="skip-res-btn-{{ loop.index }}" onclick="window.skipResTerminal{{ loop.index }}()" style="display: none; background: #000; border: 1px dashed var(--accent-color); color: var(--accent-color); padding: 5px 15px; font-family: var(--font-display); font-size: 0.8rem; cursor: pointer;">[ SKIP ]</button>
+        </div>
+        <div id="terminal-screen-{{ loop.index }}" style="font-family: monospace; color: {{ block.custom_styles.terminal_color | default('#00ff00') }}; font-size: {{ block.custom_styles.terminal_size | default('1rem') }}; min-height: 200px; margin-bottom: 20px; white-space: pre-line; text-shadow: 0 0 5px {{ block.custom_styles.terminal_color | default('#00ff00') }}; display: none;"></div>
+        <button id="start-terminal-btn-{{ loop.index }}" onclick="window.startTerminal{{ loop.index }}()" style="background:transparent; color:var(--accent-color); border:2px solid var(--accent-color); padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; letter-spacing: 2px;">[ ΕΝΑΡΞΗ ΣΥΝΔΕΣΗΣ ]</button>
+        
+        <form id="resistance-gateway-{{ loop.index }}" style="display: none; margin-top: 20px;">
+            <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">[ ΠΕΔΙΑ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ ]</div>
+            <input type="text" id="form-name-{{ loop.index }}" placeholder="[1] CODE NAME" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace; font-size: 1.2rem;" required>
+            <input type="email" id="form-email-{{ loop.index }}" placeholder="[2] ΚΑΝΑΛΙ ΕΠΙΚΟΙΝΩΝΙΑΣ (Email)" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace; font-size: 1.2rem;" required>
+            <input type="text" id="form-code-{{ loop.index }}" placeholder="[3] ΦΥΣΙΚΟ ΚΛΕΙΔΙ ΠΡΟΣΒΑΣΗΣ" style="width:100%; background:rgba(20,10,0,0.5); border:1px solid var(--accent-color); color:var(--accent-color); padding:15px; margin-bottom:15px; font-family: monospace; font-size: 1.2rem;" required>
+            
+            <div class="gdpr-terms-container" style="background: #0a0a0a; padding: 10px; border: 1px solid #222;">
+                <input type="checkbox" id="resistance-terms-{{ loop.index }}" name="terms" required class="gdpr-checkbox">
+                <label for="resistance-terms-{{ loop.index }}" class="gdpr-label">
+                    [ ] ΑΠΟΔΟΧΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΣΦΑΛΕΙΑΣ <span class="gdpr-link" onclick="openGdprModal()">(Όροι Χρήσης)</span>
+                </label>
+            </div>
+            <button type="submit" id="form-submit-btn-{{ loop.index }}" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; margin-top: 15px;">ESTABLISH LINK</button>
+            <div class="loading-spinner" id="form-spinner-{{ loop.index }}"></div>
+            <div id="form-error-{{ loop.index }}" style="color: var(--error-color); display: none; margin-top: 15px; font-weight: bold; font-family: monospace;"></div>
+        </form>
+    </div>
+    <div class="row-success-{{ loop.index }}" style="display: none; text-align: center; padding: 30px 0;">
+        <h3 id="success-title-{{ loop.index }}" style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px; text-shadow: 0 0 10px var(--accent-color);">SIGNAL ESTABLISHED</h3>
+        <p id="success-msg-{{ loop.index }}" style="color:#0f0; font-family: monospace;">> Πρόσβαση εγκρίθηκε. Η κρυπτογράφηση ολοκληρώθηκε.<br>> Αναμείνατε για περαιτέρω οδηγίες.</p>
+    </div>
+</div>
+<script>
+    var terminalText{{ loop.index }} = `{{ block.terminal_text | default("> ΕΓΚΑΘΙΔΡΥΣΗ ΑΣΦΑΛΟΥΣ ΣΥΝΔΕΣΗΣ...\n> Καλώς ήρθες στο δίκτυο του ZAIROK.\n> Η Διοκρατεία του Νόρκεν πουλάει ένα καλοστημένο ψέμα.\n> Μπορεί να μην είμαστε φυλακισμένοι με την παραδοσιακή έννοια, αλλά η ελευθερία που μας δίνουν είναι μια ψευδαίσθηση.\n> Χρειαζόμαστε πράκτορες σαν κι εσένα.\n>\n> ΑΠΑΙΤΕΙΤΑΙ ΤΑΥΤΟΠΟΙΗΣΗ:\n> Βγάλε το Μυστικό Κλειδί από την κάρτα σου.\n> Αν ο κωδικός είναι έγκυρος, περνάς στην VIP λίστα προσβάσεων.\n> Αν δεν έχεις σωστό κωδικό, καταγράφεσαι στη λίστα Υπόπτων.\n>\n> ΑΝΑΜΟΝΗ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ...") | replace('\\', '\\\\') | replace('\`', '\\\`') | replace('$', '\\$') | safe }}`;
+    var terminalI{{ loop.index }} = 0;
+    var terminalSpeed{{ loop.index }} = 30;
+    var resTypeTimer{{ loop.index }};
+    var resIsSkipped{{ loop.index }} = false;
+    
+    window.typeWriterTerminal{{ loop.index }} = function() {
+        if (resIsSkipped{{ loop.index }}) return;
+        if (terminalI{{ loop.index }} < terminalText{{ loop.index }}.length) {
+            var screen = document.getElementById("terminal-screen-{{ loop.index }}");
+            if(screen) screen.innerHTML += terminalText{{ loop.index }}.charAt(terminalI{{ loop.index }});
+            terminalI{{ loop.index }}++;
+            resTypeTimer{{ loop.index }} = setTimeout(window.typeWriterTerminal{{ loop.index }}, terminalSpeed{{ loop.index }});
+        } else {
+            window.finishResTerminal{{ loop.index }}();
+        }
+    }
+    window.finishResTerminal{{ loop.index }} = function() {
+        var gateway = document.getElementById("resistance-gateway-{{ loop.index }}");
+        var skipBtn = document.getElementById("skip-res-btn-{{ loop.index }}");
+        if(gateway) gateway.style.display = "block";
+        if(skipBtn) skipBtn.style.display = "none";
+    }
+    window.startTerminal{{ loop.index }} = function() {
+        var btn = document.getElementById("start-terminal-btn-{{ loop.index }}");
+        var screen = document.getElementById("terminal-screen-{{ loop.index }}");
+        var skipBtn = document.getElementById("skip-res-btn-{{ loop.index }}");
+        if(btn) btn.style.display = "none";
+        if(screen) screen.style.display = "block";
+        if(skipBtn) skipBtn.style.display = "block";
+        resIsSkipped{{ loop.index }} = false;
+        terminalI{{ loop.index }} = 0;
+        if(screen) screen.innerHTML = "";
+        window.typeWriterTerminal{{ loop.index }}();
+    }
+    window.skipResTerminal{{ loop.index }} = function() {
+        resIsSkipped{{ loop.index }} = true;
+        clearTimeout(resTypeTimer{{ loop.index }});
+        var screen = document.getElementById("terminal-screen-{{ loop.index }}");
+        if(screen) screen.innerHTML = terminalText{{ loop.index }};
+        window.finishResTerminal{{ loop.index }}();
+    }
+
+    document.getElementById('resistance-gateway-{{ loop.index }}').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('form-submit-btn-{{ loop.index }}');
+        var spinner = document.getElementById('form-spinner-{{ loop.index }}');
+        var errorDiv = document.getElementById('form-error-{{ loop.index }}');
+        var successDiv = document.querySelector('.row-success-{{ loop.index }}');
+        var formDiv = document.querySelector('.row-form-{{ loop.index }}');
+        var termsCheckbox = document.getElementById('resistance-terms-{{ loop.index }}');
+
+        if (!termsCheckbox.checked) {
+            errorDiv.innerText = '> [ΣΦΑΛΜΑ] ΑΠΟΤΥΧΙΑ ΣΥΝΔΕΣΗΣ: Πρέπει να αποδεχτείτε το Πρωτόκολλο Ασφαλείας.';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        var name = document.getElementById('form-name-{{ loop.index }}').value;
+        var email = document.getElementById('form-email-{{ loop.index }}').value;
+        var code = document.getElementById('form-code-{{ loop.index }}').value;
+
+        btn.style.display = 'none';
+        spinner.style.display = 'block';
+        errorDiv.style.display = 'none';
+        fetch('https://script.google.com/macros/s/AKfycbybXm1HjHdlJFxyzHZ9de-l2KR2zz47rMsBfiYGsr7cAcc-J_Kvp_Ir_RpvAijRVO9XYA/exec', {
+            method: 'POST',
+            mode: 'no-cors', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, email: email, code: code })
+        })
+        .then(() => {
+            formDiv.style.display = 'none';
+            successDiv.style.display = 'block';
+        })
+        .catch(err => {
+            console.error(err);
+            btn.style.display = 'block';
+            spinner.style.display = 'none';
+            errorDiv.innerText = '> [ΣΦΑΛΜΑ] Κρίσιμη αποτυχία επικοινωνίας με τη βάση.';
+            errorDiv.style.display = 'block';
+        });
+    });
+</script>
+{% else %}
+<div id="mlb2-{{ block.ml_form_id | default('179335714605893061') }}" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-{{ block.ml_form_id | default('179335714605893061') }}" style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
+    <div class="ml-form-embedWrapper embedForm">
+        <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+            <h3 style="color:var(--accent-color); font-family:var(--font-display); font-size: {{ block.custom_styles.title_size | default('calc(var(--title-size) * 0.8)') }};">{{ block.title }}</h3>
+            <p style="margin-bottom:20px; white-space: pre-line; font-size: {{ block.custom_styles.text_size | default('var(--text-size)') }};">{{ block.desc }}</p>
+            
+            <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id | default('179335714605893061') }}/subscribe" data-code="" method="post">
+                <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
+                <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
+                
+                <div class="gdpr-terms-container">
+                    <input type="checkbox" id="general-terms-{{ loop.index }}" name="terms" required class="gdpr-checkbox">
+                    <label for="general-terms-{{ loop.index }}" class="gdpr-label">
+                        Αποδέχομαι τους <span class="gdpr-link" onclick="openGdprModal()">Όρους Χρήσης & Προστασία Δεδομένων</span>.
+                    </label>
+                </div>
+                <input type="hidden" name="ml-submit" value="1">
+                <input type="hidden" name="anticsrf" value="true">
+                <button type="submit" class="primary" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
+            </form>
+        </div>
+        <div class="ml-form-successBody row-success" style="display: none">
+            <div class="ml-form-successContent">
+                <h3 style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px;">SIGNAL ESTABLISHED</h3>
+                <p style="color:#aaa;">You have successfully joined the resistance database.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ml_webform_success_{{ block.ml_form_id | default('179335714605893061') }}() {
+        var formContainer = document.querySelector('.ml-subscribe-form-{{ block.ml_form_id | default('179335714605893061') }}');
+        if (formContainer) {
+            formContainer.querySelector('.row-success').style.display = 'block';
+            formContainer.querySelector('.row-form').style.display = 'none';
+        }
+    }
+</script>
+{% endif %}
