@@ -120,11 +120,12 @@ blocks:
       \[ ΤΕΛΟΣ ΑΡΧΕΙΟΥ ]
     title: Πρόλογος
     pdf: https://drive.google.com/file/d/121Ou42-9c6tjXrrQ5LatxwnyHqynB9tW/view?usp=sharing
-    audio: /assets/images/dark-proof.mp3
+    audio: ""
     button_labels:
       read: Ανάγνωση
       cinematic: Audio Chapter
       pdf_btn: Download Pdf
+    audio_status_msg: "Ήχος Σύντομα διαθέσιμος "
   - type: vip_feedback
     title: "[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]"
     topic_id: prologue
