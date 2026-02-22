@@ -120,6 +120,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
 
             <script>
                 var isVipPlaying{{ loop.index }} = false;
@@ -217,7 +218,6 @@
                     }
                 }
             </script>
-            {% endif %}
 
         {% elif block.type == 'vip_feedback' %}
             <div class="vip-feedback-container" style="border: 1px solid var(--accent-color); padding: 30px; background: rgba(0,0,0,0.7); margin-bottom: 40px; margin-top: 20px;">
