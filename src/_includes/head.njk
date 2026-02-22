@@ -1,6 +1,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+{% set seoDesc = settings.seo.description | default('Το hybrid sci-fi project ZAIROK. Επίλεξε το επίπεδό σου και μπες στο Δίκτυο.') %}
+{% set seoImg = settings.seo.og_image | default(settings.site_logo) %}
+
 <title>PROJECT ZAIROK | {{ title }}</title>
+<meta name="description" content="{{ seoDesc }}">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zairok.gr/">
+<meta property="og:title" content="PROJECT ZAIROK | {{ title }}">
+<meta property="og:description" content="{{ seoDesc }}">
+{% if seoImg %}<meta property="og:image" content="https://zairok.gr{{ seoImg }}">{% endif %}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PROJECT ZAIROK | {{ title }}">
+<meta name="twitter:description" content="{{ seoDesc }}">
+{% if seoImg %}<meta name="twitter:image" content="https://zairok.gr{{ seoImg }}">{% endif %}
+
+{% if settings.seo.favicon %}
+<link rel="icon" type="image/png" href="{{ settings.seo.favicon }}">
+{% elif settings.site_logo %}
+<link rel="icon" type="image/png" href="{{ settings.site_logo }}">
+{% endif %}
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script src="https://unpkg.com/swup@4"></script>
