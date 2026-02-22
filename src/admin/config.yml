@@ -69,7 +69,7 @@ collections:
               - {label: "Text", name: "text", widget: "text"}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
-              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
+              - label: "🎨 Εξειδικευμένη Εμφάνιση Block"
                 name: "custom_styles"
                 widget: "object"
                 required: false
@@ -95,26 +95,25 @@ collections:
               - {label: "Κείμενο Κεφαλαίου", name: "content", widget: "markdown"}
               - {label: "Αρχείο Ήχου (Audio/Voiceover)", name: "audio", widget: "file", required: false}
               - {label: "Μήνυμα Αναμονής Ήχου (π.χ. [ TRANSMISSION ENCRYPTED ])", name: "audio_status_msg", widget: "string", default: "[ TRANSMISSION ENCRYPTED ]", required: false}
-              - {label: "Ένταση Background Μουσικής κατά την ακρόαση (0.1 έως 1.0)", name: "bg_volume_on_play", widget: "number", default: 0.1, min: 0, max: 1, step: 0.1}
               - {label: "Αρχείο PDF (Για κατέβασμα)", name: "pdf", widget: "file", required: false}
-              - label: "ΕΛΕΓΧΟΣ ΚΟΥΜΠΙΩΝ (Αν αφήσεις κενό ένα πεδίο, θα πάρει την προεπιλεγμένη τιμή)"
+              - label: "ΕΛΕΓΧΟΣ ΚΟΥΜΠΙΩΝ"
                 name: "button_labels"
                 widget: "object"
                 collapsed: true
                 fields:
-                  - {label: "Κουμπί Απλής Ανάγνωσης (π.χ. [ ΔΙΑΒΑΣΕ ])", name: "read", widget: "string", required: false}
-                  - {label: "Κουμπί Cinematic (π.χ. [ ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ])", name: "cinematic", widget: "string", required: false}
-                  - {label: "Κουμπί PDF (π.χ. [ PDF (OFFLINE) ])", name: "pdf_btn", widget: "string", required: false}
-                  - {label: "Κουμπί ΣΤΟΠ στη Μαύρη Οθόνη (π.χ. [ ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ])", name: "stop", widget: "string", required: false}
-                  - {label: "Κουμπί 'Άνοιγμα Κειμένου' (Κατά την ακρόαση)", name: "open_text", widget: "string", required: false}
-                  - {label: "Κουμπί 'Κλείσιμο Κειμένου' (Κατά την ακρόαση)", name: "close_text", widget: "string", required: false}
+                  - {label: "Κουμπί Απλής Ανάγνωσης", name: "read", widget: "string", required: false}
+                  - {label: "Κουμπί Cinematic", name: "cinematic", widget: "string", required: false}
+                  - {label: "Κουμπί PDF", name: "pdf_btn", widget: "string", required: false}
+                  - {label: "Κουμπί ΣΤΟΠ στη Μαύρη Οθόνη", name: "stop", widget: "string", required: false}
+                  - {label: "Κουμπί 'Άνοιγμα Κειμένου'", name: "open_text", widget: "string", required: false}
+                  - {label: "Κουμπί 'Κλείσιμο Κειμένου'", name: "close_text", widget: "string", required: false}
 
           - label: "VIP Feedback (Live Comments)"
             name: "vip_feedback"
             widget: "object"
             fields:
               - {label: "Τίτλος Ενότητας", name: "title", widget: "string", default: "[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]"}
-              - {label: "Μοναδικό ID Κεφαλαίου (Βάλε αγγλικά π.χ. prologue, chapter-1. Είναι απαραίτητο για να μην μπερδεύονται τα σχόλια των κεφαλαίων μεταξύ τους)", name: "topic_id", widget: "string", default: "general"}
+              - {label: "Μοναδικό ID Κεφαλαίου", name: "topic_id", widget: "string", default: "general"}
 
           - label: "Lore Section (Database Style)"
             name: "lore"
@@ -124,7 +123,7 @@ collections:
               - {label: "Items", name: "items", widget: "list", fields: [{label: "Item Title", name: "item_title", widget: "string"}, {label: "Item Desc", name: "item_desc", widget: "text"}]}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
-              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
+              - label: "🎨 Εξειδικευμένη Εμφάνιση Block"
                 name: "custom_styles"
                 widget: "object"
                 required: false
@@ -147,16 +146,6 @@ collections:
                   - { label: "Resistance (VIP Code)", value: "resistance" }
               - {label: "Κείμενο Τερματικού (ΜΟΝΟ για Resistance)", name: "terminal_text", widget: "text", required: false}
               - {label: "MailerLite Form ID", name: "ml_form_id", widget: "string", default: "179391629910606883"}
-              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
-                name: "custom_styles"
-                widget: "object"
-                required: false
-                collapsed: true
-                fields:
-                  - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 1.8rem", name: "title_size", widget: "string", required: false}
-                  - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1rem", name: "text_size", widget: "string", required: false}
-                  - {label: "Χρώμα Τερματικού (π.χ. #00ff00)", name: "terminal_color", widget: "color", default: "#00ff00", required: false}
-                  - {label: "Μέγεθος Τερματικού π.χ. 1.1rem", name: "terminal_size", widget: "string", required: false}
 
           - label: "Video / Image"
             name: "media_block"
@@ -182,13 +171,6 @@ collections:
                   - {label: "Button Text", name: "label", widget: "string"}
                   - {label: "Button Action", name: "action", widget: "select", options: ["Read Text", "Play Audio", "Link / PDF"]}
                   - {label: "Button URL (If Link/PDF)", name: "url", widget: "string", required: false}
-              - label: "🎨 Εξειδικευμένη Εμφάνιση Block (Προαιρετικό)"
-                name: "custom_styles"
-                widget: "object"
-                required: false
-                collapsed: true
-                fields:
-                  - {label: "Μέγεθος Κειμένου Αναγνώστη π.χ. 1.3rem", name: "text_size", widget: "string", required: false}
 
           - label: "Rich Text (Markdown)"
             name: "richtext"
