@@ -1,0 +1,211 @@
+{% set blockIndex = loop.index %}
+<style>
+    .lights-out-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.88); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 1s ease; }
+    .lights-out-overlay.active { opacity: 1; }
+    .focus-element { position: relative; z-index: 1001 !important; }
+    #crt-box-{{ blockIndex }} { --term-color: {{ block.text_color | default('#00ff00') }}; background-color: #050505; border: 2px solid #333; border-radius: 12px; padding: 40px 30px; position: relative; overflow: hidden; box-shadow: inset 0 0 100px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.5); margin-top: 30px; color: var(--term-color); font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; line-height: 1.7; text-shadow: 0 0 5px var(--term-color); }
+    #crt-box-{{ blockIndex }}::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
+    #crt-box-{{ blockIndex }}::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 50px #000; z-index: 3; pointer-events: none; }
+    .crt-content-area { position: relative; z-index: 4; white-space: pre-wrap; margin-top: 20px; }
+    .blinking-cursor { font-weight: bold; font-size: 1.2rem; animation: blink 1s step-end infinite; }
+    .terminal-menu { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5; margin-top: 30px; }
+    .terminal-btn { background: rgba(0,0,0,0.6); border: 1px solid var(--term-color); color: var(--term-color); padding: 20px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; text-align: left; letter-spacing: 1px; }
+    .terminal-btn.mini { padding: 12px 20px; font-size: 0.9rem; flex: 1; text-align: center; min-width: 200px; }
+    .terminal-btn:hover { background: var(--term-color); color: #000; box-shadow: 0 0 15px var(--term-color); }
+    .terminal-btn.link-btn { border-color: #555; color: #888; text-decoration: none; }
+    .terminal-btn.link-btn:hover { background: #222; color: #fff; border-color: #888; box-shadow: none; }
+    .skip-btn { position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.8); border: 1px dashed var(--term-color); color: var(--term-color); padding: 5px 15px; cursor: pointer; font-family: var(--font-display); font-size: 0.8rem; z-index: 10; transition: 0.3s; display: none; }
+    .skip-btn:hover { background: var(--term-color); color: #000; }
+    .waveform-container { display: none; flex-direction: column; align-items: flex-start; margin-top: 30px; position: relative; z-index: 5; border-top: 1px dashed #333; padding-top: 30px; }
+    .decrypted-doc { background: #0a0a0a; color: #e0e0e0; padding: 40px 30px; border-top: 2px solid var(--accent-color); border-bottom: 2px solid var(--accent-color); margin-top: 40px; font-family: var(--font-body); line-height: 1.8; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); white-space: pre-line; }
+</style>
+
+<div id="lights-out-{{ blockIndex }}" class="lights-out-overlay"></div>
+
+<div id="crt-box-{{ blockIndex }}" class="focus-element">
+    <button id="skip-btn-{{ blockIndex }}" type="button" class="skip-btn" onclick="window.skipTyping_{{ blockIndex }}()">[ SKIP ]</button>
+    <div id="boot-text-{{ blockIndex }}" class="crt-content-area"></div>
+    <div id="terminal-options-{{ blockIndex }}" class="terminal-menu" style="display: none;">
+        {% if block.buttons %}
+            <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
+            {% for btn in block.buttons %}
+                {% if 'Text' in btn.action %}
+                    <button type="button" class="terminal-btn" onclick="window.startTerminalMode_{{ blockIndex }}('text')">{{ btn.label }}</button>
+                {% elif 'Audio' in btn.action %}
+                    <button type="button" class="terminal-btn" onclick="window.startTerminalMode_{{ blockIndex }}('audio')">{{ btn.label }}</button>
+                {% else %}
+                    <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div id="audio-interface-{{ blockIndex }}" class="waveform-container">
+        <div style="display: flex; align-items: center; width: 100%;">
+            <div id="waveform-{{ blockIndex }}" class="waveform">
+                <div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div>
+            </div>
+            <span id="audio-status-{{ blockIndex }}" style="margin-left: 25px; font-family: var(--font-display); font-size: 1.2rem; animation: blink 1s infinite;">PLAYING TRANSMISSION...</span>
+        </div>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 30px; width: 100%;">
+            <button id="btn-pause-{{ blockIndex }}" class="terminal-btn mini" onclick="window.toggleVoiceover_{{ blockIndex }}()">[ ⏸ ΠΑΥΣΗ ]</button>
+            <button id="btn-readalong-{{ blockIndex }}" class="terminal-btn mini" onclick="window.toggleReadAlong_{{ blockIndex }}()" style="border-color: var(--accent-color); color: var(--accent-color);">[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]</button>
+            <button class="terminal-btn mini" onclick="window.stopAudioMode_{{ blockIndex }}()" style="border-color: var(--error-color); color: var(--error-color);">[ ⏹ ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ]</button>
+        </div>
+    </div>
+</div>
+<div id="decrypted-doc-{{ blockIndex }}" class="decrypted-doc focus-element" style="font-size: {{ block.custom_styles.text_size | default('1.1rem') }};">
+    {% if block.document_text %}
+        {{ block.document_text | markdown | safe }}
+    {% endif %}
+</div>
+{% if block.audio_url %}
+<audio id="terminal-audio-{{ blockIndex }}" preload="none">
+    <source src="{{ block.audio_url }}" type="audio/mpeg">
+</audio>
+{% endif %}
+<script>
+    var rawBoot_{{ blockIndex }} = `{{ block.boot_text | replace('\\', '\\\\') | replace('`', '\\`') | replace('$', '\\$') | safe }}`;
+    var pIndex_{{ blockIndex }} = 0;
+    var pSpeed_{{ blockIndex }} = 35; 
+    var isSkipped_{{ blockIndex }} = false;
+    var typeTimer_{{ blockIndex }};
+    var isVoiceoverPlaying_{{ blockIndex }} = false;
+    var isDocOpen_{{ blockIndex }} = false;
+
+    window.typeBoot_{{ blockIndex }} = function() {
+        var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
+        if (!bootContainer || isSkipped_{{ blockIndex }}) return;
+        if (pIndex_{{ blockIndex }} < rawBoot_{{ blockIndex }}.length) {
+            bootContainer.innerHTML = bootContainer.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+            bootContainer.innerHTML += rawBoot_{{ blockIndex }}.charAt(pIndex_{{ blockIndex }}) + '<span class="blinking-cursor">_</span>';
+            pIndex_{{ blockIndex }}++;
+            typeTimer_{{ blockIndex }} = setTimeout(window.typeBoot_{{ blockIndex }}, pSpeed_{{ blockIndex }});
+        } else {
+            window.finishTyping_{{ blockIndex }}();
+        }
+    }
+    window.finishTyping_{{ blockIndex }} = function() {
+        var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
+        var skipBtn = document.getElementById("skip-btn-{{ blockIndex }}");
+        var menuOptions = document.getElementById("terminal-options-{{ blockIndex }}");
+        if (bootContainer) bootContainer.innerHTML = bootContainer.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
+        if (skipBtn) skipBtn.style.display = "none";
+        if (menuOptions) menuOptions.style.display = "flex";
+    }
+    window.skipTyping_{{ blockIndex }} = function() {
+        isSkipped_{{ blockIndex }} = true;
+        clearTimeout(typeTimer_{{ blockIndex }});
+        var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
+        if (bootContainer) bootContainer.innerHTML = rawBoot_{{ blockIndex }};
+        window.finishTyping_{{ blockIndex }}();
+    }
+    window.startTerminalMode_{{ blockIndex }} = function(mode) {
+        var menuOptions = document.getElementById("terminal-options-{{ blockIndex }}");
+        var waveformContainer = document.getElementById("waveform-{{ blockIndex }}");
+        var docReader = document.getElementById("decrypted-doc-{{ blockIndex }}");
+        var vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
+        var mainAudio = document.getElementById('main-audio');
+        var lightsOutOverlay = document.getElementById("lights-out-{{ blockIndex }}");
+        var audioInterface = document.getElementById("audio-interface-{{ blockIndex }}");
+        var btnReadAlong = document.getElementById("btn-readalong-{{ blockIndex }}");
+        var audioStatus = document.getElementById("audio-status-{{ blockIndex }}");
+        var btnPause = document.getElementById("btn-pause-{{ blockIndex }}");
+        if (menuOptions) menuOptions.style.display = "none";
+        if (mode === 'text') {
+            window.stopAudioMode_{{ blockIndex }}();
+            if(docReader) {
+                docReader.style.display = "block";
+                setTimeout(() => { docReader.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        } else if (mode === 'audio') {
+            if(audioInterface) audioInterface.style.display = "flex";
+            if(lightsOutOverlay) lightsOutOverlay.classList.add("active");
+            if(vAudio) { 
+                vAudio.play().catch(e => console.log("Audio play prevented"));
+                isVoiceoverPlaying_{{ blockIndex }} = true;
+                if(waveformContainer) waveformContainer.classList.remove("paused");
+                if(audioStatus) {
+                    audioStatus.innerText = "PLAYING TRANSMISSION...";
+                    audioStatus.style.animation = "blink 1s infinite";
+                }
+                if(btnPause) btnPause.innerText = "[ ⏸ ΠΑΥΣΗ ]";
+            }
+            if(mainAudio) { mainAudio.volume = 0.1; }
+            if(docReader) docReader.style.display = "none";
+            isDocOpen_{{ blockIndex }} = false;
+            if(btnReadAlong) btnReadAlong.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
+        }
+    }
+    window.toggleVoiceover_{{ blockIndex }} = function() {
+        var vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
+        var waveformContainer = document.getElementById("waveform-{{ blockIndex }}");
+        var audioStatus = document.getElementById("audio-status-{{ blockIndex }}");
+        var btnPause = document.getElementById("btn-pause-{{ blockIndex }}");
+        if(!vAudio) return;
+        if(isVoiceoverPlaying_{{ blockIndex }}) {
+            vAudio.pause();
+            isVoiceoverPlaying_{{ blockIndex }} = false;
+            if(waveformContainer) waveformContainer.classList.add("paused");
+            if(audioStatus) {
+                audioStatus.innerText = "TRANSMISSION PAUSED.";
+                audioStatus.style.animation = "none";
+            }
+            if(btnPause) btnPause.innerText = "[ ▶ PLAY ]";
+        } else {
+            vAudio.play();
+            isVoiceoverPlaying_{{ blockIndex }} = true;
+            if(waveformContainer) waveformContainer.classList.remove("paused");
+            if(audioStatus) {
+                audioStatus.innerText = "PLAYING TRANSMISSION...";
+                audioStatus.style.animation = "blink 1s infinite";
+            }
+            if(btnPause) btnPause.innerText = "[ ⏸ ΠΑΥΣΗ ]";
+        }
+    }
+    window.toggleReadAlong_{{ blockIndex }} = function() {
+        var docReader = document.getElementById("decrypted-doc-{{ blockIndex }}");
+        var btnReadAlong = document.getElementById("btn-readalong-{{ blockIndex }}");
+        if(isDocOpen_{{ blockIndex }}) {
+            if(docReader) docReader.style.display = "none";
+            isDocOpen_{{ blockIndex }} = false;
+            if(btnReadAlong) btnReadAlong.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
+        } else {
+            if(docReader) {
+                docReader.style.display = "block";
+                isDocOpen_{{ blockIndex }} = true;
+                if(btnReadAlong) btnReadAlong.innerText = "[ ❌ ΚΛΕΙΣΙΜΟ ΚΕΙΜΕΝΟΥ ]";
+                setTimeout(() => { docReader.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            }
+        }
+    }
+    window.stopAudioMode_{{ blockIndex }} = function() {
+        var vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
+        var mainAudio = document.getElementById('main-audio');
+        var lightsOutOverlay = document.getElementById("lights-out-{{ blockIndex }}");
+        var audioInterface = document.getElementById("audio-interface-{{ blockIndex }}");
+        var docReader = document.getElementById("decrypted-doc-{{ blockIndex }}");
+        var btnReadAlong = document.getElementById("btn-readalong-{{ blockIndex }}");
+        var menuOptions = document.getElementById("terminal-options-{{ blockIndex }}");
+        if(vAudio) {
+            vAudio.pause();
+            vAudio.currentTime = 0;
+            isVoiceoverPlaying_{{ blockIndex }} = false;
+        }
+        if(mainAudio && typeof isPlaying !== 'undefined' && isPlaying) { mainAudio.volume = 0.4; }
+        if(lightsOutOverlay) lightsOutOverlay.classList.remove("active");
+        if(audioInterface) audioInterface.style.display = "none";
+        if(docReader) docReader.style.display = "none";
+        isDocOpen_{{ blockIndex }} = false;
+        if(btnReadAlong) btnReadAlong.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
+        if(menuOptions) menuOptions.style.display = "flex";
+    }
+    setTimeout(() => {
+        var skipBtn = document.getElementById("skip-btn-{{ blockIndex }}");
+        var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
+        if(skipBtn) skipBtn.style.display = "block";
+        if(bootContainer) bootContainer.innerHTML = "";
+        pIndex_{{ blockIndex }} = 0;
+        isSkipped_{{ blockIndex }} = false;
+        window.typeBoot_{{ blockIndex }}();
+    }, 500);
+</script>
