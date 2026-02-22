@@ -32,7 +32,13 @@
                 {% if 'Text' in btn.action %}
                     <button type="button" class="terminal-btn" onclick="window.startTerminalMode_{{ blockIndex }}('text')">{{ btn.label }}</button>
                 {% elif 'Audio' in btn.action %}
-                    <button type="button" class="terminal-btn" onclick="window.startTerminalMode_{{ blockIndex }}('audio')">{{ btn.label }}</button>
+                    {% if block.audio_url %}
+                        <button type="button" class="terminal-btn" onclick="window.startTerminalMode_{{ blockIndex }}('audio')">{{ btn.label }}</button>
+                    {% else %}
+                        <div style="background: rgba(255,140,0,0.05); border: 1px dashed #444; color: #666; padding: 20px; font-family: var(--font-display); font-size: 1.1rem; cursor: not-allowed; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px;">
+                            {{ block.audio_status_msg | default('[ ΑΝΑΜΟΝΗ ΗΧΗΤΙΚΗΣ ΜΕΤΑΔΟΣΗΣ ]') }}
+                        </div>
+                    {% endif %}
                 {% else %}
                     <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
                 {% endif %}
