@@ -53,7 +53,7 @@
                 </div>
 
                 <div id="vip-folder-content-{{ loop.index }}" class="vip-folder-content">
-                    <div class="vip-actions" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="vip-actions" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
                         <button onclick="toggleVipSimpleText{{ loop.index }}()" style="background: transparent; border: 1px solid #aaa; color: #fff; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; transition: 0.3s;">
                             {{ block.button_labels.read | default('[ ΔΙΑΒΑΣΕ ]') }}
                         </button>
@@ -62,6 +62,10 @@
                         <button onclick="openCinematic{{ loop.index }}()" style="background: var(--accent-color, #ff8c00); border: 1px solid var(--accent-color, #ff8c00); color: #000; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; font-weight: bold; transition: 0.3s;">
                             {{ block.button_labels.cinematic | default('[ ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]') }}
                         </button>
+                        {% else %}
+                        <div style="background: rgba(255,140,0,0.05); border: 1px dashed #444; color: #666; padding: 10px 20px; font-family: monospace; font-size: 0.9rem; cursor: not-allowed; opacity: 0.8;">
+                            {{ block.audio_status_msg | default('[ TRANSMISSION ENCRYPTED ]') }}
+                        </div>
                         {% endif %}
 
                         {% if block.pdf %}
@@ -137,7 +141,7 @@
                     document.getElementById('cinematic-overlay-{{ loop.index }}').style.display = 'block';
                     document.body.style.overflow = 'hidden'; 
                     var mainAudio = document.getElementById('main-audio');
-                    if(mainAudio) { mainAudio.volume = 0.1; }
+                    if(mainAudio) { mainAudio.volume = {{ block.bg_volume_on_play | default(0.1) }}; }
                 }
 
                 function closeCinematic{{ loop.index }}() {
@@ -386,7 +390,7 @@
                 </div>
             </div>
             <script>
-                var terminalText = `{{ block.terminal_text | default("> ΕΓΚΑΘΙΔΡΥΣΗ ΑΣΦΑΛΟΥΣ ΣΥΝΔΕΣΗΣ...\n> Καλώς ήρθες στο δίκτυο του ZAIROK.\n> Η Διοκρατεία του Νόρκεν πουλάει ένα καλοστημένο ψέμα.\n> Μπορεί να μην είμαστε φυλακισμένοι με την παραδοσιακή έννοια, αλλά η ελευθερία που μας δίνουν είναι μια ψευδαίσθηση.\n> Χρειαζόμαστε πράκτορες σαν κι εσένα.\n>\n> ΑΠΑΙΤΕΙΤΑΙ ΤΑΥΤΟΠΟΙΗΣΗ:\n> Βγάλε το Μυστικό Κλειδί από την κάρτα σου.\n> Αν ο κωδικός είναι έγκυρος, περνάς στην VIP λίστα προσβάσεων.\n> Αν δεν έχεις σωστό κωδικό, καταγράφεσαι στη λίστα Υπόπτων.\n>\n> ΑΝΑΜΟΝΗ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ...") | replace('\\', '\\\\') | replace('\`', '\\\`') | replace('$', '\\$') | safe }}`;
+                var terminalText = `{{ block.terminal_text | default("> ΕΓΚΑΘΙΔΡΥΣΗ ΑΣΦΑΛΟΥΣ ΣΥΝΔΕΣΗΣ...\n> Καλώς ήρθες στο δίκτυο του ZAIROK.\n> Η Διοκρατεία του Νόρκεν πουλάει ένα καλοστημένο ψέμα.\n> Μπορεί να μην είμαστε φυλακισμένοι με την παραδοσιακή έννοια, αλλά η ελευθερία που μας δίνουν είναι μια ψευδαίσθηση.\n> Χρειαζόμαστε πράκτορες σαν κι εσένα.\n>\n> ΑΠΑΙΤΕΙΤΑΙ ΤΑΥΤΟΠΟΙΗΣΗ:\n> Βγάλε το Μυστικό Κλειδί από την κάρτα σου.\n> Αν ο κωδικός είναι έγκυρος, περνάς στην VIP λίστα προσβάσεων.\n> Αν δεν έχεις σωστό κωδικό, καταγράφεσαι στη lista Υπόπτων.\n>\n> ΑΝΑΜΟΝΗ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ...") | replace('\\', '\\\\') | replace('\`', '\\\`') | replace('$', '\\$') | safe }}`;
                 var terminalI = 0;
                 var terminalSpeed = 30;
                 var resTypeTimer;
