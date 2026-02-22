@@ -1,0 +1,5 @@
+{% if block.image %}<img src="{{ block.image }}" style="max-width:100%; border:1px solid var(--accent-color); margin-bottom:20px;">{% endif %}
+{% if block.video %}<div style="position:relative;padding-bottom:56.25%;height:0;"><iframe src="{{ block.video | replace('watch?v=', 'embed/') }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe></div>{% endif %}
+{% if block.button_url %}
+    <a href="{{ block.button_url }}" target="_blank" class="btn-access" style="display:inline-block; margin-top:20px; text-decoration:none;">{{ block.button_text | default('VIEW TRANSMISSION') }}</a>
+{% endif %}
