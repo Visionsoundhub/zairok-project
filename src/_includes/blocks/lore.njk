@@ -1,0 +1,12 @@
+<span class="section-header">{{ nr }} // DATABASE</span>
+<div style="display: grid; gap: 40px;">
+{% for item in block.items %}
+    <div>
+        <h3 style="color:var(--accent-color); font-family:var(--font-display); font-size: {{ block.custom_styles.title_size | default('calc(var(--title-size) * 0.7)') }};">{{ item.item_title }}</h3>
+        <p style="white-space: pre-line; color:#aaa; font-size: {{ block.custom_styles.text_size | default('var(--text-size)') }};">{{ item.item_desc }}</p>
+    </div>
+{% endfor %}
+</div>
+{% if block.button_url %}
+    <a href="{{ block.button_url }}" target="_blank" class="btn-access" style="display:inline-block; margin-top:30px; text-decoration:none;">{{ block.button_text | default('ACCESS FILES') }}</a>
+{% endif %}
