@@ -164,6 +164,7 @@ collections:
               - {label: "Terminal Boot Text (Short Intro)", name: "boot_text", widget: "text"}
               - {label: "Decrypted Document (Full Story Text)", name: "document_text", widget: "markdown"}
               - {label: "Voiceover Audio", name: "audio_url", widget: "file", required: false}
+              - {label: "Μήνυμα Αναμονής Ήχου", name: "audio_status_msg", widget: "string", default: "[ ΑΝΑΜΟΝΗ ΗΧΗΤΙΚΗΣ ΜΕΤΑΔΟΣΗΣ ]", required: false}
               - label: "Terminal Menu Buttons"
                 name: "buttons"
                 widget: "list"
