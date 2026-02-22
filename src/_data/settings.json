@@ -28,5 +28,10 @@
   "scan_start_text": "SCANNING RETINA...",
   "color_error": "#ff003c",
   "audio_loop": "/assets/images/background-music.mp3",
-  "audio_access": "/assets/images/access_granted.mp3"
+  "audio_access": "/assets/images/access_granted.mp3",
+  "seo": {
+    "favicon": "/assets/images/z.jpg",
+    "og_image": "/assets/images/zairoklogo.jpg",
+    "description": "Η συχνότητα παραβιάστηκε. ZAIROK: Το ελληνικό sci-fi βιβλίο & ARG όπου η νευροδιαφορετικότητα είναι Ενέργεια. Μπες στην Αντίσταση"
+  }
 }
