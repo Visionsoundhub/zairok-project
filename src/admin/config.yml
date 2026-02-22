@@ -94,6 +94,8 @@ collections:
               - {label: "Τίτλος Κεφαλαίου (π.χ. [ 1 ] ΑΝΑΓΝΩΣΗ ΠΡΟΛΟΓΟΥ)", name: "title", widget: "string"}
               - {label: "Κείμενο Κεφαλαίου", name: "content", widget: "markdown"}
               - {label: "Αρχείο Ήχου (Audio/Voiceover)", name: "audio", widget: "file", required: false}
+              - {label: "Μήνυμα Αναμονής Ήχου (π.χ. [ TRANSMISSION ENCRYPTED ])", name: "audio_status_msg", widget: "string", default: "[ TRANSMISSION ENCRYPTED ]", required: false}
+              - {label: "Ένταση Background Μουσικής κατά την ακρόαση (0.1 έως 1.0)", name: "bg_volume_on_play", widget: "number", default: 0.1, min: 0, max: 1, step: 0.1}
               - {label: "Αρχείο PDF (Για κατέβασμα)", name: "pdf", widget: "file", required: false}
               - label: "ΕΛΕΓΧΟΣ ΚΟΥΜΠΙΩΝ (Αν αφήσεις κενό ένα πεδίο, θα πάρει την προεπιλεγμένη τιμή)"
                 name: "button_labels"
