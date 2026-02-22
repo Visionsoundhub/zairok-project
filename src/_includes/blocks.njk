@@ -99,9 +99,14 @@
                             <span id="vip-audio-status-{{ loop.index }}" style="margin-left: 25px; font-family: var(--font-display); font-size: 1.2rem; color: #555; transition: 0.3s;">TRANSMISSION READY...</span>
                         </div>
                         
-                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; align-items: center;">
                             <button id="vip-btn-play-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipAudio{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); font-family: monospace; cursor: pointer; font-weight: bold;">[ PLAY ]</button>
                             
+                            <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px 15px; border: 1px solid #333;">
+                                <span style="font-family: monospace; font-size: 0.8rem; color: #666;">VOL:</span>
+                                <input type="range" id="vip-vol-{{ loop.index }}" min="0" max="1" step="0.1" value="1" oninput="document.getElementById('vip-audio-{{ loop.index }}').volume = this.value" style="width: 80px; accent-color: var(--accent-color); cursor: pointer;">
+                            </div>
+
                             <button id="vip-btn-readalong-{{ loop.index }}" class="terminal-btn mini" onclick="toggleVipReadAlong{{ loop.index }}()" style="padding: 12px 25px; font-size: 1rem; background: transparent; border: 1px solid #aaa; color: #aaa; font-family: monospace; cursor: pointer;">{{ block.button_labels.open_text | default('[ ΑΝΟΙΓΜΑ ΚΕΙΜΕΝΟΥ ]') }}</button>
                         </div>
                         
@@ -141,7 +146,7 @@
                     document.getElementById('cinematic-overlay-{{ loop.index }}').style.display = 'block';
                     document.body.style.overflow = 'hidden'; 
                     var mainAudio = document.getElementById('main-audio');
-                    if(mainAudio) { mainAudio.volume = {{ block.bg_volume_on_play | default(0.1) }}; }
+                    if(mainAudio) { mainAudio.volume = 0.1; }
                 }
 
                 function closeCinematic{{ loop.index }}() {
@@ -361,17 +366,16 @@
                 </div>
                 <div class="row-form">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
-                        <h3 style="color:var(--accent-color); font-family:var(--font-display); font-size: {{ block.custom_styles.title_size | default('calc(var(--title-size) * 0.8)') }}; margin: 0;">{{ block.title }}</h3>
+                        <h3 style="color:var(--accent-color); font-family:var(--font-display); font-size: 1.5rem; margin: 0;">{{ block.title }}</h3>
                         <button id="skip-res-btn" onclick="window.skipResTerminal()" style="display: none; background: #000; border: 1px dashed var(--accent-color); color: var(--accent-color); padding: 5px 15px; font-family: var(--font-display); font-size: 0.8rem; cursor: pointer;">[ SKIP ]</button>
                     </div>
-                    <div id="terminal-screen" style="font-family: monospace; color: {{ block.custom_styles.terminal_color | default('#00ff00') }}; font-size: {{ block.custom_styles.terminal_size | default('1rem') }}; min-height: 200px; margin-bottom: 20px; white-space: pre-line; text-shadow: 0 0 5px {{ block.custom_styles.terminal_color | default('#00ff00') }}; display: none;"></div>
+                    <div id="terminal-screen" style="font-family: monospace; color: #00ff00; font-size: 1rem; min-height: 200px; margin-bottom: 20px; white-space: pre-line; text-shadow: 0 0 5px #00ff00; display: none;"></div>
                     <button id="start-terminal-btn" onclick="window.startTerminal()" style="background:transparent; color:var(--accent-color); border:2px solid var(--accent-color); padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; letter-spacing: 2px;">[ ΕΝΑΡΞΗ ΣΥΝΔΕΣΗΣ ]</button>
                     
                     <form id="resistance-gateway" style="display: none; margin-top: 20px;">
-                        <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">[ ΠΕΔΙΑ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ ]</div>
-                        <input type="text" id="form-name" placeholder="[1] CODE NAME" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace; font-size: 1.2rem;" required>
-                        <input type="email" id="form-email" placeholder="[2] ΚΑΝΑΛΙ ΕΠΙΚΟΙΝΩΝΙΑΣ (Email)" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace; font-size: 1.2rem;" required>
-                        <input type="text" id="form-code" placeholder="[3] ΦΥΣΙΚΟ ΚΛΕΙΔΙ ΠΡΟΣΒΑΣΗΣ" style="width:100%; background:rgba(20,10,0,0.5); border:1px solid var(--accent-color); color:var(--accent-color); padding:15px; margin-bottom:15px; font-family: monospace; font-size: 1.2rem;" required>
+                        <input type="text" id="form-name" placeholder="[1] CODE NAME" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace;" required>
+                        <input type="email" id="form-email" placeholder="[2] ΚΑΝΑΛΙ ΕΠΙΚΟΙΝΩΝΙΑΣ (Email)" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid #444; color:#0f0; padding:15px; margin-bottom:15px; font-family: monospace;" required>
+                        <input type="text" id="form-code" placeholder="[3] ΦΥΣΙΚΟ ΚΛΕΙΔΙ ΠΡΟΣΒΑΣΗΣ" style="width:100%; background:rgba(20,10,0,0.5); border:1px solid var(--accent-color); color:var(--accent-color); padding:15px; margin-bottom:15px; font-family: monospace;" required>
                         
                         <div class="gdpr-terms-container" style="background: #0a0a0a; padding: 10px; border: 1px solid #222;">
                             <input type="checkbox" id="resistance-terms" name="terms" required class="gdpr-checkbox">
@@ -380,360 +384,20 @@
                             </label>
                         </div>
                         <button type="submit" id="form-submit-btn" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold; margin-top: 15px;">ESTABLISH LINK</button>
-                        <div class="loading-spinner" id="form-spinner"></div>
-                        <div id="form-error" style="color: var(--error-color); display: none; margin-top: 15px; font-weight: bold; font-family: monospace;"></div>
                     </form>
                 </div>
                 <div class="row-success" style="display: none; text-align: center; padding: 30px 0;">
-                    <h3 id="success-title" style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px; text-shadow: 0 0 10px var(--accent-color);">SIGNAL ESTABLISHED</h3>
-                    <p id="success-msg" style="color:#0f0; font-family: monospace;">> Πρόσβαση εγκρίθηκε. Η κρυπτογράφηση ολοκληρώθηκε.<br>> Αναμείνατε για περαιτέρω οδηγίες.</p>
+                    <h3 id="success-title" style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px;">SIGNAL ESTABLISHED</h3>
+                    <p id="success-msg" style="color:#0f0; font-family: monospace;">> Πρόσβαση εγκρίθηκε. Η κρυπτογράφηση ολοκληρώθηκε.</p>
                 </div>
             </div>
-            <script>
-                var terminalText = `{{ block.terminal_text | default("> ΕΓΚΑΘΙΔΡΥΣΗ ΑΣΦΑΛΟΥΣ ΣΥΝΔΕΣΗΣ...\n> Καλώς ήρθες στο δίκτυο του ZAIROK.\n> Η Διοκρατεία του Νόρκεν πουλάει ένα καλοστημένο ψέμα.\n> Μπορεί να μην είμαστε φυλακισμένοι με την παραδοσιακή έννοια, αλλά η ελευθερία που μας δίνουν είναι μια ψευδαίσθηση.\n> Χρειαζόμαστε πράκτορες σαν κι εσένα.\n>\n> ΑΠΑΙΤΕΙΤΑΙ ΤΑΥΤΟΠΟΙΗΣΗ:\n> Βγάλε το Μυστικό Κλειδί από την κάρτα σου.\n> Αν ο κωδικός είναι έγκυρος, περνάς στην VIP λίστα προσβάσεων.\n> Αν δεν έχεις σωστό κωδικό, καταγράφεσαι στη lista Υπόπτων.\n>\n> ΑΝΑΜΟΝΗ ΕΙΣΑΓΩΓΗΣ ΔΕΔΟΜΕΝΩΝ...") | replace('\\', '\\\\') | replace('\`', '\\\`') | replace('$', '\\$') | safe }}`;
-                var terminalI = 0;
-                var terminalSpeed = 30;
-                var resTypeTimer;
-                var resIsSkipped = false;
-
-                window.typeWriterTerminal = function() {
-                    if (resIsSkipped) return;
-                    if (terminalI < terminalText.length) {
-                        var screen = document.getElementById("terminal-screen");
-                        if(screen) screen.innerHTML += terminalText.charAt(terminalI);
-                        terminalI++;
-                        resTypeTimer = setTimeout(window.typeWriterTerminal, terminalSpeed);
-                    } else {
-                        window.finishResTerminal();
-                    }
-                }
-                window.finishResTerminal = function() {
-                    var gateway = document.getElementById("resistance-gateway");
-                    var skipBtn = document.getElementById("skip-res-btn");
-                    if(gateway) gateway.style.display = "block";
-                    if(skipBtn) skipBtn.style.display = "none";
-                }
-                window.startTerminal = function() {
-                    var btn = document.getElementById("start-terminal-btn");
-                    var screen = document.getElementById("terminal-screen");
-                    var skipBtn = document.getElementById("skip-res-btn");
-                    if(btn) btn.style.display = "none";
-                    if(screen) screen.style.display = "block";
-                    if(skipBtn) skipBtn.style.display = "block";
-                    resIsSkipped = false;
-                    terminalI = 0;
-                    if(screen) screen.innerHTML = "";
-                    window.typeWriterTerminal();
-                }
-                window.skipResTerminal = function() {
-                    resIsSkipped = true;
-                    clearTimeout(resTypeTimer);
-                    var screen = document.getElementById("terminal-screen");
-                    if(screen) screen.innerHTML = terminalText;
-                    window.finishResTerminal();
-                }
-
-                document.getElementById('resistance-gateway').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    var btn = document.getElementById('form-submit-btn');
-                    var spinner = document.getElementById('form-spinner');
-                    var errorDiv = document.getElementById('form-error');
-                    var successDiv = document.querySelector('.row-success');
-                    var formDiv = document.querySelector('.row-form');
-                    var termsCheckbox = document.getElementById('resistance-terms');
-
-                    if (!termsCheckbox.checked) {
-                        errorDiv.innerText = '> [ΣΦΑΛΜΑ] ΑΠΟΤΥΧΙΑ ΣΥΝΔΕΣΗΣ: Πρέπει να αποδεχτείτε το Πρωτόκολλο Ασφαλείας.';
-                        errorDiv.style.display = 'block';
-                        return;
-                    }
-
-                    var name = document.getElementById('form-name').value;
-                    var email = document.getElementById('form-email').value;
-                    var code = document.getElementById('form-code').value;
-
-                    btn.style.display = 'none';
-                    spinner.style.display = 'block';
-                    errorDiv.style.display = 'none';
-                    fetch('https://script.google.com/macros/s/AKfycbybXm1HjHdlJFxyzHZ9de-l2KR2zz47rMsBfiYGsr7cAcc-J_Kvp_Ir_RpvAijRVO9XYA/exec', {
-                        method: 'POST',
-                        mode: 'no-cors', 
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: name, email: email, code: code })
-                    })
-                    .then(() => {
-                        formDiv.style.display = 'none';
-                        successDiv.style.display = 'block';
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        btn.style.display = 'block';
-                        spinner.style.display = 'none';
-                        errorDiv.innerText = '> [ΣΦΑΛΜΑ] Κρίσιμη αποτυχία επικοινωνίας με τη βάση.';
-                        errorDiv.style.display = 'block';
-                    });
-                });
-            </script>
-            {% else %}
-            <div id="mlb2-{{ block.ml_form_id | default('179335714605893061') }}" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-{{ block.ml_form_id | default('179335714605893061') }}" style="border: 1px solid #333; padding: 25px; background: rgba(10,10,10,0.8);">
-                <div class="ml-form-embedWrapper embedForm">
-                    <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
-                        <h3 style="color:var(--accent-color); font-family:var(--font-display); font-size: {{ block.custom_styles.title_size | default('calc(var(--title-size) * 0.8)') }};">{{ block.title }}</h3>
-                        <p style="margin-bottom:20px; white-space: pre-line; font-size: {{ block.custom_styles.text_size | default('var(--text-size)') }};">{{ block.desc }}</p>
-                        
-                        <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id | default('179335714605893061') }}/subscribe" data-code="" method="post">
-                            <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
-                            <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
-                            
-                            <div class="gdpr-terms-container">
-                                <input type="checkbox" id="general-terms-{{ loop.index }}" name="terms" required class="gdpr-checkbox">
-                                <label for="general-terms-{{ loop.index }}" class="gdpr-label">
-                                    Αποδέχομαι τους <span class="gdpr-link" onclick="openGdprModal()">Όρους Χρήσης & Προστασία Δεδομένων</span>.
-                                </label>
-                            </div>
-                            <input type="hidden" name="ml-submit" value="1">
-                            <input type="hidden" name="anticsrf" value="true">
-                            <button type="submit" class="primary" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
-                        </form>
-                    </div>
-                    <div class="ml-form-successBody row-success" style="display: none">
-                        <div class="ml-form-successContent">
-                            <h3 style="color:var(--accent-color); font-family:var(--font-display); margin-bottom:10px;">SIGNAL ESTABLISHED</h3>
-                            <p style="color:#aaa;">You have successfully joined the resistance database.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script>
-                function ml_webform_success_{{ block.ml_form_id | default('179335714605893061') }}() {
-                    var formContainer = document.querySelector('.ml-subscribe-form-{{ block.ml_form_id | default('179335714605893061') }}');
-                    if (formContainer) {
-                        formContainer.querySelector('.row-success').style.display = 'block';
-                        formContainer.querySelector('.row-form').style.display = 'none';
-                    }
-                }
-            </script>
             {% endif %}
 
-        {% elif block.type == 'media_block' %}
-            {% if block.image %}<img src="{{ block.image }}" style="max-width:100%; border:1px solid var(--accent-color); margin-bottom:20px;">{% endif %}
-            {% if block.video %}<div style="position:relative;padding-bottom:56.25%;height:0;"><iframe src="{{ block.video | replace('watch?v=', 'embed/') }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe></div>{% endif %}
-            {% if block.button_url %}
-                <a href="{{ block.button_url }}" target="_blank" class="btn-access" style="display:inline-block; margin-top:20px; text-decoration:none;">{{ block.button_text | default('VIEW TRANSMISSION') }}</a>
-            {% endif %}
-        
-        {% elif block.type == 'crt_terminal' %}
-            {% set blockIndex = loop.index %}
-            <style>
-                .lights-out-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.88); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 1s ease; }
-                .lights-out-overlay.active { opacity: 1; }
-                .focus-element { position: relative; z-index: 1001 !important; }
-                #crt-box-{{ blockIndex }} { --term-color: {{ block.text_color | default('#00ff00') }}; background-color: #050505; border: 2px solid #333; border-radius: 12px; padding: 40px 30px; position: relative; overflow: hidden; box-shadow: inset 0 0 100px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.5); margin-top: 30px; color: var(--term-color); font-family: 'Courier New', Courier, monospace; font-size: 1.15rem; line-height: 1.7; text-shadow: 0 0 5px var(--term-color); }
-                #crt-box-{{ blockIndex }}::before { content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 2; background-size: 100% 2px, 3px 100%; pointer-events: none; }
-                #crt-box-{{ blockIndex }}::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 50px #000; z-index: 3; pointer-events: none; }
-                .crt-content-area { position: relative; z-index: 4; white-space: pre-wrap; margin-top: 20px; }
-                .blinking-cursor { font-weight: bold; font-size: 1.2rem; animation: blink 1s step-end infinite; }
-                .terminal-menu { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5; margin-top: 30px; }
-                .terminal-btn { background: rgba(0,0,0,0.6); border: 1px solid var(--term-color); color: var(--term-color); padding: 20px; font-family: var(--font-display); font-size: 1.1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; text-align: left; letter-spacing: 1px; }
-                .terminal-btn.mini { padding: 12px 20px; font-size: 0.9rem; flex: 1; text-align: center; min-width: 200px; }
-                .terminal-btn:hover { background: var(--term-color); color: #000; box-shadow: 0 0 15px var(--term-color); }
-                .terminal-btn.link-btn { border-color: #555; color: #888; text-decoration: none; }
-                .terminal-btn.link-btn:hover { background: #222; color: #fff; border-color: #888; box-shadow: none; }
-                .skip-btn { position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.8); border: 1px dashed var(--term-color); color: var(--term-color); padding: 5px 15px; cursor: pointer; font-family: var(--font-display); font-size: 0.8rem; z-index: 10; transition: 0.3s; display: none; }
-                .skip-btn:hover { background: var(--term-color); color: #000; }
-                .waveform-container { display: none; flex-direction: column; align-items: flex-start; margin-top: 30px; position: relative; z-index: 5; border-top: 1px dashed #333; padding-top: 30px; }
-                .decrypted-doc { background: #0a0a0a; color: #e0e0e0; padding: 40px 30px; border-top: 2px solid var(--accent-color); border-bottom: 2px solid var(--accent-color); margin-top: 40px; font-family: var(--font-body); line-height: 1.8; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); white-space: pre-line; }
-            </style>
-
-            <div id="lights-out-{{ blockIndex }}" class="lights-out-overlay"></div>
-
-            <div id="crt-box-{{ blockIndex }}" class="focus-element">
-                <button id="skip-btn-{{ blockIndex }}" type="button" class="skip-btn" onclick="window.skipTyping_{{ blockIndex }}()">[ SKIP ]</button>
-                <div id="boot-text-{{ blockIndex }}" class="crt-content-area"></div>
-                <div id="terminal-options-{{ blockIndex }}" class="terminal-menu" style="display: none;">
-                    {% if block.buttons %}
-                        <div style="margin-bottom: 10px; font-weight: bold;">> ΕΠΙΛΟΓΗ ΠΡΩΤΟΚΟΛΛΟΥ ΑΝΑΓΝΩΣΗΣ:</div>
-                        {% for btn in block.buttons %}
-                            {% if 'Text' in btn.action %}
-                                <button type="button" class="terminal-btn" onclick="window.startTerminalMode_{{ blockIndex }}('text')">{{ btn.label }}</button>
-                            {% elif 'Audio' in btn.action %}
-                                <button type="button" class="terminal-btn" onclick="window.startTerminalMode_{{ blockIndex }}('audio')">{{ btn.label }}</button>
-                            {% else %}
-                                <a href="{{ btn.url }}" target="_blank" class="terminal-btn link-btn">{{ btn.label }}</a>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <div id="audio-interface-{{ blockIndex }}" class="waveform-container">
-                    <div style="display: flex; align-items: center; width: 100%;">
-                        <div id="waveform-{{ blockIndex }}" class="waveform">
-                            <div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div><div class="bar" style="background:var(--term-color)"></div>
-                        </div>
-                        <span id="audio-status-{{ blockIndex }}" style="margin-left: 25px; font-family: var(--font-display); font-size: 1.2rem; animation: blink 1s infinite;">PLAYING TRANSMISSION...</span>
-                    </div>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 30px; width: 100%;">
-                        <button id="btn-pause-{{ blockIndex }}" class="terminal-btn mini" onclick="window.toggleVoiceover_{{ blockIndex }}()">[ ⏸ ΠΑΥΣΗ ]</button>
-                        <button id="btn-readalong-{{ blockIndex }}" class="terminal-btn mini" onclick="window.toggleReadAlong_{{ blockIndex }}()" style="border-color: var(--accent-color); color: var(--accent-color);">[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]</button>
-                        <button class="terminal-btn mini" onclick="window.stopAudioMode_{{ blockIndex }}()" style="border-color: var(--error-color); color: var(--error-color);">[ ⏹ ΣΤΟΠ & ΕΠΙΣΤΡΟΦΗ ]</button>
-                    </div>
-                </div>
+        {% elif block.type == 'richtext' %}
+            <div class="markdown-content">
+                {{ block.body | markdown | safe }}
             </div>
-            <div id="decrypted-doc-{{ blockIndex }}" class="decrypted-doc focus-element" style="font-size: {{ block.custom_styles.text_size | default('1.1rem') }};">
-                {% if block.document_text %}
-                    {{ block.document_text | markdown | safe }}
-                {% endif %}
-            </div>
-            {% if block.audio_url %}
-            <audio id="terminal-audio-{{ blockIndex }}" preload="none">
-                <source src="{{ block.audio_url }}" type="audio/mpeg">
-            </audio>
-            {% endif %}
-            <script>
-                var rawBoot_{{ blockIndex }} = `{{ block.boot_text | replace('\\', '\\\\') | replace('`', '\\`') | replace('$', '\\$') | safe }}`;
-                var pIndex_{{ blockIndex }} = 0;
-                var pSpeed_{{ blockIndex }} = 35; 
-                var isSkipped_{{ blockIndex }} = false;
-                var typeTimer_{{ blockIndex }};
-                var isVoiceoverPlaying_{{ blockIndex }} = false;
-                var isDocOpen_{{ blockIndex }} = false;
 
-                window.typeBoot_{{ blockIndex }} = function() {
-                    var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
-                    if (!bootContainer || isSkipped_{{ blockIndex }}) return;
-                    if (pIndex_{{ blockIndex }} < rawBoot_{{ blockIndex }}.length) {
-                        bootContainer.innerHTML = bootContainer.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
-                        bootContainer.innerHTML += rawBoot_{{ blockIndex }}.charAt(pIndex_{{ blockIndex }}) + '<span class="blinking-cursor">_</span>';
-                        pIndex_{{ blockIndex }}++;
-                        typeTimer_{{ blockIndex }} = setTimeout(window.typeBoot_{{ blockIndex }}, pSpeed_{{ blockIndex }});
-                    } else {
-                        window.finishTyping_{{ blockIndex }}();
-                    }
-                }
-                window.finishTyping_{{ blockIndex }} = function() {
-                    var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
-                    var skipBtn = document.getElementById("skip-btn-{{ blockIndex }}");
-                    var menuOptions = document.getElementById("terminal-options-{{ blockIndex }}");
-                    if (bootContainer) bootContainer.innerHTML = bootContainer.innerHTML.replace('<span class="blinking-cursor">_</span>', '');
-                    if (skipBtn) skipBtn.style.display = "none";
-                    if (menuOptions) menuOptions.style.display = "flex";
-                }
-                window.skipTyping_{{ blockIndex }} = function() {
-                    isSkipped_{{ blockIndex }} = true;
-                    clearTimeout(typeTimer_{{ blockIndex }});
-                    var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
-                    if (bootContainer) bootContainer.innerHTML = rawBoot_{{ blockIndex }};
-                    window.finishTyping_{{ blockIndex }}();
-                }
-                window.startTerminalMode_{{ blockIndex }} = function(mode) {
-                    var menuOptions = document.getElementById("terminal-options-{{ blockIndex }}");
-                    var waveformContainer = document.getElementById("waveform-{{ blockIndex }}");
-                    var docReader = document.getElementById("decrypted-doc-{{ blockIndex }}");
-                    var vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
-                    var mainAudio = document.getElementById('main-audio');
-                    var lightsOutOverlay = document.getElementById("lights-out-{{ blockIndex }}");
-                    var audioInterface = document.getElementById("audio-interface-{{ blockIndex }}");
-                    var btnReadAlong = document.getElementById("btn-readalong-{{ blockIndex }}");
-                    var audioStatus = document.getElementById("audio-status-{{ blockIndex }}");
-                    var btnPause = document.getElementById("btn-pause-{{ blockIndex }}");
-                    if (menuOptions) menuOptions.style.display = "none";
-                    if (mode === 'text') {
-                        window.stopAudioMode_{{ blockIndex }}();
-                        if(docReader) {
-                            docReader.style.display = "block";
-                            setTimeout(() => { docReader.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-                        }
-                    } else if (mode === 'audio') {
-                        if(audioInterface) audioInterface.style.display = "flex";
-                        if(lightsOutOverlay) lightsOutOverlay.classList.add("active");
-                        if(vAudio) { 
-                            vAudio.play().catch(e => console.log("Audio play prevented"));
-                            isVoiceoverPlaying_{{ blockIndex }} = true;
-                            if(waveformContainer) waveformContainer.classList.remove("paused");
-                            if(audioStatus) {
-                                audioStatus.innerText = "PLAYING TRANSMISSION...";
-                                audioStatus.style.animation = "blink 1s infinite";
-                            }
-                            if(btnPause) btnPause.innerText = "[ ⏸ ΠΑΥΣΗ ]";
-                        }
-                        if(mainAudio) { mainAudio.volume = 0.1; }
-                        if(docReader) docReader.style.display = "none";
-                        isDocOpen_{{ blockIndex }} = false;
-                        if(btnReadAlong) btnReadAlong.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
-                    }
-                }
-                window.toggleVoiceover_{{ blockIndex }} = function() {
-                    var vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
-                    var waveformContainer = document.getElementById("waveform-{{ blockIndex }}");
-                    var audioStatus = document.getElementById("audio-status-{{ blockIndex }}");
-                    var btnPause = document.getElementById("btn-pause-{{ blockIndex }}");
-                    if(!vAudio) return;
-                    if(isVoiceoverPlaying_{{ blockIndex }}) {
-                        vAudio.pause();
-                        isVoiceoverPlaying_{{ blockIndex }} = false;
-                        if(waveformContainer) waveformContainer.classList.add("paused");
-                        if(audioStatus) {
-                            audioStatus.innerText = "TRANSMISSION PAUSED.";
-                            audioStatus.style.animation = "none";
-                        }
-                        if(btnPause) btnPause.innerText = "[ ▶ PLAY ]";
-                    } else {
-                        vAudio.play();
-                        isVoiceoverPlaying_{{ blockIndex }} = true;
-                        if(waveformContainer) waveformContainer.classList.remove("paused");
-                        if(audioStatus) {
-                            audioStatus.innerText = "PLAYING TRANSMISSION...";
-                            audioStatus.style.animation = "blink 1s infinite";
-                        }
-                        if(btnPause) btnPause.innerText = "[ ⏸ ΠΑΥΣΗ ]";
-                    }
-                }
-                window.toggleReadAlong_{{ blockIndex }} = function() {
-                    var docReader = document.getElementById("decrypted-doc-{{ blockIndex }}");
-                    var btnReadAlong = document.getElementById("btn-readalong-{{ blockIndex }}");
-                    if(isDocOpen_{{ blockIndex }}) {
-                        if(docReader) docReader.style.display = "none";
-                        isDocOpen_{{ blockIndex }} = false;
-                        if(btnReadAlong) btnReadAlong.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
-                    } else {
-                        if(docReader) {
-                            docReader.style.display = "block";
-                            isDocOpen_{{ blockIndex }} = true;
-                            if(btnReadAlong) btnReadAlong.innerText = "[ ❌ ΚΛΕΙΣΙΜΟ ΚΕΙΜΕΝΟΥ ]";
-                            setTimeout(() => { docReader.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-                        }
-                    }
-                }
-                window.stopAudioMode_{{ blockIndex }} = function() {
-                    var vAudio = document.getElementById("terminal-audio-{{ blockIndex }}");
-                    var mainAudio = document.getElementById('main-audio');
-                    var lightsOutOverlay = document.getElementById("lights-out-{{ blockIndex }}");
-                    var audioInterface = document.getElementById("audio-interface-{{ blockIndex }}");
-                    var docReader = document.getElementById("decrypted-doc-{{ blockIndex }}");
-                    var btnReadAlong = document.getElementById("btn-readalong-{{ blockIndex }}");
-                    var menuOptions = document.getElementById("terminal-options-{{ blockIndex }}");
-                    if(vAudio) {
-                        vAudio.pause();
-                        vAudio.currentTime = 0;
-                        isVoiceoverPlaying_{{ blockIndex }} = false;
-                    }
-                    if(mainAudio && typeof isPlaying !== 'undefined' && isPlaying) { mainAudio.volume = 0.4; }
-                    if(lightsOutOverlay) lightsOutOverlay.classList.remove("active");
-                    if(audioInterface) audioInterface.style.display = "none";
-                    if(docReader) docReader.style.display = "none";
-                    isDocOpen_{{ blockIndex }} = false;
-                    if(btnReadAlong) btnReadAlong.innerText = "[ 📖 ΑΚΟΥ ΚΑΙ ΔΙΑΒΑΣΕ ]";
-                    if(menuOptions) menuOptions.style.display = "flex";
-                }
-                setTimeout(() => {
-                    var skipBtn = document.getElementById("skip-btn-{{ blockIndex }}");
-                    var bootContainer = document.getElementById("boot-text-{{ blockIndex }}");
-                    if(skipBtn) skipBtn.style.display = "block";
-                    if(bootContainer) bootContainer.innerHTML = "";
-                    pIndex_{{ blockIndex }} = 0;
-                    isSkipped_{{ blockIndex }} = false;
-                    window.typeBoot_{{ blockIndex }}();
-                }, 500);
-            </script>
         {% endif %}
     </section>
 {% endfor %}
