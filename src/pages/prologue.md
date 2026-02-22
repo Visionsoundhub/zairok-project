@@ -111,7 +111,7 @@ blocks:
 
 
       [ ΤΕΛΟΣ ΑΡΧΕΙΟΥ ]
-    audio_url: /audio/prologue-voiceover.mp3
+    audio_url: ""
     buttons:
       - label: "[ 1 ] ΑΝΑΓΝΩΣΗ ΠΡΟΛΟΓΟΥ"
         action: Read Text
@@ -120,4 +120,5 @@ blocks:
       - label: "[ 3 ] ΛΗΨΗ ΑΡΧΕΙΟΥ ΓΙΑ OFFLINE ΑΝΑΓΝΩΣΗ (PDF)"
         action: Link / PDF
         url: https://drive.google.com/file/d/121Ou42-9c6tjXrrQ5LatxwnyHqynB9tW/view?usp=sharing
+    audio_status_msg: Ηχος Σύντομα Διαθέσιμος
 ---
