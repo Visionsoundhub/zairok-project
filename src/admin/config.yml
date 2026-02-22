@@ -23,6 +23,15 @@ collections:
           - {label: "Main Accent Color (Neon)", name: "color_accent", widget: "color", default: "#ff8c00"}
           - {label: "Error/Alert Color (Red)", name: "color_error", widget: "color", default: "#ff003c"}
           
+          - label: "📱 SEO & SOCIAL MEDIA (Κοινοποιήσεις)"
+            name: "seo"
+            widget: "object"
+            collapsed: false
+            fields:
+              - {label: "Favicon (Μικρό εικονίδιο δίπλα στον τίτλο)", name: "favicon", widget: "image", required: false}
+              - {label: "Εικόνα Κοινοποίησης (Thumbnail για Facebook/Instagram)", name: "og_image", widget: "image", required: false}
+              - {label: "Περιγραφή Κοινοποίησης (Τι θα γράφει κάτω από τον τίτλο)", name: "description", widget: "text", default: "Το ψηφιακό δίκτυο άνοιξε. Επίλεξε το επίπεδό σου και μπες στην Αντίσταση.", required: false}
+
           - label: "🔠 GLOBAL TYPOGRAPHY (Προαιρετικά)"
             name: "global_typography"
             widget: "object"
@@ -164,7 +173,6 @@ collections:
               - {label: "Terminal Boot Text (Short Intro)", name: "boot_text", widget: "text"}
               - {label: "Decrypted Document (Full Story Text)", name: "document_text", widget: "markdown"}
               - {label: "Voiceover Audio", name: "audio_url", widget: "file", required: false}
-              - {label: "Μήνυμα Αναμονής Ήχου", name: "audio_status_msg", widget: "string", default: "[ ΑΝΑΜΟΝΗ ΗΧΗΤΙΚΗΣ ΜΕΤΑΔΟΣΗΣ ]", required: false}
               - label: "Terminal Menu Buttons"
                 name: "buttons"
                 widget: "list"
