@@ -1,4 +1,4 @@
-signup_form.njk{% if block.form_type == "resistance" %}
+{% if block.form_type == "resistance" %}
 <div class="resistance-form-container" style="border: 1px solid var(--accent-color); padding: 25px; background: rgba(5,5,5,0.9); position: relative;">
     <button onclick="document.getElementById('terminal-instructions-{{ loop.index }}').classList.toggle('hidden')" style="position: absolute; top: -15px; right: 20px; background: #000; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 5px 15px; font-family: var(--font-display); font-size: 0.8rem; cursor: pointer; z-index: 10;">[ ? ] ΟΔΗΓΙΕΣ</button>
     <div id="terminal-instructions-{{ loop.index }}" class="hidden" style="background: #111; border: 1px dashed #555; padding: 15px; margin-bottom: 20px; font-size: 0.85rem; color: #aaa;">
@@ -45,7 +45,6 @@ signup_form.njk{% if block.form_type == "resistance" %}
     var terminalSpeed{{ loop.index }} = 30;
     var resTypeTimer{{ loop.index }};
     var resIsSkipped{{ loop.index }} = false;
-    
     window.typeWriterTerminal{{ loop.index }} = function() {
         if (resIsSkipped{{ loop.index }}) return;
         if (terminalI{{ loop.index }} < terminalText{{ loop.index }}.length) {
