@@ -33,27 +33,6 @@ collections:
               - {label: "Εικόνα Κοινοποίησης (Thumbnail για Facebook/Instagram)", name: "og_image", widget: "image", required: false}
               - {label: "Περιγραφή Κοινοποίησης (Τι θα γράφει κάτω από τον τίτλο)", name: "description", widget: "text", default: "Το ψηφιακό δίκτυο άνοιξε. Επίλεξε το επίπεδό σου και μπες στην Αντίσταση.", required: false}
 
-          - label: "🔠 GLOBAL TYPOGRAPHY (Προαιρετικά)"
-            name: "global_typography"
-            widget: "object"
-            required: false
-            collapsed: true
-            fields:
-              - {label: "Μέγεθος Τίτλων (Desktop) π.χ. 2.5rem", name: "title_desk", widget: "string", required: false}
-              - {label: "Μέγεθος Τίτλων (Mobile) π.χ. 1.8rem", name: "title_mob", widget: "string", required: false}
-              - {label: "Μέγεθος Κειμένου (Desktop) π.χ. 1.1rem", name: "text_desk", widget: "string", required: false}
-              - {label: "Μέγεθος Κειμένου (Mobile) π.χ. 0.95rem", name: "text_mob", widget: "string", required: false}
-
-          - label: "Menu Items"
-            name: "menu_items"
-            widget: "list"
-            fields:
-              - {label: "Label", name: "label", widget: "string"}
-              - {label: "Type", name: "type", widget: "select", options: ["Link", "Modal"], default: "Link"}
-              - {label: "Link URL", name: "url", widget: "string", required: false}
-              - {label: "Modal Title", name: "modal_title", widget: "string", required: false}
-              - {label: "Modal Text", name: "modal_text", widget: "text", required: false}
-
   - name: "pages"
     label: "📄 Pages"
     folder: "src/pages"
@@ -79,68 +58,26 @@ collections:
               - {label: "Text", name: "text", widget: "text"}
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
-              - label: "🎨 Εξειδικευμένη Εμφάνιση Block"
-                name: "custom_styles"
-                widget: "object"
-                required: false
-                collapsed: true
-                fields:
-                  - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 3.5rem", name: "title_size", widget: "string", required: false}
-                  - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1.2rem", name: "text_size", widget: "string", required: false}
 
           - label: "Terminal Intro (VIP/Atmospheric)"
             name: "terminal_intro"
             widget: "object"
             fields:
               - {label: "Κείμενο Τερματικού", name: "text", widget: "text"}
-              - {label: "Χρώμα Γραμμάτων", name: "color", widget: "color", default: "#00ff00"}
-              - {label: "Μέγεθος Γραμμάτων π.χ. 1.2rem", name: "size", widget: "string", default: "1.1rem"}
-              - {label: "Ταχύτητα Πληκτρολόγησης (ms)", name: "speed", widget: "number", default: 30}
               
           - label: "VIP Chapter (Interactive)"
             name: "vip_chapter"
             widget: "object"
             fields:
-              - {label: "Τίτλος Κεφαλαίου (π.χ. [ 1 ] ΑΝΑΓΝΩΣΗ ΠΡΟΛΟΓΟΥ)", name: "title", widget: "string"}
+              - {label: "Τίτλος Κεφαλαίου", name: "title", widget: "string"}
               - {label: "Κείμενο Κεφαλαίου", name: "content", widget: "markdown"}
-              - {label: "Αρχείο Ήχου (Audio/Voiceover)", name: "audio", widget: "file", required: false}
-              - {label: "Μήνυμα Αναμονής Ήχου (π.χ. [ TRANSMISSION ENCRYPTED ])", name: "audio_status_msg", widget: "string", default: "[ TRANSMISSION ENCRYPTED ]", required: false}
-              - {label: "Αρχείο PDF (Για κατέβασμα)", name: "pdf", widget: "file", required: false}
-              - label: "ΕΛΕΓΧΟΣ ΚΟΥΜΠΙΩΝ"
-                name: "button_labels"
-                widget: "object"
-                collapsed: true
-                fields:
-                  - {label: "Κουμπί Απλής Ανάγνωσης", name: "read", widget: "string", required: false}
-                  - {label: "Κουμπί Cinematic", name: "cinematic", widget: "string", required: false}
-                  - {label: "Κουμπί PDF", name: "pdf_btn", widget: "string", required: false}
-                  - {label: "Κουμπί ΣΤΟΠ στη Μαύρη Οθόνη", name: "stop", widget: "string", required: false}
-                  - {label: "Κουμπί 'Άνοιγμα Κειμένου'", name: "open_text", widget: "string", required: false}
-                  - {label: "Κουμπί 'Κλείσιμο Κειμένου'", name: "close_text", widget: "string", required: false}
+              - {label: "Αρχείο Ήχου", name: "audio", widget: "file", required: false}
 
           - label: "VIP Feedback (Live Comments)"
             name: "vip_feedback"
             widget: "object"
             fields:
               - {label: "Τίτλος Ενότητας", name: "title", widget: "string", default: "[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]"}
-              - {label: "Μοναδικό ID Κεφαλαίου", name: "topic_id", widget: "string", default: "general"}
-
-          - label: "Lore Section (Database Style)"
-            name: "lore"
-            widget: "object"
-            fields:
-              - {label: "Section Title", name: "title", widget: "string"}
-              - {label: "Items", name: "items", widget: "list", fields: [{label: "Item Title", name: "item_title", widget: "string"}, {label: "Item Desc", name: "item_desc", widget: "text"}]}
-              - {label: "Button Text", name: "button_text", widget: "string", required: false}
-              - {label: "Button URL", name: "button_url", widget: "string", required: false}
-              - label: "🎨 Εξειδικευμένη Εμφάνιση Block"
-                name: "custom_styles"
-                widget: "object"
-                required: false
-                collapsed: true
-                fields:
-                  - {label: "Μέγεθος Τίτλου ΕΔΩ π.χ. 2rem", name: "title_size", widget: "string", required: false}
-                  - {label: "Μέγεθος Κειμένου ΕΔΩ π.χ. 1rem", name: "text_size", widget: "string", required: false}
 
           - label: "Form (Εγγραφή)"
             name: "signup_form"
@@ -148,39 +85,18 @@ collections:
             fields:
               - {label: "Title", name: "title", widget: "string"}
               - {label: "Desc", name: "desc", widget: "text"}
-              - label: "Form Type"
-                name: "form_type"
-                widget: "select"
-                options: 
-                  - { label: "General (First 100)", value: "general" }
-                  - { label: "Resistance (VIP Code)", value: "resistance" }
-              - {label: "Κείμενο Τερματικού (ΜΟΝΟ για Resistance)", name: "terminal_text", widget: "text", required: false}
-              - {label: "MailerLite Form ID", name: "ml_form_id", widget: "string", default: "179391629910606883"}
+              - {label: "Form Type", name: "form_type", widget: "select", options: ["general", "resistance"]}
 
-          - label: "Video / Image"
-            name: "media_block"
+          - label: "🛒 Product (Gear Shop)"
+            name: "product"
             widget: "object"
             fields:
-              - {label: "YouTube URL", name: "video", widget: "string", required: false}
-              - {label: "Image", name: "image", widget: "image", required: false}
-              - {label: "Button Text", name: "button_text", widget: "string", required: false}
-              - {label: "Button URL", name: "button_url", widget: "string", required: false}
-
-          - label: "Terminal (Dynamic)"
-            name: "crt_terminal"
-            widget: "object"
-            fields:
-              - {label: "Terminal Text Color", name: "text_color", widget: "color", default: "#00ff00"}
-              - {label: "Terminal Boot Text (Short Intro)", name: "boot_text", widget: "text"}
-              - {label: "Decrypted Document (Full Story Text)", name: "document_text", widget: "markdown"}
-              - {label: "Voiceover Audio", name: "audio_url", widget: "file", required: false}
-              - label: "Terminal Menu Buttons"
-                name: "buttons"
-                widget: "list"
-                fields:
-                  - {label: "Button Text", name: "label", widget: "string"}
-                  - {label: "Button Action", name: "action", widget: "select", options: ["Read Text", "Play Audio", "Link / PDF"]}
-                  - {label: "Button URL (If Link/PDF)", name: "url", widget: "string", required: false}
+              - {label: "Product Name", name: "title", widget: "string"}
+              - {label: "Price", name: "price", widget: "string"}
+              - {label: "Product Image", name: "image", widget: "image"}
+              - {label: "Payhip Link", name: "payhip_url", widget: "string"}
+              - {label: "Description", name: "description", widget: "text"}
+              - {label: "Status Label", name: "status", widget: "select", options: ["AVAILABLE", "LIMITED", "ENCRYPTED", "SOLD OUT"], default: "AVAILABLE"}
 
           - label: "Rich Text (Markdown)"
             name: "richtext"
