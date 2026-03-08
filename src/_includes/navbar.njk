@@ -1,3 +1,17 @@
+<style>
+    /* Εφέ Hover και Active State για το Μενού */
+    #nav-menu a, 
+    #nav-menu .menu-modal-trigger {
+        transition: color 0.3s ease;
+    }
+    
+    #nav-menu a:hover, 
+    #nav-menu .menu-modal-trigger:hover,
+    #nav-menu a.active {
+        color: var(--accent-color) !important;
+    }
+</style>
+
 <header>
     <a href="/" class="logo-text">{% if settings.site_logo %}<img src="{{ settings.site_logo }}" style="max-height:45px;">{% else %}ZAIROK{% endif %}</a>
     <button class="menu-toggle" onclick="document.getElementById('nav-menu').classList.toggle('active')">☰</button>
@@ -7,7 +21,7 @@
             {% if item.type == 'Modal' %}
                 <button class="menu-modal-trigger" onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')">{{ item.label }}</button>
             {% else %}
-                <a href="{{ item.url }}">{{ item.label }}</a>
+                <a href="{{ item.url }}" class="{% if page.url == item.url %}active{% endif %}">{{ item.label }}</a>
             {% endif %}
         {% endfor %}
     </nav>
