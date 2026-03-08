@@ -48,7 +48,7 @@ collections:
         name: "blocks"
         widget: "list"
         types:
-          - label: "Hero (Μεγλα Γράμματα)"
+          - label: "Hero (Μεγάλα Γράμματα)"
             name: "hero"
             widget: "object"
             fields:
@@ -80,7 +80,7 @@ collections:
             fields:
               - {label: "Product Name", name: "title", widget: "string"}
               - {label: "Price", name: "price", widget: "string"}
-              - {label: "Product Image", name: "image", widget: "image"}
+              - {label: "Product Images", name: "images", widget: "list", field: {label: "Image", name: "image", widget: "image"}}
               - {label: "Payhip Link", name: "payhip_url", widget: "string"}
               - {label: "Description", name: "description", widget: "text"}
               - {label: "Status Label", name: "status", widget: "select", options: ["AVAILABLE", "LIMITED", "ENCRYPTED", "SOLD OUT"], default: "AVAILABLE"}
@@ -104,5 +104,4 @@ collections:
             widget: "object"
             fields:
               - {label: "Body", name: "body", widget: "markdown"}
-
-
+              
