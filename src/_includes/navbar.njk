@@ -7,7 +7,7 @@
     
     #nav-menu a:hover, 
     #nav-menu .menu-modal-trigger:hover,
-    #nav-menu a.active {
+    #nav-menu a.current-link {
         color: var(--accent-color) !important;
     }
 </style>
@@ -21,7 +21,7 @@
             {% if item.type == 'Modal' %}
                 <button class="menu-modal-trigger" onclick="openModal('{{ item.modal_title | escape }}', '{{ item.modal_text | replace('\n', '\\n') | escape }}')">{{ item.label }}</button>
             {% else %}
-                <a href="{{ item.url }}" class="{% if page.url == item.url %}active{% endif %}">{{ item.label }}</a>
+                <a href="{{ item.url }}" class="{% if page.url == item.url %}current-link{% endif %}">{{ item.label }}</a>
             {% endif %}
         {% endfor %}
     </nav>
