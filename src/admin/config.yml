@@ -48,7 +48,7 @@ collections:
         name: "blocks"
         widget: "list"
         types:
-          - label: "Hero (Μεγάλα Γράμματα)ΔΔΔΔ"
+          - label: "Hero (Μεγλα Γράμματα)"
             name: "hero"
             widget: "object"
             fields:
@@ -104,4 +104,5 @@ collections:
             widget: "object"
             fields:
               - {label: "Body", name: "body", widget: "markdown"}
+
 
