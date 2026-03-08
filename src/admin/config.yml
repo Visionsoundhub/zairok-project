@@ -59,18 +59,12 @@ collections:
               - {label: "Button Text", name: "button_text", widget: "string", required: false}
               - {label: "Button URL", name: "button_url", widget: "string", required: false}
 
-          - label: "Terminal Intro (VIP/Atmospheric)"
-            name: "terminal_intro"
+          - label: "Lore Section (Database Style)"
+            name: "lore"
             widget: "object"
             fields:
-              - {label: "Κείμενο Τερματικού", name: "text", widget: "text"}
-
-          - label: "VIP Chapter (Interactive)"
-            name: "vip_chapter"
-            widget: "object"
-            fields:
-              - {label: "Τίτλος Κεφαλαίου", name: "title", widget: "string"}
-              - {label: "Κείμενο Κεφαλαίου", name: "content", widget: "markdown"}
+              - {label: "Section Title", name: "title", widget: "string"}
+              - {label: "Items", name: "items", widget: "list", fields: [{label: "Item Title", name: "item_title", widget: "string"}, {label: "Item Desc", name: "item_desc", widget: "text"}]}
 
           - label: "Form (Εγγραφή)"
             name: "signup_form"
@@ -90,6 +84,20 @@ collections:
               - {label: "Payhip Link", name: "payhip_url", widget: "string"}
               - {label: "Description", name: "description", widget: "text"}
               - {label: "Status Label", name: "status", widget: "select", options: ["AVAILABLE", "LIMITED", "ENCRYPTED", "SOLD OUT"], default: "AVAILABLE"}
+
+          - label: "Video / Image"
+            name: "media_block"
+            widget: "object"
+            fields:
+              - {label: "YouTube URL", name: "video", widget: "string", required: false}
+              - {label: "Image", name: "image", widget: "image", required: false}
+
+          - label: "Terminal (Dynamic)"
+            name: "crt_terminal"
+            widget: "object"
+            fields:
+              - {label: "Terminal Boot Text", name: "boot_text", widget: "text"}
+              - {label: "Decrypted Document", name: "document_text", widget: "markdown"}
 
           - label: "Rich Text (Markdown)"
             name: "richtext"
