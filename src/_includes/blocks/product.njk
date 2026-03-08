@@ -5,10 +5,17 @@
     </div>
 
     <div style="display: flex; flex-wrap: wrap; gap: 25px; align-items: flex-start;">
-        {# Image #}
-        {% if block.image %}
-        <div style="flex: 1; min-width: 260px; border: 1px solid #222;">
-            <img src="{{ block.image }}" alt="{{ block.title }}" style="width: 100%; display: block; filter: contrast(1.1);">
+        
+        {# Image Gallery #}
+        {% if block.images and block.images | length > 0 %}
+        <div style="flex: 1; min-width: 260px;">
+            <div style="display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr);">
+                {% for imgPath in block.images %}
+                    <div style="border: 1px solid #222; overflow: hidden; {% if loop.first %}grid-column: 1 / -1;{% endif %}">
+                        <img src="{{ imgPath }}" alt="{{ block.title }} - Image {{ loop.index }}" style="width: 100%; height: 100%; object-fit: cover; display: block; filter: contrast(1.1);">
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
 
