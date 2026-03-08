@@ -64,20 +64,13 @@ collections:
             widget: "object"
             fields:
               - {label: "Κείμενο Τερματικού", name: "text", widget: "text"}
-              
+
           - label: "VIP Chapter (Interactive)"
             name: "vip_chapter"
             widget: "object"
             fields:
               - {label: "Τίτλος Κεφαλαίου", name: "title", widget: "string"}
               - {label: "Κείμενο Κεφαλαίου", name: "content", widget: "markdown"}
-              - {label: "Αρχείο Ήχου", name: "audio", widget: "file", required: false}
-
-          - label: "VIP Feedback (Live Comments)"
-            name: "vip_feedback"
-            widget: "object"
-            fields:
-              - {label: "Τίτλος Ενότητας", name: "title", widget: "string", default: "[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]"}
 
           - label: "Form (Εγγραφή)"
             name: "signup_form"
