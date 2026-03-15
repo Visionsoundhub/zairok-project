@@ -19,12 +19,6 @@
                 {{ block.audio_status_msg | default('[ TRANSMISSION ENCRYPTED ]') }}
             </div>
             {% endif %}
-
-            {% if block.pdf_file %}
-            <a href="{{ block.pdf_file }}" target="_blank" style="background: transparent; border: 1px dashed #555; color: #aaa; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; text-decoration: none; transition: 0.3s;">
-                {{ block.button_labels.pdf_btn | default('[ PDF (OFFLINE) ]') }}
-            </a>
-            {% endif %}
         </div>
 
         <div id="vip-content-{{ loop.index }}" class="markdown-content" style="display: none; margin-top: 30px; border-top: 1px dashed #555; padding-top: 25px; color: #ddd; font-size: 1.1rem;">
