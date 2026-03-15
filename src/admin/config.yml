@@ -47,7 +47,7 @@ collections:
       - label: "PAGE BLOCKS"
         name: "blocks"
         widget: "list"
-      types:
+        types:
           - label: "Terminal Intro (Green Text)"
             name: "terminal_intro"
             widget: "object"
