@@ -47,7 +47,27 @@ collections:
       - label: "PAGE BLOCKS"
         name: "blocks"
         widget: "list"
-        types:
+      types:
+          - label: "Terminal Intro (Green Text)"
+            name: "terminal_intro"
+            widget: "object"
+            fields:
+              - {label: "Lines", name: "lines", widget: "list", field: {label: "Line", name: "line", widget: "string"}}
+
+          - label: "VIP Chapter (Accordion)"
+            name: "vip_chapter"
+            widget: "object"
+            fields:
+              - {label: "Chapter Title", name: "title", widget: "string"}
+              - {label: "Chapter Content", name: "content", widget: "markdown"}
+
+          - label: "VIP Feedback Form"
+            name: "vip_feedback"
+            widget: "object"
+            fields:
+              - {label: "Form Title", name: "title", widget: "string", default: "ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ"}
+              - {label: "Placeholder Text", name: "placeholder", widget: "string", default: "ΕΙΣΑΓΩΓΗ ΑΝΑΦΟΡΑΣ..."}
+
           - label: "Hero (Μεγάλα Γράμματα)"
             name: "hero"
             widget: "object"
@@ -104,4 +124,3 @@ collections:
             widget: "object"
             fields:
               - {label: "Body", name: "body", widget: "markdown"}
-              
