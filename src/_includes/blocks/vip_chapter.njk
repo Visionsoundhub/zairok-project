@@ -20,8 +20,8 @@
             </div>
             {% endif %}
 
-            {% if block.pdf %}
-            <a href="{{ block.pdf }}" target="_blank" style="background: transparent; border: 1px dashed #555; color: #aaa; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; text-decoration: none; transition: 0.3s;">
+            {% if block.pdf_file %}
+            <a href="{{ block.pdf_file }}" target="_blank" style="background: transparent; border: 1px dashed #555; color: #aaa; padding: 10px 20px; cursor: pointer; font-family: monospace; font-size: 1rem; text-decoration: none; transition: 0.3s;">
                 {{ block.button_labels.pdf_btn | default('[ PDF (OFFLINE) ]') }}
             </a>
             {% endif %}
@@ -81,6 +81,7 @@
     function toggleFolder{{ loop.index }}() {
         var folder = document.getElementById('vip-folder-{{ loop.index }}');
         var content = document.getElementById('vip-folder-content-{{ loop.index }}');
+        
         if (folder.classList.contains('active')) {
             folder.classList.remove('active');
             content.style.display = 'none';
