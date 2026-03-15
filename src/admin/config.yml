@@ -2,7 +2,8 @@ backend:
   name: github
   repo: Visionsoundhub/zairok-project
   branch: main
-  base_url: https://playful-peony-98e268.netlify.app
+  base_url: https://zairok-auth.agent-d3f.workers.dev
+  auth_endpoint: auth
 
 media_folder: "src/assets/images"
 public_folder: "/assets/images"
