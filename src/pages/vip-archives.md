@@ -458,6 +458,9 @@ blocks:
 
 
       Ο Μέρβιν μπήκε στο αυτοκίνητο της Νάλιας. Καθώς απομακρύνονταν, κοίταξε πίσω. Είδε τον Ρίκι να στέκεται στην πύλη και να τον κοιτάζει σιωπηλός. Και αυτό ήταν πιο ανησυχητικό από οποιαδήποτε απειλή.
+  - type: vip_archive_button
+    button_text: OFFLINE PDF DOWNLOAD
+    pdf_url: https://drive.google.com/file/d/1AYwHVyHt77UBvBDRIzB2l_HS2UuyM6yq/view?usp=sharing
   - type: vip_feedback
     title: "[ ΑΝΑΦΟΡΕΣ ΠΡΑΚΤΟΡΩΝ ]"
     topic_id: prologue
