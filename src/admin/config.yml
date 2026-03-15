@@ -60,7 +60,7 @@ collections:
             fields:
               - {label: "Chapter Title", name: "title", widget: "string"}
               - {label: "Chapter Content", name: "content", widget: "markdown"}
-              - {label: "Download PDF", name: "pdf_file", widget: "file", required: false}
+              - {label: "Download PDF Link", name: "pdf", widget: "string", required: false}
 
           - label: "VIP Feedback Form"
             name: "vip_feedback"
