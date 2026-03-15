@@ -61,7 +61,13 @@ collections:
             fields:
               - {label: "Chapter Title", name: "title", widget: "string"}
               - {label: "Chapter Content", name: "content", widget: "markdown"}
-              - {label: "Download PDF Link", name: "pdf", widget: "string", required: false}
+
+          - label: "VIP Archive Button (Γενικό PDF)"
+            name: "vip_archive_button"
+            widget: "object"
+            fields:
+              - {label: "Κείμενο Κουμπιού", name: "button_text", widget: "string", default: "OFFLINE ARCHIVE DOWNLOAD"}
+              - {label: "Link για PDF", name: "pdf_url", widget: "string"}
 
           - label: "VIP Feedback Form"
             name: "vip_feedback"
