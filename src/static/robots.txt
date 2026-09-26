@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /secure-link/
+Disallow: /secure-prologue/
+Disallow: /vip-archives/
+
+Sitemap: https://zairok.gr/sitemap.xml
