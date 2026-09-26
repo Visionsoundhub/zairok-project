@@ -111,6 +111,13 @@
             body: JSON.stringify({ name: name, email: email, code: code })
         })
         .then(() => {
+            // Background subscription to Resend
+            fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, email: email })
+            }).catch(console.error);
+
             formDiv.style.display = 'none';
             successDiv.style.display = 'block';
         })
@@ -130,7 +137,7 @@
             <h3 style="color:var(--accent-color); font-family:var(--font-display); font-size: {{ block.custom_styles.title_size | default('calc(var(--title-size) * 0.8)') }};">{{ block.title }}</h3>
             <p style="margin-bottom:20px; white-space: pre-line; font-size: {{ block.custom_styles.text_size | default('var(--text-size)') }};">{{ block.desc }}</p>
             
-            <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2113368/forms/{{ block.ml_form_id | default('179335714605893061') }}/subscribe" data-code="" method="post">
+            <form class="ml-block-form" id="resend-form-{{ loop.index }}" onsubmit="submitToResend(event, '{{ loop.index }}', '{{ block.ml_form_id | default(\'179335714605893061\') }}')">
                 <input type="text" name="fields[name]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="CODE NAME" required>
                 <input type="email" name="fields[email]" style="width:100%; background:transparent; border:1px solid #444; color:#fff; padding:15px; margin-bottom:15px;" placeholder="FREQUENCY (Email)" required>
                 
@@ -140,8 +147,6 @@
                         Αποδέχομαι τους <span class="gdpr-link" onclick="openGdprModal()">Όρους Χρήσης & Προστασία Δεδομένων</span>.
                     </label>
                 </div>
-                <input type="hidden" name="ml-submit" value="1">
-                <input type="hidden" name="anticsrf" value="true">
                 <button type="submit" class="primary" style="background:var(--accent-color); color:#000; border:none; padding:15px 30px; cursor:pointer; font-family:var(--font-display); width:100%; font-weight:bold;">ESTABLISH LINK</button>
             </form>
         </div>
@@ -154,12 +159,46 @@
     </div>
 </div>
 <script>
-    function ml_webform_success_{{ block.ml_form_id | default('179335714605893061') }}() {
-        var formContainer = document.querySelector('.ml-subscribe-form-{{ block.ml_form_id | default('179335714605893061') }}');
-        if (formContainer) {
-            formContainer.querySelector('.row-success').style.display = 'block';
-            formContainer.querySelector('.row-form').style.display = 'none';
-        }
+    window.submitToResend = function(event, index, formId) {
+        event.preventDefault();
+        var form = event.target;
+        var btn = form.querySelector('button[type="submit"]');
+        var nameInput = form.querySelector('input[name="fields[name]"]');
+        var emailInput = form.querySelector('input[name="fields[email]"]');
+        
+        var name = nameInput ? nameInput.value : '';
+        var email = emailInput ? emailInput.value : '';
+
+        btn.disabled = true;
+        var originalText = btn.textContent;
+        btn.textContent = 'CONNECTING...';
+
+        fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, email: email })
+        })
+        .then(function(res) {
+            if (res.ok) {
+                var formContainer = document.querySelector('.ml-subscribe-form-' + formId);
+                if (formContainer) {
+                    formContainer.querySelector('.row-success').style.display = 'block';
+                    formContainer.querySelector('.row-form').style.display = 'none';
+                }
+            } else {
+                return res.json().then(function(data) {
+                    alert('> [ΣΦΑΛΜΑ] ' + (data.error || 'Αποτυχία εγγραφής.'));
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                });
+            }
+        })
+        .catch(function(err) {
+            console.error(err);
+            alert('> [ΣΦΑΛΜΑ] Αποτυχία σύνδεσης με το δίκτυο.');
+            btn.disabled = false;
+            btn.textContent = originalText;
+        });
     }
 </script>
 {% endif %}
