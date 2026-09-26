@@ -27,19 +27,23 @@
 </div>
 
 <script>
-    const swup = new Swup({
-        plugins: [new SwupScriptsPlugin()]
+    // Το swup ξανατρέχει αυτό το script σε κάθε αλλαγή σελίδας: γι' αυτό var (όχι const/let)
+    // και το swup στήνεται μία φορά (τα scripts του φορτώνουν με defer).
+    var swup = window.swup;
+    if (!swup) document.addEventListener('DOMContentLoaded', () => {
+        swup = window.swup = new Swup({ plugins: [new SwupScriptsPlugin()] });
+        swup.hooks.on('content:replace', () => { document.getElementById('nav-menu').classList.remove('active'); });
     });
-    const audioEl = document.getElementById('main-audio');
-    const playBtn = document.getElementById('play-btn');
-    let isPlaying = false;
+    var audioEl = document.getElementById('main-audio');
+    var playBtn = document.getElementById('play-btn');
+    var isPlaying = (typeof isPlaying !== 'undefined') ? isPlaying : false;
     function toggleAudio() {
         if(!isPlaying) { audioEl.play(); playBtn.innerText = "❚❚"; isPlaying = true; } 
         else { audioEl.pause(); playBtn.innerText = "▶"; isPlaying = false; }
     }
 
     {% if require_gate %}
-    const accessSound = document.getElementById('access-sound');
+    var accessSound = document.getElementById('access-sound');
     if(sessionStorage.getItem('zairok_access')) { document.getElementById('the-gate').style.display = 'none'; }
 
     function handleAccess(btn) {
@@ -68,7 +72,6 @@
     function closeGdprModal() { document.getElementById('gdpr-modal').classList.add('hidden'); }
 
     audioEl.ontimeupdate = () => { if(audioEl.duration) document.getElementById('progress-bar').style.width = (audioEl.currentTime / audioEl.duration) * 100 + "%"; };
-    swup.on('contentReplaced', () => { document.getElementById('nav-menu').classList.remove('active'); });
 </script>
 
 <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
