@@ -16,7 +16,8 @@
 {% set displayTitle = "Hybrid Sci-Fi Novel" if title == "Home" else title %}
 
 <title>ZAIROK | {{ displayTitle }}</title>
-<meta name="description" content="{{ seoDesc }}">
+{% set pageDesc = description or (seoDesc if page.url == "/" else displayTitle + " · " + seoDesc) %}
+<meta name="description" content="{{ pageDesc }}">
 
 <meta property="og:type" content="website">
 {% set isPrivate = ('secure' in page.url) or ('vip' in page.url) or ('404' in page.url) %}
@@ -26,12 +27,12 @@
 <meta property="og:locale" content="el_GR">
 <meta property="og:url" content="https://zairok.gr{{ page.url }}">
 <meta property="og:title" content="ZAIROK | {{ displayTitle }}">
-<meta property="og:description" content="{{ seoDesc }}">
+<meta property="og:description" content="{{ pageDesc }}">
 {% if seoImg %}<meta property="og:image" content="https://zairok.gr{{ seoImg }}">{% endif %}
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ZAIROK | {{ displayTitle }}">
-<meta name="twitter:description" content="{{ seoDesc }}">
+<meta name="twitter:description" content="{{ pageDesc }}">
 {% if seoImg %}<meta name="twitter:image" content="https://zairok.gr{{ seoImg }}">{% endif %}
 
 {% if settings.seo.favicon %}
