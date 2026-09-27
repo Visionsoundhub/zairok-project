@@ -5,7 +5,7 @@ eleventyExcludeFromCollections: true
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {%- for p in collections.all %}
-{%- if not ('secure' in p.url or 'vip' in p.url or '404' in p.url or 'admin' in p.url) %}
+{%- if not ('secure' in p.url or 'vip' in p.url or '404' in p.url or 'admin' in p.url or 'gear-shop' in p.url) %}
   <url><loc>https://zairok.gr{{ p.url }}</loc><lastmod>{{ p.date.toISOString().slice(0, 10) }}</lastmod></url>
 {%- endif %}
 {%- endfor %}

@@ -21,19 +21,15 @@ blocks:
     button_url: https://www.youtube.com/watch?v=lGDubSRiIWo
   - type: hero
     status: CLASSIFIED
-    title: ΚΑΤΑΦΕΡΕΣ ΝΑ ΠΡΟΣΠΕΡΑΣΕΙΣ ΤΟ FIREWALL
-    subtitle: Ξεκλείδωσε ένα άκρως απόρρητο αρχείο.
-    text: Διάβασε τον πρόλογο πριν το σύστημα εντοπίσει το ίχνος σου
+    title: ΥΠΟΚΛΟΠΗ ΣΗΜΑΤΟΣ
+    subtitle: Agent Z - 15 Χρόνια Πριν.
+    text: Η ιστορία τρέχει ήδη. Παρακολούθησε τα βήματα του Agent Z και ψήφισε για τις κινήσεις του στα Social Media.
     button_text: ""
     button_url: ""
   - type: signup_form
     title: FIRST WAVE RECRUITMENT.
     desc: >-
-      Ξεκίνα το ταξίδι σου στο Norken τώρα. Η εγγραφή στο Newsletter σου
-      ξεκλειδώνει άμεσα και δωρεάν την πρόσβαση στον Πρόλογο του Zairok.
-
-
-      Για όσους αναζητούν το Ψηφιακό ή το Φυσικό Κλειδί, η πύλη του Gear Shop είναι ανοιχτή. Ακολούθησε το Zairok στα Social Media γιατί θα γίνουν Give away μερικά φυσικά κλειδιά που ξεκλειδώνουν πρόσβαση στον κόσμο του Zairok
+      Μπες στο κρυφό δίκτυο της Αντίστασης. Γράψου στο Newsletter για να λαμβάνεις πρώτος τις απόρρητες αναφορές του Agent Z και αποκλειστικό υλικό από το βιβλίο που γράφεται.
     form_type: general
     ml_form_id: "179335714605893061"
 ---

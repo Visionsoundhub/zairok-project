@@ -1,6 +1,6 @@
 ---
 layout: base.njk
-title: Public Archives
+title: Norken Archives
 permalink: /public-archives/
 in_menu: true
 blocks:

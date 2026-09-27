@@ -43,7 +43,7 @@
 
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 {% if page.url == "/" %}
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"ZAIROK","url":"https://zairok.gr/","inLanguage":"el"},{"@type":"CreativeWorkSeries","name":"ZAIROK","url":"https://zairok.gr/","genre":["Science fiction","Cyberpunk"],"inLanguage":"el","description":"{{ seoDesc }}"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"ZAIROK","url":"https://zairok.gr/","inLanguage":"el","sameAs":["https://www.youtube.com/@zairok.universe"]},{"@type":"CreativeWorkSeries","name":"ZAIROK","url":"https://zairok.gr/","genre":["Science fiction","Cyberpunk"],"inLanguage":"el","description":"{{ seoDesc }}","sameAs":["https://www.youtube.com/@zairok.universe"]}]}</script>
 {% elif not isPrivate %}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ZAIROK","item":"https://zairok.gr/"},{"@type":"ListItem","position":2,"name":"{{ displayTitle }}","item":"https://zairok.gr{{ page.url }}"}]}</script>
 {% endif %}
@@ -100,11 +100,16 @@
     nav { display: flex; gap: 20px; align-items: center; }
     nav a, nav button { color: #888; text-decoration: none; font-family: var(--font-display); font-size: 0.85rem; text-transform: uppercase; transition: 0.3s; background: none; border: none; cursor: pointer; }
 
+    .menu-close-mobile { display: none; }
+
     @media (max-width: 768px) {
         .menu-toggle { display: block; }
+        .menu-close-mobile { display: block; position: absolute; top: 25px; right: 25px; background: none; border: none; color: var(--accent-color); font-size: 2rem; cursor: pointer; }
         nav { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(15px); z-index: 10004; flex-direction: column; justify-content: center; align-items: center; transition: 0.4s ease-in-out; gap: 30px; }
         nav.active { right: 0; }
         nav a, nav button { font-size: 1.6rem !important; color: var(--accent-color); font-weight: 700; }
+        .gate-content { padding: 30px 15px !important; }
+        .btn-access { padding: 14px 20px !important; font-size: 0.95rem !important; letter-spacing: 1px !important; }
     }
 
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }

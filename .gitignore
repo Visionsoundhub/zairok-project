@@ -1,0 +1,6 @@
+_site/
+node_modules/
+*.zip
+zairok-20260627T203304Z-3-001/
+.DS_Store
+Thumbs.db
